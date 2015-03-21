@@ -35,6 +35,9 @@ public class Partner {
 	
 	@ManyToOne
 	private ExpenseAccount expenseAccount;
+	
+	@ManyToOne
+	private ExpenseCategory expenseCategory;
 
 	public Long getId() {
 		return id;
@@ -111,6 +114,22 @@ public class Partner {
 	public Double getPartnerCommissionTo(Double comission) {
 		Double result = comission * (this.percentual/100);
 		return new Arredondamento().arredondar(result);
+	}
+
+	public Double getPercentual() {
+		return percentual;
+	}
+
+	public void setPercentual(Double percentual) {
+		this.percentual = percentual;
+	}
+
+	public ExpenseCategory getExpenseCategory() {
+		return expenseCategory;
+	}
+
+	public void setExpenseCategory(ExpenseCategory expenseCategory) {
+		this.expenseCategory = expenseCategory;
 	}
 
 }

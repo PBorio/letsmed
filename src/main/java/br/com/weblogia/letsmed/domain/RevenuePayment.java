@@ -23,6 +23,9 @@ public class RevenuePayment {
 	private Revenue revenue;
 	
 	@ManyToOne
+	private BankAccount bankAccount;
+	
+	@ManyToOne
 	private PaymentTerm paymentTerm;
 	
 	private Double value;
@@ -72,6 +75,14 @@ public class RevenuePayment {
 
 	public void setRevenue(Revenue revenue) {
 		this.revenue = revenue;
+	}
+
+	public BankAccount getBankAccount() {
+		return bankAccount;
+	}
+
+	public void setBankAccount(BankAccount bankAccount) {
+		this.bankAccount = bankAccount;
 	}
 
 }

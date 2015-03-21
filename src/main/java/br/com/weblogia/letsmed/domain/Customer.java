@@ -54,6 +54,17 @@ public class Customer {
 		
 		return this.partner.getExpenseAccount();
 	}
+	
+	public ExpenseCategory getPartnerExpenseCategory() {
+
+		if (this.partner == null)
+			return null;
+		
+		if (this.partner.getExpenseCategory() == null)
+			return null;
+		
+		return this.partner.getExpenseCategory();
+	}
 
 	public Double getPartnerComissionTo(Double value) {
 		if (partner == null)
@@ -164,7 +175,5 @@ public class Customer {
 	public void setCommission(Double commission) {
 		this.commission = commission;
 	}
-	
-	
 
 }

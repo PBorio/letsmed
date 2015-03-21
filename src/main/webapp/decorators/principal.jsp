@@ -323,20 +323,26 @@
 					  </li>						
 					  <li><a class="dropmenu" href="#"><i class="fa-icon-folder-close-alt"></i><span class="hidden-tablet"> Financial</span></a>
 					  	 <ul>
+					  	 	<li <c:if test="${controller eq 'accountDetails'}"> class="active" </c:if>>
+								<a class="submenu"  href="<c:url value='/accountDetails'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Acount Details</span></a></li>
+							<li <c:if test="${controller eq 'statement'}"> class="active" </c:if>>
+								<a class="submenu"  href="<c:url value='/statement'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Bank Statements</span></a></li>
 					  	 	<li <c:if test="${controller eq 'revenues'}"> class="active" </c:if>>
 					  	 		<a class="submenu"  href="<c:url value='/revenues'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Revenues</span></a></li>
 							<li <c:if test="${controller eq 'timeline'}"> class="active" </c:if>>
-								<a class="submenu"  href="<c:url value='/despesas'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Expenses</span></a></li>
-							<li <c:if test="${controller eq 'timeline'}"> class="active" </c:if>>
-								<a class="submenu"  href="<c:url value='/despesas'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Expense Payments</span></a></li>
+								<a class="submenu"  href="<c:url value='/expenses'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Expenses</span></a></li>
+							<li <c:if test="${controller eq 'expensePayments'}"> class="active" </c:if>>
+								<a class="submenu"  href="<c:url value='/expensePayments'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Expense Payments</span></a></li>
 							<li <c:if test="${controller eq 'revenueAccounts'}"> class="active" </c:if>>
 								<a class="submenu"  href="<c:url value='/revenueAccounts'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Revenue Accounts</span></a></li>
-							<li <c:if test="${controller eq 'timeline'}"> class="active" </c:if>>
+							<li <c:if test="${controller eq 'expenseAccounts'}"> class="active" </c:if>>
 								<a class="submenu"  href="<c:url value='/expenseAccounts'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Expense Accounts</span></a></li>
-							<li <c:if test="${controller eq 'timeline'}"> class="active" </c:if>>
-								<a class="submenu"  href="<c:url value='/despesas'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Expense Details</span></a></li>
+							<li <c:if test="${controller eq 'expenseCategories'}"> class="active" </c:if>>
+								<a class="submenu"  href="<c:url value='/expenseCategories'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Expense Categories</span></a></li>
 							<li <c:if test="${controller eq 'offices'}"> class="active" </c:if>>
 								<a class="submenu"  href="<c:url value='/offices'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Offices</span></a></li>
+							<li <c:if test="${controller eq 'bankAccounts'}"> class="active" </c:if>>
+								<a class="submenu"  href="<c:url value='/bankAccounts'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Bank Accounts</span></a></li>
 							<li <c:if test="${controller eq 'paymentTerms'}"> class="active" </c:if>>
 								<a class="submenu"  href="<c:url value='/paymentTerms'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Payment Terms</span></a></li>
 							<li <c:if test="${controller eq 'negotiationTerms'}"> class="active" </c:if>>

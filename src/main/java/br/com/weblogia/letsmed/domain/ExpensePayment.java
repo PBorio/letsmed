@@ -20,12 +20,20 @@ public class ExpensePayment {
 	private Date paymentDate;
 	
 	@ManyToOne
-	private Expense expense;
+	private ExpenseAccount expenseAccount;
+	
+	@ManyToOne
+	private BankAccount bankAccount;
 	
 	@ManyToOne
 	private PaymentTerm paymentTerm;
 	
+	@ManyToOne
+	private Office office;
+	
 	private Double value;
+	
+	private String additionalInfo;
 
 	public Long getId() {
 		return id;
@@ -43,14 +51,6 @@ public class ExpensePayment {
 		this.paymentDate = paymentDate;
 	}
 
-	public Expense getExpense() {
-		return expense;
-	}
-
-	public void setExpense(Expense expense) {
-		this.expense = expense;
-	}
-
 	public PaymentTerm getPaymentTerm() {
 		return paymentTerm;
 	}
@@ -65,6 +65,38 @@ public class ExpensePayment {
 
 	public void setValue(Double value) {
 		this.value = value;
+	}
+
+	public ExpenseAccount getExpenseAccount() {
+		return expenseAccount;
+	}
+
+	public void setExpenseAccount(ExpenseAccount expenseAccount) {
+		this.expenseAccount = expenseAccount;
+	}
+
+	public BankAccount getBankAccount() {
+		return this.bankAccount;
+	}
+
+	public void setBankAccount(BankAccount bankAccount) {
+		this.bankAccount = bankAccount;
+	}
+
+	public Office getOffice() {
+		return this.office;
+	}
+
+	public void setOffice(Office office) {
+		this.office = office;
+	}
+
+	public String getAdditionalInfo() {
+		return additionalInfo;
+	}
+
+	public void setAdditionalInfo(String additionalInfo) {
+		this.additionalInfo = additionalInfo;
 	}
 	
 

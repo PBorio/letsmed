@@ -14,6 +14,7 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validator;
+import br.com.weblogia.letsmed.domain.BankAccount;
 import br.com.weblogia.letsmed.domain.PaymentTerm;
 import br.com.weblogia.letsmed.domain.Revenue;
 import br.com.weblogia.letsmed.domain.RevenuePayment;
@@ -55,7 +56,7 @@ public class RevenuesController {
 	@Transactional
 	@Post
 	@Path("/revenues/payment/save")
-	public void save(RevenuePayment revenuePayment){
+	public void savePayment(RevenuePayment revenuePayment){
 		
 		validatePayment(revenuePayment);
 
@@ -97,6 +98,8 @@ public class RevenuesController {
 	@SuppressWarnings("unchecked")
 	private void loadLists() {
 		List<PaymentTerm> paymentTermList = (List<PaymentTerm>) entityManager.createQuery(" from PaymentTerm p order by p.description ").getResultList();
+		List<BankAccount> bankAccountList = (List<BankAccount>) entityManager.createQuery(" from BankAccount b order by b.description ").getResultList();
+		result.include("bankAccountList", bankAccountList);
 		result.include("paymentTermList", paymentTermList);
 	}
 	

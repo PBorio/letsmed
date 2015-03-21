@@ -24,8 +24,9 @@
   	  <tr>
 	  		<td class="center"><a href="<c:url value='/revenues/payment/${revenue.id}'/>"><fmt:formatDate value='${revenue.revenueDate}' pattern='MM/dd/yyyy'/></a></td>
 	  		<td class="center">
-	  		   <a href="<c:url value='/revenues/payment/${revenue.id}'/>">${revenue.revenueAccount.description}
-	  			  <c:if test="${revenue.order != null}"> - Order N. ${revenue.order.id} </c:if>
+	  		   <a href="<c:url value='/revenues/payment/${revenue.id}'/>">
+	  			  <c:if test="${revenue.order != null}"> Order N. ${revenue.order.id} - </c:if>
+	  			  ${revenue.revenueAccount.description}
 	  		   </a>
 	  		</td>
 	  		<td class="center"><a href="<c:url value='/revenues/payment/${revenue.id}'/>">${revenue.value}</a></td>

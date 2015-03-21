@@ -14,6 +14,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validator;
 import br.com.weblogia.letsmed.domain.ExpenseAccount;
+import br.com.weblogia.letsmed.domain.ExpenseCategory;
 import br.com.weblogia.letsmed.domain.Partner;
 
 @Controller
@@ -29,13 +30,11 @@ public class PartnersController {
 	@Inject 
 	Validator validator;
 	
-	@SuppressWarnings("unchecked")
 	public void partner(){
-		List<ExpenseAccount> expenseAccountList = (List<ExpenseAccount>) entityManager.createQuery(" from ExpenseAccount ea order by ea.description ").getResultList();
-		result.include("expenseAccountList", expenseAccountList);
+		loadLists();
 		result.include("controller", "partners");
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Get
 	@Path("/partners")
@@ -44,15 +43,13 @@ public class PartnersController {
 		return (List<Partner>) entityManager.createQuery(" from Partner o order by o.partnerName ").getResultList();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Transactional
 	public void save(Partner partner){
 		
 		validator.addIf(( partner.getPartnerName() == null || partner.getPartnerName().trim().equals("")),new I18nMessage("off","partner.without.name"));
 
 		if(validator.hasErrors()){
-			List<ExpenseAccount> expenseAccountList = (List<ExpenseAccount>) entityManager.createQuery(" from ExpenseAccount ea order by ea.description ").getResultList();
-			result.include("expenseAccountList", expenseAccountList);
+			loadLists();
 			result.include("partner", partner);
 			validator.onErrorUsePageOf(this).partner();
 		}
@@ -68,16 +65,22 @@ public class PartnersController {
 		result.redirectTo(this).list();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Get
 	@Path("/partners/{id}")
 	public void edit(Long id) {
 		Partner partner = entityManager.find(Partner.class, id);
-		List<ExpenseAccount> expenseAccountList = (List<ExpenseAccount>) entityManager.createQuery(" from ExpenseAccount ea order by ea.description ").getResultList();
-		result.include("expenseAccountList", expenseAccountList);
+		loadLists();
 		result.include("controller", "partners");
 		result.include("partner", partner);
 		result.of(this).partner();
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void loadLists() {
+		List<ExpenseAccount> expenseAccountList = (List<ExpenseAccount>) entityManager.createQuery(" from ExpenseAccount ea order by ea.description ").getResultList();
+		List<ExpenseCategory> expenseCategoryList = (List<ExpenseCategory>) entityManager.createQuery(" from ExpenseCategory ec order by ec.description ").getResultList();
+		result.include("expenseAccountList", expenseAccountList);
+		result.include("expenseCategoryList", expenseCategoryList);
 	}
 
 }

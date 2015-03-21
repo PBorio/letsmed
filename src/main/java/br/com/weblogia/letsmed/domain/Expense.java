@@ -26,6 +26,9 @@ public class Expense {
 	private ExpenseAccount expenseAccount;
 	
 	@ManyToOne
+	private ExpenseCategory expenseCategory;
+	
+	@ManyToOne
 	private Order order;
 	
 	private Double value;
@@ -86,6 +89,14 @@ public class Expense {
 
 	public void setAdditionalInfo(String additionalInfo) {
 		this.additionalInfo = additionalInfo;
+	}
+
+	public ExpenseCategory getExpenseCategory() {
+		return expenseCategory;
+	}
+
+	public void setExpenseCategory(ExpenseCategory expenseCategory) {
+		this.expenseCategory = expenseCategory;
 	}
 	
 	

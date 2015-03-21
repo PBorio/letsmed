@@ -87,6 +87,19 @@
 		  </div>
 		</div>
 		<div class="control-group">
+		  <label class="control-label col-xs2">Bank:</label>
+		  <div class="controls">
+		    <select id="revenuePayment.bankAccount.id" name="revenuePayment.bankAccount.id" class="input-xlarge span6" >   
+              <option value="-1"> Banks...</option>  
+              <c:forEach var="bank" items="${bankAccountList}">  
+                  <option value="${bank.id}" <c:if test="${bank.id == revenuePayment.bankAccount.id}">selected="true"</c:if>> 
+                  	${bank.description} 
+                  </option>  
+              </c:forEach> 
+          </select>
+		  </div>
+		</div>
+		<div class="control-group">
 		  <label class="control-label col-xs2">Value:</label>
 		  <div class="controls">
 		    <input type="text" class="input-xlarge span4" data-behaviour="valor" name="revenuePayment.value" id="revenuePayment.value" value="${revenuePayment.value}" />
@@ -97,7 +110,7 @@
     <hr class="hideInIE8"/>
 	<div class="form-actions">
 	  <button id="singlebutton" name="singlebutton" class="btn btn-primary">Save</button>
-	     <a href="<c:url value='/revenuePayments'/>" class="btn btn-primary">Cancel</a>
+	     <a href="<c:url value='/revenues'/>" class="btn btn-primary">Cancel</a>
 	     <a href="<c:url value='/timeline'/>" class="btn btn-primary">Go To Timeline</a>   
 	</div>
 </div>

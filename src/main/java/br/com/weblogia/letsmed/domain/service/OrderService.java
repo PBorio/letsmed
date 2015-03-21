@@ -27,6 +27,7 @@ public class OrderService {
 			Expense expense = new Expense();
 			expense.setExpenseDate(new Date());
 			expense.setExpenseAccount(order.getCustomer().getPartnerExpenseAccount());
+			expense.setExpenseCategory(order.getCustomer().getPartnerExpenseCategory());
 			expense.setOffice(order.getCustomer().getOffice());
 			expense.setOrder(order);
 			expense.setValue(order.getCustomer().getPartnerComissionTo(order.getTotalValue()));

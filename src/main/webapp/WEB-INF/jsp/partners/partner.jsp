@@ -78,6 +78,19 @@
 		  </div>
 		</div>
 		<div class="control-group">
+		  <label class="control-label col-xs2">Comission Category:</label>
+		  <div class="controls">
+		    <select id="partner.expenseCategory.id" name="partner.expenseCategory.id" class="input-xlarge span6" >   
+              <option value="-1"> Categories...</option>  
+              <c:forEach var="expenseCategory" items="${expenseCategoryList}">  
+                  <option value="${expenseCategory.id}" <c:if test="${expenseCategory.id == partner.expenseCategory.id}">selected="true"</c:if>> 
+                  	${expenseCategory.description} 
+                  </option>  
+              </c:forEach> 
+          </select>
+		  </div>
+		</div>
+		<div class="control-group">
 		  <label class="control-label col-xs2">Percentual:</label>
 		  <div class="controls">
 		    <input type="text" class="input-xlarge span2" name="partner.percentual" id="partner.percentual" value="${partner.percentual}" />

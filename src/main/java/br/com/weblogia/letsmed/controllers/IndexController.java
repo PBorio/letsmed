@@ -22,7 +22,7 @@ public class IndexController {
 	@Get
 	@Path("/")
 	public void index(){
-		result.include("controller", "dashboard");
+		result.redirectTo(TimelineController.class).timeline();
 	}
 
 }
