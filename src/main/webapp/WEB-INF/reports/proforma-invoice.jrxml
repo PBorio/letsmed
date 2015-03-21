@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="proforma-invoice" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="65b2ff10-6837-4062-931c-7f41e8fbe98f">
 	<property name="ireport.zoom" value="3.0"/>
-	<property name="ireport.x" value="93"/>
-	<property name="ireport.y" value="648"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="560"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -269,35 +269,35 @@ where o.id = $P{order_id}]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="32" splitType="Stretch">
+		<band height="14" splitType="Immediate">
 			<subreport isUsingCache="true">
-				<reportElement uuid="345dfcdd-b434-410b-9aaa-4cdbbd365cc9" mode="Opaque" x="1" y="0" width="555" height="32" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="345dfcdd-b434-410b-9aaa-4cdbbd365cc9" style="Detail" positionType="Float" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" mode="Transparent" x="0" y="0" width="556" height="14"/>
 				<subreportParameter name="order_id">
 					<subreportParameterExpression><![CDATA[$P{order_id}]]></subreportParameterExpression>
 				</subreportParameter>
-				<connectionExpression><![CDATA[]]></connectionExpression>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "ProformaInvoice_itens.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="108" splitType="Stretch">
+		<band height="108" splitType="Immediate">
 			<staticText>
-				<reportElement uuid="c9313250-cced-49ca-acb1-e833d3b2a745" x="0" y="0" width="239" height="11"/>
+				<reportElement uuid="c9313250-cced-49ca-acb1-e833d3b2a745" x="1" y="0" width="239" height="11" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="f3fa7903-c05e-477c-b704-bb501dc76e75" x="238" y="0" width="80" height="11"/>
+				<reportElement uuid="f3fa7903-c05e-477c-b704-bb501dc76e75" x="239" y="0" width="80" height="11"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalQuantity}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="f3fa7903-c05e-477c-b704-bb501dc76e75" x="396" y="0" width="80" height="11"/>
+				<reportElement uuid="f3fa7903-c05e-477c-b704-bb501dc76e75" isPrintRepeatedValues="false" x="397" y="0" width="80" height="11"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
@@ -317,7 +317,7 @@ where o.id = $P{order_id}]]>
 				<reportElement uuid="070bec7c-57dc-49f4-a2f8-6a8d3253675d" x="317" y="19" width="238" height="89"/>
 			</rectangle>
 			<staticText>
-				<reportElement uuid="cf7dec6f-69e0-4e81-ae2b-ef89e0dfc3b1" x="0" y="11" width="552" height="7"/>
+				<reportElement uuid="cf7dec6f-69e0-4e81-ae2b-ef89e0dfc3b1" x="0" y="12" width="552" height="7"/>
 				<textElement textAlignment="Left">
 					<font size="5"/>
 				</textElement>

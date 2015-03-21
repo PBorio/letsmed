@@ -39,7 +39,7 @@ where item.order_id = $P{order_id}]]>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="40" splitType="Stretch">
+		<band height="15" splitType="Immediate">
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="0" y="0" width="60" height="15"/>
 				<textElement verticalAlignment="Middle">
@@ -48,7 +48,7 @@ where item.order_id = $P{order_id}]]>
 				<textFieldExpression><![CDATA[$F{articleNumber}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="59" y="0" width="180" height="30"/>
+				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="60" y="0" width="180" height="15"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Calibri" size="8"/>
 				</textElement>
