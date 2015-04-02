@@ -27,6 +27,11 @@ public class BuyOrderItem {
 	
 	private String additionalInfo;
 	
+	private Integer packageQuantity = 0;
+	private Double grossWeight = 0.0;
+	private Double netWeight = 0.0;
+	private Double volume = 0.0;
+	
 	public Double getTotalValue(){
 		return this.quantity * this.unitPrice;
 	}
@@ -77,6 +82,38 @@ public class BuyOrderItem {
 
 	public void setAdditionalInfo(String additionalInfo) {
 		this.additionalInfo = additionalInfo;
+	}
+
+	public Integer getPackageQuantity() {
+		return packageQuantity;
+	}
+
+	public void setPackageQuantity(Integer packageQuantity) {
+		this.packageQuantity = packageQuantity;
+	}
+
+	public Double getGrossWeight() {
+		return grossWeight;
+	}
+
+	public void setGrossWeight(Double grossWeight) {
+		this.grossWeight = grossWeight;
+	}
+
+	public Double getNetWeight() {
+		return netWeight;
+	}
+
+	public void setNetWeight(Double netWeight) {
+		this.netWeight = netWeight;
+	}
+
+	public Double getVolume() {
+		return volume;
+	}
+
+	public void setVolume(Double volume) {
+		this.volume = volume;
 	}
 
 

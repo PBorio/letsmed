@@ -15,6 +15,7 @@
 	  <tr>
 	   <th width="15%">Order Date</th>
 	   <th width="35%">Supplier Name</th>
+	   <th>Order N.</th>
 	   <th width="35%">Customer Name</th>
  	   <th>Actions</th>
 	  </tr>
@@ -22,9 +23,10 @@
   <tbody>
   	<c:forEach var="buyOrder" items="${buyOrderList}">
   	  <tr>
-	  		<td class="center"><a href="<c:url value='/${url}/${buyOrder.id}'/>"><fmt:formatDate value='${buyOrder.orderDate}' pattern='dd/MM/yyyy'/></a></td>
-	  		<td class="center"><a href="<c:url value='/${url}/${buyOrder.id}'/>">${buyOrder.supplier.supplierName}</a></td>
-	  		<td class="center"><a href="<c:url value='/${url}/${buyOrder.id}'/>">${buyOrder.order.customer.name}</a></td>
+	  		<td class="center"><a href="<c:url value='/buyOrders/${buyOrder.id}'/>"><fmt:formatDate value='${buyOrder.orderDate}' pattern='dd/MM/yyyy'/></a></td>
+	  		<td class="center"><a href="<c:url value='/buyOrders/${buyOrder.id}'/>">${buyOrder.supplier.supplierName}</a></td>
+	  		<td class="center"><a href="<c:url value='/buyOrders/${buyOrder.id}'/>">${buyOrder.order.id}</a></td>
+	  		<td class="center"><a href="<c:url value='/buyOrders/${buyOrder.id}'/>">${buyOrder.order.customer.name}</a></td>
   	  		<td class="center">
 				<a href="" onclick="remove(${buyOrder.id}); return false;" class="btn btn-danger"><i class="halflings-icon trash halflings-icon"></i></a>	        	 
 	        </td>

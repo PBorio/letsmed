@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PedidoDeVenda_itens" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="386b2354-8e0d-4b93-8e7b-535ad361cc91">
-	<property name="ireport.zoom" value="4.0"/>
+	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="order_id" class="java.lang.Long"/>
@@ -9,14 +9,13 @@
 	   product.description as description,
 	   item.quantity as quantity,
 	   item.unitPrice as unitPrice,
-       item.additionalInfo as additionalInfo,
-       (item.quantity*item.unitPrice) as amount,
-	   itembo.volume as volume
+	   unit.description as unit,
+	   item.deliveryDate as deliveryDate,
+       (item.quantity*item.unitPrice) as amount
 from order_itens item
+ left join units_of_measure unit on unit.id = item.unitOfMeasure_id
  join products product on product.id = item.product_id
    join orders o on o.id = item.order_id
-     left join buy_orders bo on bo.order_id = o.id
-		left join buy_order_itens itembo on itembo.buyOrder_id = bo.id and itembo.product_id = product.id
 where item.order_id = $P{order_id}]]>
 	</queryString>
 	<field name="articleNumber" class="java.lang.String">
@@ -31,18 +30,29 @@ where item.order_id = $P{order_id}]]>
 	<field name="unitPrice" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="additionalInfo" class="java.lang.String">
+	<field name="unit" class="java.lang.String"/>
+	<field name="deliveryDate" class="java.sql.Timestamp">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="amount" class="java.math.BigDecimal"/>
-	<field name="volume" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
 		<band height="15" splitType="Immediate">
+			<line direction="BottomUp">
+				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="0" y="0" width="1" height="13"/>
+			</line>
+			<line direction="BottomUp">
+				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="288" y="0" width="1" height="13"/>
+			</line>
+			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="228" y="-1" width="60" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{deliveryDate}]]></textFieldExpression>
+			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="0" y="0" width="60" height="15"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -50,67 +60,64 @@ where item.order_id = $P{order_id}]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{articleNumber}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="61" y="0" width="180" height="15"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="238" y="0" width="80" height="15"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.000000" isBlankWhenNull="true">
-				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="318" y="0" width="80" height="15"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Calibri" size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{unitPrice}]]></textFieldExpression>
-			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" mode="Opaque" x="398" y="0" width="78" height="15" backcolor="#99FFCC"/>
+				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="484" y="0" width="70" height="15"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Calibri" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="476" y="0" width="79" height="15"/>
+			<textField pattern="#,##0.0000" isBlankWhenNull="true">
+				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" mode="Transparent" x="422" y="0" width="62" height="15" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Calibri" size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{volume}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{unitPrice}]]></textFieldExpression>
 			</textField>
-			<line>
-				<reportElement uuid="ea50e027-3928-48aa-a558-f7c4d2772037" x="0" y="0" width="555" height="1"/>
-			</line>
-			<line>
-				<reportElement uuid="ea50e027-3928-48aa-a558-f7c4d2772037" x="0" y="14" width="555" height="1"/>
-			</line>
 			<line direction="BottomUp">
 				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="60" y="1" width="1" height="13"/>
 			</line>
 			<line direction="BottomUp">
-				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="239" y="1" width="1" height="13"/>
+				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="484" y="1" width="1" height="13"/>
 			</line>
 			<line direction="BottomUp">
-				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="318" y="1" width="1" height="13"/>
+				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="358" y="1" width="1" height="13"/>
+			</line>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" mode="Transparent" x="358" y="0" width="64" height="15" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="61" y="0" width="168" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="ea50e027-3928-48aa-a558-f7c4d2772037" x="0" y="14" width="555" height="1"/>
 			</line>
 			<line direction="BottomUp">
-				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="398" y="1" width="1" height="13"/>
+				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="422" y="1" width="1" height="13"/>
 			</line>
 			<line direction="BottomUp">
-				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="476" y="1" width="1" height="13"/>
+				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="228" y="1" width="1" height="13"/>
+			</line>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="288" y="0" width="70" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unit}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="ea50e027-3928-48aa-a558-f7c4d2772037" x="0" y="0" width="555" height="1"/>
 			</line>
 			<line direction="BottomUp">
 				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="554" y="1" width="1" height="13"/>
-			</line>
-			<line direction="BottomUp">
-				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="0" y="1" width="1" height="13"/>
 			</line>
 		</band>
 	</detail>

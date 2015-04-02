@@ -46,6 +46,9 @@ public class Order {
 	@ManyToOne
 	private NegotiationTerm negotiationTerm;
 	
+	@ManyToOne
+	private ShipmentTerm shipmentTerm;
+	
 	private Date proformaConfirmationDate;
 	
 	private Date artworkConfirmationDate;
@@ -110,6 +113,176 @@ public class Order {
 		return new Arredondamento().arredondar(result);
 	}
 
+	
+
+	public boolean unsolvedComplains() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isPaid() {
+		if (this.getTotalValue().doubleValue() == 0.0)
+			return false;
+		
+		return (this.getBalance() <= 0.0);
+	}
+
+	public Date getLastPaymentDate() {
+		if (this.payments == null || this.payments.size() == 0)
+			return null;
+		
+		DateTime ultimaData = null;
+		
+		for (OrderPayment op : this.payments){
+			if (ultimaData == null || ultimaData.isBefore(new DateTime(op.getPaymentDate().getTime())))
+				ultimaData = new DateTime(op.getPaymentDate().getTime());
+		}
+		
+		return ultimaData.toDate();
+	}
+	
+	public Date getLastForwardDetailDate(){
+		if (this.forwardDetails == null || this.forwardDetails.size() == 0)
+			return null;
+		
+		DateTime lastDate = null;
+		
+		for (ForwardDetail f : this.forwardDetails){
+			if (lastDate == null || lastDate.isBefore(new DateTime(f.getForwardDetailDate().getTime())))
+				lastDate = new DateTime(f.getForwardDetailDate().getTime());
+		}
+		
+		return lastDate.toDate();
+	}
+
+	public boolean isAdvancedPaid() {
+		
+		if (this.getTotalValue().doubleValue() == 0.0)
+			return false;
+		
+		return (this.getPaidValue().doubleValue() > 0.0 && this.getBalance().doubleValue() > 0.0);
+	}
+
+	public BuyOrder getBuyOrder() {
+		if (this.buyOrders == null || this.buyOrders.size() == 0)
+			return null;
+		return buyOrders.get(0);
+	}
+	
+	public OrderStatus getStatus(){
+		return new OrderStatusFactory().getStatus(this);
+	}
+
+	public boolean isForwardDetailsSent() {
+		return (this.forwardDetails != null && !this.forwardDetails.isEmpty());
+	}
+
+	public boolean isToBeFilledIn() {
+		return this.confirmationDate == null;
+	}
+
+	public boolean isToBeSentToFactory() {
+		return (this.confirmationDate != null && this.getBuyOrder() == null);
+	}
+
+	public boolean isWaitingProformaConfirmation() {
+		return (getBuyOrder() != null && this.proformaConfirmationDate == null);
+	}
+
+	public boolean isWaitingArtworkConfirmation() {
+		return (this.proformaConfirmationDate != null && this.artworkConfirmationDate == null);
+	}
+
+	public boolean isWaitingAdvancedPayment() {
+		
+		if(negotiationTerm == null)
+			return false;
+		
+		if (this.negotiationTerm.getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_AGAINST_COPY)||
+			this.negotiationTerm.getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT)){
+			return (this.artworkConfirmationDate != null && !this.isPaid() && !this.isAdvancedPaid());
+		}
+		return false;
+	}
+
+	public boolean isWaitingProductionStart() {
+		
+		if (negotiationTerm == null)
+			return false;
+		
+		if (this.negotiationTerm.getNegotiationType().equals(NegotiationType.LC_AT_SIGHT)){
+			return (this.isPaid() && this.productionStartDate == null);
+		}
+		
+		if (this.negotiationTerm.getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_AGAINST_COPY)||
+			this.negotiationTerm.getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT)){
+			return (this.isAdvancedPaid() && this.productionStartDate == null);
+		}
+		return (this.artworkConfirmationDate != null && this.productionStartDate == null);
+	}
+
+	public boolean isWaitingForwardDetails() {
+		return (productionStartDate != null && !this.isForwardDetailsSent());
+	}
+
+	public boolean isWaitingShipment() {
+		
+		if (negotiationTerm == null)
+			return false;
+		
+		if (!this.isForwardDetailsSent())
+			return false;
+		
+		if (NegotiationType.TT_100_BEFORE_SHIPMENT.equals(this.negotiationTerm.getNegotiationType())||
+			NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT.equals(this.negotiationTerm.getNegotiationType())){
+			return (this.shipDate == null && this.isPaid());
+		}
+		return (this.shipDate == null);
+	}
+
+	public boolean isWaitingForDocumentCopy() {
+		return (this.shipDate != null && this.copyDocumentDate == null);
+	}
+
+	public boolean isWaitingOrderToBePaid() {
+		
+		if (negotiationTerm == null)
+			return false;
+		
+		if (this.isPaid())
+			return false;
+		
+		if (NegotiationType.LC_AT_SIGHT.equals(this.negotiationTerm.getNegotiationType())){
+			return (this.artworkConfirmationDate != null && this.productionStartDate == null);
+		}
+		
+		if (NegotiationType.TT_100_BEFORE_SHIPMENT.equals(this.negotiationTerm.getNegotiationType())||
+			NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT.equals(this.negotiationTerm.getNegotiationType())){
+			return (this.isForwardDetailsSent() && this.shipDate == null);
+		}
+		
+		if (NegotiationType.TT_100_AGAINST_COPY.equals(this.negotiationTerm.getNegotiationType())||
+			NegotiationType.TT_ADVANCE_AND_BALANCE_AGAINST_COPY.equals(this.negotiationTerm.getNegotiationType())){
+			return (this.copyDocumentDate != null && this.originalDocumentDate == null);
+		}
+		return false;
+	}
+
+	public boolean isWaitingForOriginalDocument() {
+		return (this.originalDocumentDate == null && this.isPaid());
+	}
+
+	public boolean isComissionPaid() {
+		if (this.getComissionRevenue() == null)
+			return false;
+		
+		return (this.getComissionRevenue().getBalance() <= 0.0);
+	}
+
+	public boolean isWaitingForComissionPayment() {
+		return (this.originalDocumentDate != null && this.conclusionDate == null);
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -269,159 +442,12 @@ public class Order {
 		this.conclusionDate = conclusionDate;
 	}
 
-	public boolean unsolvedComplains() {
-		// TODO Auto-generated method stub
-		return false;
+	public ShipmentTerm getShipmentTerm() {
+		return shipmentTerm;
 	}
 
-	public boolean isPaid() {
-		if (this.getTotalValue().doubleValue() == 0.0)
-			return false;
-		
-		return (this.getBalance() <= 0.0);
-	}
-
-	public Date getLastPaymentDate() {
-		if (this.payments == null || this.payments.size() == 0)
-			return null;
-		
-		DateTime ultimaData = null;
-		
-		for (OrderPayment op : this.payments){
-			if (ultimaData == null || ultimaData.isBefore(new DateTime(op.getPaymentDate().getTime())))
-				ultimaData = new DateTime(op.getPaymentDate().getTime());
-		}
-		
-		return ultimaData.toDate();
-	}
-	
-	public Date getLastForwardDetailDate(){
-		if (this.forwardDetails == null || this.forwardDetails.size() == 0)
-			return null;
-		
-		DateTime lastDate = null;
-		
-		for (ForwardDetail f : this.forwardDetails){
-			if (lastDate == null || lastDate.isBefore(new DateTime(f.getForwardDetailDate().getTime())))
-				lastDate = new DateTime(f.getForwardDetailDate().getTime());
-		}
-		
-		return lastDate.toDate();
-	}
-
-	public boolean isAdvancedPaid() {
-		
-		if (this.getTotalValue().doubleValue() == 0.0)
-			return false;
-		
-		return (this.getPaidValue().doubleValue() > 0.0 && this.getBalance().doubleValue() > 0.0);
-	}
-
-	public BuyOrder getBuyOrder() {
-		if (this.buyOrders == null || this.buyOrders.size() == 0)
-			return null;
-		return buyOrders.get(0);
-	}
-	
-	public OrderStatus getStatus(){
-		return new OrderStatusFactory().getStatus(this);
-	}
-
-	public boolean isForwardDetailsSent() {
-		return (this.forwardDetails != null && !this.forwardDetails.isEmpty());
-	}
-
-	public boolean isToBeFilledIn() {
-		return this.confirmationDate == null;
-	}
-
-	public boolean isToBeSentToFactory() {
-		return (this.confirmationDate != null && this.getBuyOrder() == null);
-	}
-
-	public boolean isWaitingProformaConfirmation() {
-		return (getBuyOrder() != null && this.proformaConfirmationDate == null);
-	}
-
-	public boolean isWaitingArtworkConfirmation() {
-		return (this.proformaConfirmationDate != null && this.artworkConfirmationDate == null);
-	}
-
-	public boolean isWaitingAdvancedPayment() {
-		
-		if (this.negotiationTerm.getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_AGAINST_COPY)||
-			this.negotiationTerm.getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT)){
-			return (this.artworkConfirmationDate != null && !this.isPaid() && !this.isAdvancedPaid());
-		}
-		return false;
-	}
-
-	public boolean isWaitingProductionStart() {
-		
-		if (this.negotiationTerm.getNegotiationType().equals(NegotiationType.LC_AT_SIGHT)){
-			return (this.isPaid() && this.productionStartDate == null);
-		}
-		
-		if (this.negotiationTerm.getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_AGAINST_COPY)||
-			this.negotiationTerm.getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT)){
-			return (this.isAdvancedPaid() && this.productionStartDate == null);
-		}
-		return (this.artworkConfirmationDate != null && this.productionStartDate == null);
-	}
-
-	public boolean isWaitingForwardDetails() {
-		return (productionStartDate != null && !this.isForwardDetailsSent());
-	}
-
-	public boolean isWaitingShipment() {
-		if (!this.isForwardDetailsSent())
-			return false;
-		
-		if (NegotiationType.TT_100_BEFORE_SHIPMENT.equals(this.negotiationTerm.getNegotiationType())||
-			NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT.equals(this.negotiationTerm.getNegotiationType())){
-			return (this.shipDate == null && this.isPaid());
-		}
-		return (this.shipDate == null);
-	}
-
-	public boolean isWaitingForDocumentCopy() {
-		return (this.shipDate != null && this.copyDocumentDate == null);
-	}
-
-	public boolean isWaitingOrderToBePaid() {
-		
-		if (this.isPaid())
-			return false;
-		
-		if (NegotiationType.LC_AT_SIGHT.equals(this.negotiationTerm.getNegotiationType())){
-			return (this.artworkConfirmationDate != null && this.productionStartDate == null);
-		}
-		
-		if (NegotiationType.TT_100_BEFORE_SHIPMENT.equals(this.negotiationTerm.getNegotiationType())||
-			NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT.equals(this.negotiationTerm.getNegotiationType())){
-			return (this.isForwardDetailsSent() && this.shipDate == null);
-		}
-		
-		if (NegotiationType.TT_100_AGAINST_COPY.equals(this.negotiationTerm.getNegotiationType())||
-			NegotiationType.TT_ADVANCE_AND_BALANCE_AGAINST_COPY.equals(this.negotiationTerm.getNegotiationType())){
-			return (this.copyDocumentDate != null && this.originalDocumentDate == null);
-		}
-		return false;
-	}
-
-	public boolean isWaitingForOriginalDocument() {
-		return (this.originalDocumentDate == null && this.isPaid());
-	}
-
-	public boolean isComissionPaid() {
-		if (this.getComissionRevenue() == null)
-			return false;
-		
-		return (this.getComissionRevenue().getBalance() <= 0.0);
-	}
-
-	public boolean isWaitingForComissionPayment() {
-		return (this.originalDocumentDate != null && this.conclusionDate == null);
+	public void setShipmentTerm(ShipmentTerm shipmentTerm) {
+		this.shipmentTerm = shipmentTerm;
 	}
 
 }

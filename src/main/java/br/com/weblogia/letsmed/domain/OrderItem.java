@@ -1,5 +1,7 @@
 package br.com.weblogia.letsmed.domain;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,6 +31,11 @@ public class OrderItem {
 	private Double unitPrice = 0.0;
 	
 	private String additionalInfo;
+	
+	private Date deliveryDate;
+	
+	@ManyToOne
+	private UnitOfMeasure unitOfMeasure;
 	
 	public Double getTotalValue(){
 		return new Arredondamento().arredondar(this.quantity * this.unitPrice);
@@ -80,6 +87,22 @@ public class OrderItem {
 
 	public void setAdditionalInfo(String additionalInfo) {
 		this.additionalInfo = additionalInfo;
+	}
+
+	public UnitOfMeasure getUnitOfMeasure() {
+		return unitOfMeasure;
+	}
+
+	public void setUnitOfMeasure(UnitOfMeasure unitOfMeasure) {
+		this.unitOfMeasure = unitOfMeasure;
+	}
+
+	public Date getDeliveryDate() {
+		return deliveryDate;
+	}
+
+	public void setDeliveryDate(Date deliveryDate) {
+		this.deliveryDate = deliveryDate;
 	}
 	
 	

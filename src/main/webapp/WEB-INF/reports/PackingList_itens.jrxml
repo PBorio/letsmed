@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PedidoDeVenda_itens" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="386b2354-8e0d-4b93-8e7b-535ad361cc91">
 	<property name="ireport.zoom" value="4.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="808"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="order_id" class="java.lang.Long"/>
 	<queryString>
 		<![CDATA[select product.articleNumber as articleNumber,
 	   product.description as description,
-	   item.quantity as quantity,
-	   item.unitPrice as unitPrice,
-       item.additionalInfo as additionalInfo,
-       (item.quantity*item.unitPrice) as amount,
+	   itembo.quantity as quantity,
+	   itembo.packageQuantity as packageQuantity,
+       itembo.grossWeight as grossWeight,
+	   itembo.netWeight as netWeight,
 	   itembo.volume as volume
 from order_itens item
  join products product on product.id = item.product_id
@@ -28,13 +28,15 @@ where item.order_id = $P{order_id}]]>
 	<field name="quantity" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="unitPrice" class="java.math.BigDecimal">
+	<field name="packageQuantity" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="additionalInfo" class="java.lang.String">
+	<field name="grossWeight" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="amount" class="java.math.BigDecimal"/>
+	<field name="netWeight" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="volume" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -51,35 +53,35 @@ where item.order_id = $P{order_id}]]>
 				<textFieldExpression><![CDATA[$F{articleNumber}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="61" y="0" width="180" height="15"/>
+				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="61" y="0" width="168" height="15"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Calibri" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="238" y="0" width="80" height="15"/>
+				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="228" y="0" width="60" height="15"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Calibri" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.000000" isBlankWhenNull="true">
-				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="318" y="0" width="80" height="15"/>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="288" y="0" width="70" height="15"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Calibri" size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{unitPrice}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{packageQuantity}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" mode="Opaque" x="398" y="0" width="78" height="15" backcolor="#99FFCC"/>
+				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" mode="Transparent" x="358" y="0" width="64" height="15" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Calibri" size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{grossWeight}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="476" y="0" width="79" height="15"/>
+				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="484" y="0" width="70" height="15"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Calibri" size="8"/>
 				</textElement>
@@ -95,22 +97,32 @@ where item.order_id = $P{order_id}]]>
 				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="60" y="1" width="1" height="13"/>
 			</line>
 			<line direction="BottomUp">
-				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="239" y="1" width="1" height="13"/>
+				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="228" y="1" width="1" height="13"/>
 			</line>
 			<line direction="BottomUp">
-				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="318" y="1" width="1" height="13"/>
+				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="288" y="1" width="1" height="13"/>
 			</line>
 			<line direction="BottomUp">
-				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="398" y="1" width="1" height="13"/>
+				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="358" y="1" width="1" height="13"/>
 			</line>
 			<line direction="BottomUp">
-				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="476" y="1" width="1" height="13"/>
+				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="484" y="1" width="1" height="13"/>
 			</line>
 			<line direction="BottomUp">
 				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="554" y="1" width="1" height="13"/>
 			</line>
 			<line direction="BottomUp">
 				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="0" y="1" width="1" height="13"/>
+			</line>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" mode="Transparent" x="422" y="0" width="62" height="15" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{netWeight}]]></textFieldExpression>
+			</textField>
+			<line direction="BottomUp">
+				<reportElement uuid="88058df1-378f-4646-a700-0d2aa41a456c" x="422" y="1" width="1" height="13"/>
 			</line>
 		</band>
 	</detail>

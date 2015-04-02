@@ -71,11 +71,14 @@
 	  <table class="table table-striped table-bordered" id="table-receita">
 		<thead>
 		  <tr>
-			<td width="40%">Product</td>
+			<td width="20%">Product</td>
 			<td width="10%">Quantity</td>
 			<td width="10%">Unit Price</td>
-			<td width="30%">Additional Info</td>
-			<td width="10%">Total</td>
+			<td width="10%">Total Value</td>
+			<td width="10%">Quantity CTN</td>
+			<td width="10%">G.W KGs</td>
+			<td width="10%">N.W KGs</td>
+			<td width="10%">Volume (CBM)</td>
 		  </tr>
 		</thead>
 		<tbody id="tb-itens">
@@ -95,8 +98,11 @@
 		 	    </td>
 		 	  <td><input type="text" class="input-xlarge span12" name="buyOrder.itens[${idx.index}].quantity" value="${item.quantity}"  /></td>
 		 	  <td><input type="text" class="input-xlarge span12" data-behaviour="valor" name="buyOrder.itens[${idx.index}].unitPrice" value="${item.unitPrice}"/></td>
-		 	  <td><textarea class="input-xlarge span12" name="buyOrder.itens[${idx.index}].additionalInfo" id="buyOrder.itens[${idx.index}].additionalInfo">${item.additionalInfo}</textarea></td>
 		 	  <td><input type="text" class="input-xlarge span12" data-behaviour="valor" readonly="readonly" name="buyOrder.itens[${idx.index}].totalValue" value="<fmt:formatNumber value='${item.totalValue}' pattern='#,##0.00'/>"  /></td>
+		 	  <td><input type="text" class="input-xlarge span12" data-behaviour="valor" name="buyOrder.itens[${idx.index}].packageQuantity" value="${item.packageQuantity}"/></td>
+		 	  <td><input type="text" class="input-xlarge span12" data-behaviour="valor" name="buyOrder.itens[${idx.index}].grossWeight" value="${item.grossWeight}"/></td>
+		 	  <td><input type="text" class="input-xlarge span12" data-behaviour="valor" name="buyOrder.itens[${idx.index}].netWeight" value="${item.netWeight}"/></td>
+		 	  <td><input type="text" class="input-xlarge span12" data-behaviour="valor" name="buyOrder.itens[${idx.index}].volume" value="${item.volume}"/></td>
 		 	  <td><a href="" title="Delete" class="btn btn-danger" onclick="removeItem(${item.id}); return false;"><i class="halflings-icon trash halflings-icon"></i></a></td>
 		 	</tr>
 		 </c:forEach>
@@ -147,8 +153,11 @@ function addItem(nCountItems) {
 			 	"</td> "+
 			 	" <td><input type='text' class='input-xlarge span12' name='buyOrder.itens["+nCountItems+"].quantity' id='quantity-"+nCountItems+"' /></td> "+
 			 	" <td><input type='text' class='input-xlarge span12' data-behaviour='valor' name='buyOrder.itens["+nCountItems+"].unitPrice' id='price-"+nCountItems+"' /></td> "+
-			 	" <td><textarea class='input-xlarge span12' name='buyOrder.itens["+nCountItems+"].additionalInfo' id='buyOrder.itens["+nCountItems+"].additionalInfo'></textarea></td> "+
 			 	" <td><input type='text' class='input-xlarge span12' data-behaviour='valor' readonly='readonly' name='buyOrder.itens["+nCountItems+"].totalValue' id='total-"+nCountItems+"' /></td> "+
+			 	" <td><input type='text' class='input-xlarge span12' data-behaviour='valor' name='buyOrder.itens["+nCountItems+"].packageQuantity' /></td> "+
+			 	" <td><input type='text' class='input-xlarge span12' data-behaviour='valor' name='buyOrder.itens["+nCountItems+"].grossWeight' /></td> "+
+			 	" <td><input type='text' class='input-xlarge span12' data-behaviour='valor' name='buyOrder.itens["+nCountItems+"].netWeight' /></td> "+
+			 	" <td><input type='text' class='input-xlarge span12' data-behaviour='valor' name='buyOrder.itens["+nCountItems+"].volume' /></td> "+
 			 	" <td> <a id='delete-"+nCountItems+"' href='javascript:' class='btn btn-danger'><i class='halflings-icon trash halflings-icon'></i></a></td>"+
 			 	" </tr> ";
 

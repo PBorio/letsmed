@@ -42,8 +42,7 @@ public class BuyOrdersController {
 	@Path("/buyOrders")
 	public List<BuyOrder> list(){
 		result.include("controller", "buyOrders");
-		result.include("url", "buyOrders");
-		return (List<BuyOrder>) entityManager.createQuery(" from BuyOrder bo where bo.order.productionStartDate is null order by bo.orderDate desc ").getResultList();
+		return (List<BuyOrder>) entityManager.createQuery(" select bo from BuyOrder bo join bo.order o where o.conclusionDate is null order by bo.orderDate desc ").getResultList();
 	}
 	
 	@Transactional

@@ -22,6 +22,8 @@
 	   customer.address as customerAddress,
        customer.phoneNumber as customerPhone,
 	   customer.phoneNumber2 as customerFax,
+	   supplier.supplierName as supplierName,
+       supplier.address as supplierAddress,
        forward.invoiceNumber as invoiceNumber,
 	   forward.terms as terms,
 	   forward.shipment as shipment,
@@ -32,14 +34,13 @@
        forward.deliveryDate as deliveryDate,
 	   (select sum(i.quantity) from order_itens i where i.order_id = o.id ) as totalQuantity,
 	   (select sum(i.quantity*i.unitPrice) from order_itens i where i.order_id = o.id ) as totalAmount,
-	   (select coalesce(0, sum(boi.volume))
-          from buy_order_itens boi
-			join buy_orders bo on boi.buyOrder_id = bo.id
-			where bo.order_id = o.id ) as totalVolume
+	   (select coalesce(0, sum(i.volume)) from order_itens i where i.order_id = o.id ) as totalVolume
 from orders o
   join customers customer on customer.id = o.customer_id
   left join forward_details forward on forward.order_id = o.id
-where o.id =  $P{order_id}]]>
+    left join buy_orders bo on bo.order_id = o.id
+		left join suppliers supplier on supplier.id = bo.supplier_id
+where o.id = $P{order_id}]]>
 	</queryString>
 	<field name="orderNumber" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -51,6 +52,10 @@ where o.id =  $P{order_id}]]>
 	<field name="customerAddress" class="java.lang.String"/>
 	<field name="customerPhone" class="java.lang.String"/>
 	<field name="customerFax" class="java.lang.String"/>
+	<field name="supplierName" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="supplierAddress" class="java.lang.String"/>
 	<field name="invoiceNumber" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -92,7 +97,7 @@ where o.id =  $P{order_id}]]>
 				<textElement textAlignment="Center">
 					<font fontName="Times New Roman" pdfFontName="Times-Roman"/>
 				</textElement>
-				<text><![CDATA[PROFORMA INVOICE]]></text>
+				<text><![CDATA[COMERCIAL INVOICE]]></text>
 			</staticText>
 			<staticText>
 				<reportElement uuid="cf7dec6f-69e0-4e81-ae2b-ef89e0dfc3b1" x="202" y="85" width="151" height="11"/>
@@ -141,13 +146,6 @@ where o.id =  $P{order_id}]]>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{customerName}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="08168ded-35e4-4765-9231-5bffcd2d9191" x="23" y="25" width="218" height="21"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{customerAddress}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement uuid="e057cee0-4cbd-4f83-ae8a-4c58326f4918" x="23" y="46" width="17" height="11"/>
@@ -255,40 +253,40 @@ where o.id =  $P{order_id}]]>
 				<text><![CDATA[Mark & NO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="c9313250-cced-49ca-acb1-e833d3b2a745" mode="Opaque" x="59" y="71" width="180" height="11" backcolor="#CCCCCC"/>
+				<reportElement uuid="c9313250-cced-49ca-acb1-e833d3b2a745" mode="Opaque" x="59" y="71" width="259" height="11" backcolor="#CCCCCC"/>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Commodity & Description]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="c9313250-cced-49ca-acb1-e833d3b2a745" mode="Opaque" x="238" y="71" width="80" height="11" backcolor="#CCCCCC"/>
+				<reportElement uuid="c9313250-cced-49ca-acb1-e833d3b2a745" mode="Opaque" x="317" y="71" width="80" height="11" backcolor="#CCCCCC"/>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Quantity]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="c9313250-cced-49ca-acb1-e833d3b2a745" mode="Opaque" x="317" y="71" width="80" height="11" backcolor="#CCCCCC"/>
+				<reportElement uuid="c9313250-cced-49ca-acb1-e833d3b2a745" mode="Opaque" x="396" y="71" width="80" height="11" backcolor="#CCCCCC"/>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Unit Price (USD)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="c9313250-cced-49ca-acb1-e833d3b2a745" mode="Opaque" x="396" y="71" width="80" height="11" backcolor="#CCCCCC"/>
+				<reportElement uuid="c9313250-cced-49ca-acb1-e833d3b2a745" mode="Opaque" x="475" y="71" width="80" height="11" backcolor="#CCCCCC"/>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Amount (USD)]]></text>
 			</staticText>
-			<staticText>
-				<reportElement uuid="c9313250-cced-49ca-acb1-e833d3b2a745" mode="Opaque" x="475" y="71" width="81" height="11" backcolor="#CCCCCC"/>
-				<textElement textAlignment="Center">
-					<font size="8" isBold="true"/>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="08168ded-35e4-4765-9231-5bffcd2d9191" x="23" y="25" width="218" height="21"/>
+				<textElement>
+					<font size="8"/>
 				</textElement>
-				<text><![CDATA[Volume (CBM)]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA[$F{customerAddress}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnHeader>
 	<detail>
@@ -299,201 +297,52 @@ where o.id =  $P{order_id}]]>
 					<subreportParameterExpression><![CDATA[$P{order_id}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "ProformaInvoice_itens.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "ComercialInvoice_itens.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>
 	<columnFooter>
 		<band height="129" splitType="Prevent">
 			<staticText>
-				<reportElement uuid="c9313250-cced-49ca-acb1-e833d3b2a745" x="0" y="0" width="240" height="11" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="c9313250-cced-49ca-acb1-e833d3b2a745" x="0" y="0" width="317" height="11" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
 				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="f3fa7903-c05e-477c-b704-bb501dc76e75" x="239" y="0" width="80" height="11"/>
+				<reportElement uuid="f3fa7903-c05e-477c-b704-bb501dc76e75" x="319" y="0" width="80" height="11"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalQuantity}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement uuid="f3fa7903-c05e-477c-b704-bb501dc76e75" isPrintRepeatedValues="false" mode="Opaque" x="398" y="0" width="79" height="11" backcolor="#99FFCC"/>
+				<reportElement uuid="f3fa7903-c05e-477c-b704-bb501dc76e75" isPrintRepeatedValues="false" mode="Opaque" x="476" y="0" width="79" height="11" backcolor="#99FFCC"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalAmount}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement uuid="f3fa7903-c05e-477c-b704-bb501dc76e75" x="475" y="0" width="80" height="11"/>
-				<textElement textAlignment="Center">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{totalVolume}]]></textFieldExpression>
-			</textField>
-			<rectangle>
-				<reportElement uuid="0abea890-dca6-4aa2-8e01-e62b9e9d3dc4" x="1" y="40" width="316" height="89"/>
-			</rectangle>
-			<rectangle>
-				<reportElement uuid="070bec7c-57dc-49f4-a2f8-6a8d3253675d" x="317" y="40" width="238" height="89"/>
-			</rectangle>
 			<staticText>
-				<reportElement uuid="cf7dec6f-69e0-4e81-ae2b-ef89e0dfc3b1" x="0" y="11" width="552" height="7"/>
-				<textElement textAlignment="Left">
-					<font size="5"/>
-				</textElement>
-				<text><![CDATA[(NOTE: CONDITIONS ARE VALIDS WITHIN 6 WEEKS FROM PROFRMA´S ISSUE DATE)]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="d3036486-76f6-4dc3-bb71-2431ad5118d9" x="3" y="41" width="218" height="11"/>
+				<reportElement uuid="d3036486-76f6-4dc3-bb71-2431ad5118d9" x="4" y="15" width="64" height="11"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Brand:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="d3036486-76f6-4dc3-bb71-2431ad5118d9" x="3" y="52" width="64" height="11"/>
-				<textElement>
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Port of Landing:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="d3036486-76f6-4dc3-bb71-2431ad5118d9" x="3" y="64" width="78" height="11"/>
-				<textElement>
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Port of Destination:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="d3036486-76f6-4dc3-bb71-2431ad5118d9" x="3" y="75" width="82" height="11"/>
-				<textElement>
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Payment Conditions:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="d3036486-76f6-4dc3-bb71-2431ad5118d9" x="3" y="86" width="42" height="11"/>
-				<textElement>
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Insurance:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="d3036486-76f6-4dc3-bb71-2431ad5118d9" x="3" y="97" width="58" height="11"/>
-				<textElement>
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Delivery Date:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="cf7dec6f-69e0-4e81-ae2b-ef89e0dfc3b1" x="4" y="108" width="312" height="21"/>
-				<textElement textAlignment="Left">
-					<font size="5"/>
-				</textElement>
-				<text><![CDATA[(NOTE: DELIVERY TIME IS ESTIMATED SINCE PAYMENTS, L/C ACCREDITATION AND ANY OTHER NECESSARY ELEMENTS FOR THE PRODUCTION, SUCH AS ARTWORKS, SHIPPING MARKS, ETC. OF THE GOODS HAS BEEN COMPLETELY CONFIRMED AND REMITTED OR CONFIRMED BY THE CUSTOMER)]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="d3036486-76f6-4dc3-bb71-2431ad5118d9" x="318" y="41" width="234" height="11"/>
-				<textElement textAlignment="Center">
-					<font size="8" isBold="false" isUnderline="true"/>
-				</textElement>
-				<text><![CDATA[TRANSFER DETAILS]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="d3036486-76f6-4dc3-bb71-2431ad5118d9" x="318" y="58" width="234" height="8"/>
-				<textElement textAlignment="Center">
-					<font size="6" isBold="false"/>
-				</textElement>
-				<text><![CDATA[Beneficiary: LETSMED LIMITED]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="cf7dec6f-69e0-4e81-ae2b-ef89e0dfc3b1" x="318" y="66" width="234" height="8"/>
-				<textElement textAlignment="Center">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[MSH4844 ROOM 1007, 10/F HO KING CTR NO. 2-16 FA YUEN ST., P.R. CHINA]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="cf7dec6f-69e0-4e81-ae2b-ef89e0dfc3b1" x="318" y="74" width="234" height="8"/>
-				<textElement textAlignment="Center">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[TEL: 0086-21-60943001]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="cf7dec6f-69e0-4e81-ae2b-ef89e0dfc3b1" x="318" y="90" width="234" height="8"/>
-				<textElement textAlignment="Center">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[Bank Account: BANK OF COMMUNICATIONS CO., LTD OFFSHORE BANKING UNIT]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="cf7dec6f-69e0-4e81-ae2b-ef89e0dfc3b1" x="318" y="106" width="234" height="8"/>
-				<textElement textAlignment="Center">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[SWIFT CODE: COMMCN3XOBU]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="cf7dec6f-69e0-4e81-ae2b-ef89e0dfc3b1" x="318" y="114" width="234" height="8"/>
-				<textElement textAlignment="Center">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[BANK ACCOUNT: OSA90000060488100]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="cf7dec6f-69e0-4e81-ae2b-ef89e0dfc3b1" x="318" y="98" width="234" height="8"/>
-				<textElement textAlignment="Center">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[BANK ADDRESS: NO 188, YINCHENG ZHONG ROAD, SHANGHAI, CHINA]]></text>
+				<text><![CDATA[Manufacturer:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="08168ded-35e4-4765-9231-5bffcd2d9191" x="67" y="52" width="249" height="11"/>
+				<reportElement uuid="08168ded-35e4-4765-9231-5bffcd2d9191" x="4" y="26" width="338" height="11"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{landingPort}]]></textFieldExpression>
-			</textField>
-			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
-				<reportElement uuid="08168ded-35e4-4765-9231-5bffcd2d9191" x="61" y="97" width="220" height="11"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{deliveryDate}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="08168ded-35e4-4765-9231-5bffcd2d9191" x="45" y="86" width="271" height="11"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{insurance}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="08168ded-35e4-4765-9231-5bffcd2d9191" x="85" y="75" width="231" height="11"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{paymentConditions}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="08168ded-35e4-4765-9231-5bffcd2d9191" x="81" y="64" width="235" height="11"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{destinationPort}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{supplierName}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement uuid="64114ed7-4969-426a-85e5-28d05060f3e1" x="0" y="11" width="555" height="1"/>
 			</line>
 			<line direction="BottomUp">
 				<reportElement uuid="4d318db3-9967-41f5-b8c0-b1fac2e34330" x="0" y="0" width="1" height="11"/>
-			</line>
-			<line direction="BottomUp">
-				<reportElement uuid="4d318db3-9967-41f5-b8c0-b1fac2e34330" x="239" y="0" width="1" height="11"/>
 			</line>
 			<line direction="BottomUp">
 				<reportElement uuid="4d318db3-9967-41f5-b8c0-b1fac2e34330" x="398" y="0" width="1" height="11"/>
@@ -507,6 +356,13 @@ where o.id =  $P{order_id}]]>
 			<line direction="BottomUp">
 				<reportElement uuid="4d318db3-9967-41f5-b8c0-b1fac2e34330" x="318" y="0" width="1" height="11"/>
 			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="08168ded-35e4-4765-9231-5bffcd2d9191" x="4" y="37" width="338" height="21"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{supplierAddress}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnFooter>
 	<summary>

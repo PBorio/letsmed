@@ -42,7 +42,6 @@
        </select> 
   </div>
 </div>
-<hr class="hideInIE8"/>
 	<div class="form-actions">
 	  <button id="singlebutton" name="singlebutton" class="btn btn-primary">Search</button>
 	</div>

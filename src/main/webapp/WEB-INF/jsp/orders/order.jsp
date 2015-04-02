@@ -15,7 +15,7 @@
 	</div>
 </c:forEach>
 <div class="box-header" data-original-title>
-	<h2><i class="halflings-icon edit"></i><span class="break"></span>Orders</h2>
+	<h2><i class="halflings-icon edit"></i><span class="break"></span>Order N. ${order.id}</h2>
 </div>
 <form class="form-horizontal" action='<c:url value="/orders/save"/>' method="post">
 <input type="hidden" name="order.id" value="${order.id}" />
@@ -94,6 +94,19 @@
 		  </div>
 		</div>
 		<div class="control-group">
+		  <label class="control-label col-xs2">Shipment Term:</label>
+		  <div class="controls">
+		    <select id="order.shipmentTerm.id" name="order.shipmentTerm.id" class="input-xlarge span6" >   
+              <option value="-1"> Shipment Terms...</option>  
+              <c:forEach var="shipmentTerm" items="${shipmentTermList}">  
+                  <option value="${shipmentTerm.id}" <c:if test="${shipmentTerm.id == order.shipmentTerm.id}">selected="true"</c:if>> 
+                  	${shipmentTerm.description} 
+                  </option>  
+              </c:forEach> 
+          </select>
+		  </div>
+		</div>
+		<div class="control-group">
 		  <label class="control-label col-xs2">Additional Info:</label>
 		  <div class="controls">
 		    <textarea class="input-xlarge span6" name="order.additionalInfo" id="order.additionalInfo">${order.additionalInfo}</textarea> 
@@ -103,11 +116,14 @@
 	  <table class="table table-striped table-bordered" id="table-receita">
 		<thead>
 		  <tr>
-			<td width="40%">Product</td>
-			<td width="10%">Quantity</td>
-			<td width="10%">Unit Price</td>
-			<td width="30%">Additional Info</td>
-			<td width="10%">Total</td>
+			<td width="20%" >Product</td>
+			<td >Quantity</td>
+			<td width="15%" >Units</td>
+			<td >Unit Price</td>
+			<td >Total</td>
+			<td width="20%" >Additional Info</td>
+			<td >Delivery Date</td>
+			<td ></td>
 		  </tr>
 		</thead>
 		<tbody id="tb-itens">
@@ -126,9 +142,20 @@
 		          </select>
 		 	    </td>
 		 	  <td><input type="text" class="input-xlarge span12" name="order.itens[${idx.index}].quantity" value="${item.quantity}"  /></td>
+		 	  <td>
+		 	  	 <select id="order.itens[${idx.index}].unitOfMeasure.id" name="order.itens[${idx.index}].unitOfMeasure.id" class="input-xlarge span12" >   
+		              <option value="-1"> Units...</option>  
+		              <c:forEach var="unit" items="${unitsList}">  
+		                  <option value="${unit.id}" <c:if test="${unit.id == item.unitOfMeasure.id}">selected="true"</c:if>> 
+		                  	${unit.description} 
+		                  </option>  
+		              </c:forEach>  
+		          </select>
+		 	  </td>
 		 	  <td><input type="text" class="input-xlarge span12" data-behaviour="valor" name="order.itens[${idx.index}].unitPrice" value="${item.unitPrice}"/></td>
-		 	  <td><textarea class="input-xlarge span12" name="order.itens[${idx.index}].additionalInfo" id="order.itens[${idx.index}].additionalInfo">${item.additionalInfo}</textarea></td>
 		 	  <td><input type="text" class="input-xlarge span12" data-behaviour="valor" readonly="readonly" name="order.itens[${idx.index}].totalValue" value="<fmt:formatNumber value='${item.totalValue}' pattern='#,##0.00'/>"  /></td>
+		 	  <td><textarea class="input-xlarge span12" name="order.itens[${idx.index}].additionalInfo" id="order.itens[${idx.index}].additionalInfo">${item.additionalInfo}</textarea></td>
+		 	  <td><input autocomplete='off' value="<fmt:formatDate value='${item.deliveryDate}' pattern='MM/dd/yyyy' />" data-behaviour='datepicker' type='text' class='input-xlarge span12' name='order.itens[${idx.index}].deliveryDate'> </input></td>
 		 	  <td><c:if test="${order == null || order.toBeFilledIn}">
 		 	        <a href="" title="Delete" class="btn btn-danger" onclick="removeItem(${item.id}); return false;"><i class="halflings-icon trash halflings-icon"></i></a>
 		 	       </c:if>
@@ -151,7 +178,7 @@
 	<div class="form-actions">
 	  <c:choose>
 	    <c:when test="${order == null || order.toBeFilledIn}">
-		  <button id="singlebutton" name="singlebutton" class="btn btn-primary">Confirm</button>
+		  <button id="singlebutton" name="singlebutton" class="btn btn-primary">Save</button>
 	    </c:when>
 	    <c:when test="${order.waitingProformaConfirmation}">
 	       <a href="<c:url value='/proformaConfirmation/confirm/${order.id}'/>" class="btn btn-primary">Proforma Confirmed</a>
@@ -175,9 +202,19 @@
 	       <a href="<c:url value='/conclusion/confirm/${order.id}'/>" class="btn btn-primary">Finished</a>
 	    </c:when>
       </c:choose>
-      <a href="<c:url value='/timeline'/>" class="btn btn-primary">Back to Timeline</a>
       <c:if test="${order.toBeFilledIn}">
 		 <a href="<c:url value='/orders/confirm/${order.id}'/>" class="btn btn-primary">Filled In Confirmation</a>
+	  </c:if>
+	  <c:if test="${order.id != null}">
+		  <a href="<c:url value='/timeline'/>" class="btn btn-primary">Back to Timeline</a>
+		  <a href="<c:url value='/orders/print/purchase/${order.id}'/>" class="btn btn-success">Print Purchase Order</a>
+		  <a href="<c:url value='/orders/print/proforma/${order.id}'/>" class="btn btn-success">Print Proforma Invoice</a>
+		  <a href="<c:url value='/orders/print/comercial/${order.id}'/>" class="btn btn-success">Print Comercial Invoice</a>
+		  
+		  <c:if test="${order.buyOrder != null}">
+		  	<a href="<c:url value='/orders/print/packing/${order.id}'/>" class="btn btn-success">Print Packing List</a>
+		  </c:if>
+		  
 	  </c:if>
 	</div>
         
@@ -213,9 +250,22 @@ function addItem(nCountItems) {
 			    " </select> "+
 			 	"</td> "+
 			 	" <td><input type='text' class='input-xlarge span12' name='order.itens["+nCountItems+"].quantity' id='quantity-"+nCountItems+"' /></td> "+
+			 	
+			 	" <td> "+
+			 	" <select id='order.itens["+nCountItems+"].unitOfMeasure.id' name='order.itens["+nCountItems+"].unitOfMeasure.id' class='input-xlarge span12' >   "+
+			    "   <option value='-1'> Units...</option> "+  
+			    <c:forEach var="unit" items="${unitsList}">  
+			    "   <option value='${unit.id}'> "+ 
+			    "     ${unit.description} "+ 
+			    "   </option> "+  
+			    </c:forEach>  
+			    " </select> "+
+			 	"</td> "+
+			 	
 			 	" <td><input type='text' class='input-xlarge span12' data-behaviour='valor' name='order.itens["+nCountItems+"].unitPrice' id='price-"+nCountItems+"' /></td> "+
-			 	" <td><textarea class='input-xlarge span12' name='order.itens["+nCountItems+"].additionalInfo' id='order.itens["+nCountItems+"].additionalInfo'></textarea></td> "+
 			 	" <td><input type='text' class='input-xlarge span12' data-behaviour='valor' readonly='readonly' name='order.itens["+nCountItems+"].totalValue' id='total-"+nCountItems+"' /></td> "+
+			 	" <td><textarea class='input-xlarge span12' name='order.itens["+nCountItems+"].additionalInfo' id='order.itens["+nCountItems+"].additionalInfo'></textarea></td> "+
+			 	" <td><input autocomplete='off' data-behaviour='datepicker' type='text' class='input-xlarge span12' id='delivery-date-"+nCountItems+"' name='order.itens[${idx.index}].deliveryDate'> </input></td> "+
 			 	" <td> <a id='delete-"+nCountItems+"' href='javascript:' class='btn btn-danger'><i class='halflings-icon trash halflings-icon'></i></a></td>"+
 			 	" </tr> ";
 
@@ -241,6 +291,8 @@ function addItem(nCountItems) {
 				});
 		
 		$("#total-" + nCountItems).setMask('decimal');
+		$('#delivery-date-'+nCountItems).datepicker({dateFormat: "mm/dd/yy"});
+		$('#delivery-date-'+nCountItems).setMask({mask: '19/39/9999', autoTab: false});
 }
 	
 function calculateTotalItem(nLinhaDeItem) {
