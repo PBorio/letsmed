@@ -15,7 +15,6 @@ import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validator;
 import br.com.weblogia.letsmed.domain.Order;
 import br.com.weblogia.letsmed.domain.OrderPayment;
-import br.com.weblogia.letsmed.domain.PaymentTerm;
 
 @Controller
 public class OrderPaymentsController {
@@ -93,15 +92,12 @@ public class OrderPaymentsController {
 		result.redirectTo(this).payment(orderId);
 	}
 
-	@SuppressWarnings("unchecked")
 	private void loadLists() {
-		List<PaymentTerm> paymentTermList = (List<PaymentTerm>) entityManager.createQuery(" from PaymentTerm p order by p.description ").getResultList();
-		result.include("paymentTermList", paymentTermList);
+//		List<TransactionTerms> paymentTermList = (List<TransactionTerms>) entityManager.createQuery(" from PaymentTerm p order by p.description ").getResultList();
+//		result.include("paymentTermList", paymentTermList);
 	}
 	
 	private void validatePayment(OrderPayment orderPayment) {
-		if (orderPayment.getPaymentTerm().getId() == -1) 	orderPayment.setPaymentTerm(null);
-		
 		validator.addIf( orderPayment.getPaymentDate() == null,new I18nMessage("rev","revenuepayment.without.date"));
 		validator.addIf( orderPayment.getValue() == null,new I18nMessage("cus","revenuepayment.without.value"));
 	}

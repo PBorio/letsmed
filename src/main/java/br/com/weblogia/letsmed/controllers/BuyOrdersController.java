@@ -15,7 +15,7 @@ import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validator;
 import br.com.weblogia.letsmed.domain.BuyOrder;
 import br.com.weblogia.letsmed.domain.BuyOrderItem;
-import br.com.weblogia.letsmed.domain.PaymentTerm;
+import br.com.weblogia.letsmed.domain.TransactionTerm;
 import br.com.weblogia.letsmed.domain.Product;
 import br.com.weblogia.letsmed.domain.Supplier;
 
@@ -109,7 +109,7 @@ public class BuyOrdersController {
 	private void loadLists() {
 		List<Product> productList = (List<Product>) entityManager.createQuery(" from Product p order by p.description ").getResultList();
 		List<Supplier> supplierList = (List<Supplier>) entityManager.createQuery(" from Supplier s order by s.supplierName ").getResultList();
-		List<PaymentTerm> paymentTermList = (List<PaymentTerm>) entityManager.createQuery(" from PaymentTerm p order by p.description ").getResultList();
+		List<TransactionTerm> paymentTermList = (List<TransactionTerm>) entityManager.createQuery(" from PaymentTerm p order by p.description ").getResultList();
 		result.include("productList", productList);
 		result.include("supplierList", supplierList);
 		result.include("paymentTermList", paymentTermList);

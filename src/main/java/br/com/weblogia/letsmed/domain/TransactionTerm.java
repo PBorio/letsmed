@@ -7,8 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="payment_terms")
-public class PaymentTerm {
+@Table(name="transaction_terms")
+public class TransactionTerm {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

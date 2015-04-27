@@ -78,19 +78,6 @@
 		  </div>
 		</div>
 		<div class="control-group">
-		  <label class="control-label col-xs2">Office:</label>
-		  <div class="controls">
-		    <select id="customer.office.id" name="customer.office.id" class="input-xlarge span6" >   
-              <option value="-1"> Offices...</option>  
-              <c:forEach var="office" items="${officeList}">  
-                  <option value="${office.id}" <c:if test="${office.id == customer.office.id}">selected="true"</c:if>> 
-                  	${office.officeName} 
-                  </option>  
-              </c:forEach> 
-          </select>
-		  </div>
-		</div>
-		<div class="control-group">
 		  <label class="control-label col-xs2">Partner:</label>
 		  <div class="controls">
 		    <select id="customer.partner.id" name="customer.partner.id" class="input-xlarge span6" >   
@@ -103,12 +90,7 @@
           </select>
 		  </div>
 		</div>
-		<div class="control-group">
-		  <label class="control-label col-xs2">Comission:</label>
-		  <div class="controls">
-		    <input type="text" class="input-xlarge span2" name="customer.commission" id="customer.commission" value="${customer.commission}" />
-		  </div>
-		</div>
+		
 	  </fieldset>
     <hr class="hideInIE8"/>
    

@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Payment Terms</title>
+<title>Transaction Terms</title>
 </head>
 <body>
 <c:forEach var="error" items="${errors}">
@@ -16,14 +16,14 @@
 <div class="box-header" data-original-title>
 	<h2><i class="halflings-icon edit"></i><span class="break"></span>Payment Terms</h2>
 </div>
-<form class="form-horizontal" action='<c:url value="/paymentTerms/save"/>' method="post">
-<input type="hidden" name="paymentTerm.id" value="${paymentTerm.id}" />
+<form class="form-horizontal" action='<c:url value="/transactionTerms/save"/>' method="post">
+<input type="hidden" name="transactionTerm.id" value="${transactionTerm.id}" />
 <div class="box-content">
 	  <fieldset>
 		<div class="control-group">
 		  <label class="control-label col-xs2">Description:</label>
 		  <div class="controls">
-		    <input type="text" class="input-xlarge span8" name="paymentTerm.description" id="paymentTerm.description" value="${paymentTerm.description}" />
+		    <input type="text" class="input-xlarge span8" name="transactionTerm.description" id="transactionTerm.description" value="${transactionTerm.description}" />
 		  </div>
 		</div>
 	  </fieldset>
@@ -31,7 +31,7 @@
    
 	<div class="form-actions">
 	  <button id="singlebutton" name="singlebutton" class="btn btn-primary">Confirm</button>
-      <a href="<c:url value='/paymentTerms'/>" class="btn btn-primary">Cancel</a>
+      <a href="<c:url value='/transactionTerms'/>" class="btn btn-primary">Cancel</a>
 	</div>
         
 </div>
@@ -39,7 +39,7 @@
 <content tag="local_script">
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#paymentTerm\\.description').focus();
+		$('#transactionTerm\\.description').focus();
 	});
 </script>
 </content>

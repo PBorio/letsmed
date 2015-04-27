@@ -4,11 +4,8 @@ import java.util.Date;
 
 import javax.persistence.EntityManager;
 
-import br.com.weblogia.letsmed.domain.BuyOrderItem;
-import br.com.weblogia.letsmed.domain.BuyOrder;
 import br.com.weblogia.letsmed.domain.Expense;
 import br.com.weblogia.letsmed.domain.Order;
-import br.com.weblogia.letsmed.domain.OrderItem;
 import br.com.weblogia.letsmed.domain.Revenue;
 
 public class OrderService {
@@ -20,7 +17,7 @@ public class OrderService {
 	}
 
 	public void confirm(Order order) {
-		order.setConfirmationDate(new Date());
+		order.setProformaConfirmationDate(new Date());
 		entityManager.merge(order);
 		
 		if (order.getCustomer().getPartnerExpenseAccount() != null){
@@ -28,9 +25,9 @@ public class OrderService {
 			expense.setExpenseDate(new Date());
 			expense.setExpenseAccount(order.getCustomer().getPartnerExpenseAccount());
 			expense.setExpenseCategory(order.getCustomer().getPartnerExpenseCategory());
-			expense.setOffice(order.getCustomer().getOffice());
+			expense.setOffice(order.getOffice());
 			expense.setOrder(order);
-			expense.setValue(order.getCustomer().getPartnerComissionTo(order.getTotalValue()));
+			expense.setValue(order.getPartnerComissionValue());
 			expense.setAdditionalInfo("Expense from Order N. "+String.valueOf(order.getId()));
 			entityManager.persist(expense);
 		}
@@ -38,26 +35,12 @@ public class OrderService {
 		Revenue revenue = new Revenue();
 		revenue.setRevenueDate(new Date());
 		revenue.setRevenueAccount(order.getCustomer().getRevenueAccount());
-		revenue.setOffice(order.getCustomer().getOffice());
+		revenue.setOffice(order.getOffice());
 		revenue.setOrder(order);
-		revenue.setValue(order.getCustomer().getComissionTo(order.getTotalValue()));
+		revenue.setValue(order.getRevenueValue());
 		revenue.setAdditionalInfo("Revenue from Order N. "+String.valueOf(order.getId()));
 		entityManager.persist(revenue);
 		
-		BuyOrder buyOrder = new BuyOrder();
-		buyOrder.setOrderDate(new Date());
-		buyOrder.setOrder(order);
-		buyOrder.setSupplier(order.getSupplier());
-		entityManager.persist(buyOrder);
-		
-		for (OrderItem item : order.getItens()){
-			BuyOrderItem buyOrderItem = new BuyOrderItem();
-			buyOrderItem.setBuyOrder(buyOrder);
-			buyOrderItem.setQuantity(item.getQuantity());
-			buyOrderItem.setUnitPrice(item.getUnitPrice());
-			buyOrderItem.setProduct(item.getProduct());
-			entityManager.persist(buyOrderItem);
-		}
 	}
 
 }

@@ -33,7 +33,7 @@ public class BuyOrder {
 	private Supplier supplier;
 	
 	@ManyToOne
-	private PaymentTerm paymentTerm;
+	private TransactionTerm paymentTerm;
 	
 	@OneToMany(mappedBy="buyOrder")
 	private List<BuyOrderItem> itens = new ArrayList<BuyOrderItem>();
@@ -86,11 +86,11 @@ public class BuyOrder {
 		this.supplier = supplier;
 	}
 
-	public PaymentTerm getPaymentTerm() {
+	public TransactionTerm getPaymentTerm() {
 		return paymentTerm;
 	}
 
-	public void setPaymentTerm(PaymentTerm paymentTerm) {
+	public void setPaymentTerm(TransactionTerm paymentTerm) {
 		this.paymentTerm = paymentTerm;
 	}
 

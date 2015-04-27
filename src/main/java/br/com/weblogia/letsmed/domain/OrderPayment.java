@@ -22,18 +22,8 @@ public class OrderPayment {
 	@ManyToOne
 	private Order order;
 	
-	@ManyToOne
-	private PaymentTerm paymentTerm;
-	
 	private Double value;
 	
-	public String getPaymentTermDescription(){
-		if (this.paymentTerm == null)
-			return "";
-		
-		return this.paymentTerm.getDescription();
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -48,14 +38,6 @@ public class OrderPayment {
 
 	public void setPaymentDate(Date paymentDate) {
 		this.paymentDate = paymentDate;
-	}
-
-	public PaymentTerm getPaymentTerm() {
-		return paymentTerm;
-	}
-
-	public void setPaymentTerm(PaymentTerm paymentTerm) {
-		this.paymentTerm = paymentTerm;
 	}
 
 	public Double getValue() {

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PedidoDeVenda_itens" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="386b2354-8e0d-4b93-8e7b-535ad361cc91">
 	<property name="ireport.zoom" value="4.0"/>
-	<property name="ireport.x" value="813"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="order_id" class="java.lang.Long"/>
 	<queryString>
 		<![CDATA[select product.articleNumber as articleNumber,
 	   product.description as description,
+             item.additionalDescription as additionalDescription,
 	   item.quantity as quantity,
 	   item.unitPrice as unitPrice,
        item.additionalInfo as additionalInfo,
@@ -20,6 +21,9 @@ where item.order_id = $P{order_id}]]>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="description" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="additionalDescription" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="quantity" class="java.lang.Integer">
@@ -52,7 +56,9 @@ where item.order_id = $P{order_id}]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Calibri" size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{additionalDescription} != null)
+  ? $F{description}+" "+$F{additionalDescription}
+  : $F{description}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="319" y="0" width="79" height="15"/>

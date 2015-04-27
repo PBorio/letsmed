@@ -31,13 +31,8 @@ public class Customer {
 	
 	private String contact;
 	
-	private Double commission;
-	
 	@ManyToOne
 	private RevenueAccount revenueAccount;
-	
-	@ManyToOne
-	private Office office;
 	
 	@ManyToOne
 	private Partner partner;
@@ -69,16 +64,9 @@ public class Customer {
 	public Double getPartnerComissionTo(Double value) {
 		if (partner == null)
 			return 0.0;
-		Double partnerComission = partner.getPartnerCommissionTo(getComissionTo(value));
+		Double partnerComission = partner.getPartnerCommissionTo(value);
 		return new Arredondamento().arredondar(partnerComission);
 	}
-
-	public Double getComissionTo(Double value) {
-		Double comission = (value * (this.commission/100));
-		return new Arredondamento().arredondar(comission);
-	}
-	
-	
 
 	public Long getId() {
 		return id;
@@ -152,28 +140,12 @@ public class Customer {
 		this.revenueAccount = revenueAccount;
 	}
 
-	public Office getOffice() {
-		return office;
-	}
-
-	public void setOffice(Office office) {
-		this.office = office;
-	}
-
 	public Partner getPartner() {
 		return partner;
 	}
 
 	public void setPartner(Partner partner) {
 		this.partner = partner;
-	}
-
-	public Double getCommission() {
-		return commission;
-	}
-
-	public void setCommission(Double commission) {
-		this.commission = commission;
 	}
 
 }

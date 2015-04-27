@@ -32,13 +32,26 @@ public class OrderItem {
 	
 	private String additionalInfo;
 	
+	private String additionalDescription;
+	
 	private Date deliveryDate;
+	
+	private Double buyPrice = 0.0;
+	private Integer packageQuantity = 0;
+	private Double grossWeight = 0.0;
+	private Double netWeight = 0.0;
+	private Double volume = 0.0;
+	private Double commision;
 	
 	@ManyToOne
 	private UnitOfMeasure unitOfMeasure;
 	
 	public Double getTotalValue(){
 		return new Arredondamento().arredondar(this.quantity * this.unitPrice);
+	}
+	
+	public Double getTotalBuyValue() {
+		return new Arredondamento().arredondar(this.quantity * this.buyPrice);
 	}
 
 	public Long getId() {
@@ -104,6 +117,68 @@ public class OrderItem {
 	public void setDeliveryDate(Date deliveryDate) {
 		this.deliveryDate = deliveryDate;
 	}
+
+	public Double getBuyPrice() {
+		return buyPrice;
+	}
+
+	public void setBuyPrice(Double buyPrice) {
+		this.buyPrice = buyPrice;
+	}
+
+	public Integer getPackageQuantity() {
+		return packageQuantity;
+	}
+
+	public void setPackageQuantity(Integer packageQuantity) {
+		this.packageQuantity = packageQuantity;
+	}
+
+	public Double getGrossWeight() {
+		return grossWeight;
+	}
+
+	public void setGrossWeight(Double grossWeight) {
+		this.grossWeight = grossWeight;
+	}
+
+	public Double getNetWeight() {
+		return netWeight;
+	}
+
+	public void setNetWeight(Double netWeight) {
+		this.netWeight = netWeight;
+	}
+
+	public Double getVolume() {
+		return volume;
+	}
+
+	public void setVolume(Double volume) {
+		this.volume = volume;
+	}
+
+	public String getAdditionalDescription() {
+		return additionalDescription;
+	}
+
+	public void setAdditionalDescription(String additionalDescription) {
+		this.additionalDescription = additionalDescription;
+	}
+
+	public Double getCommision() {
+		return commision;
+	}
+
+	public void setCommision(Double commision) {
+		this.commision = commision;
+	}
+
+	public Double getCommisionValue() {
+		return (this.getTotalValue() * (this.commision/100));
+	}
+
+	
 	
 	
 

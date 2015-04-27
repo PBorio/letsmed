@@ -128,5 +128,13 @@ public class Revenue {
 		
 		return ultimaData.toDate();
 	}
+	
+	public boolean isPaid(){
+		
+		if (this.value == null)
+			return false;
+		
+		return (this.getPaidValue() >= this.value);
+	}
 
 }

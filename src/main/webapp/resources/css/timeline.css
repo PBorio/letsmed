@@ -169,13 +169,13 @@ Timeline UI Base
 	 color: #01015b; 
 }
 /* Yellow */
-.timeline li.timeline-to_send_to_factory .timeline-body:after {
+.timeline li.timeline-supplier_proforma .timeline-body:after {
 	border-right-color: #ffb848;
 }
-.timeline li.timeline-to_send_to_factory .timeline-body {
+.timeline li.timeline-supplier_proforma .timeline-body {
 	 background: #ffb848;
 }
-.timeline li.timeline-to_send_to_factory .timeline-time span.time {
+.timeline li.timeline-supplier_proforma .timeline-time span.time {
 	 color: #ffb848; 
 }
 /* Green */
@@ -327,7 +327,7 @@ Timeline UI Base
 		border-right-color: transparent;
 		border-bottom-color: #35aa47;
 	}
-	.timeline li.timeline-to_send_to_factory .timeline-body:after {
+	.timeline li.timeline-supplier_proforma .timeline-body:after {
 		border-right-color: transparent;
 		border-bottom-color: #ffb848;
 	}

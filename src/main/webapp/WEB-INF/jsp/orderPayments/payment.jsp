@@ -31,7 +31,6 @@
 		  <tr>
 		   <th>Date</th>
 		   <th>Value</th>
-		   <th>Payment Term</th>
 		   <th>Actions</th>
 		  </tr>
 	  </thead>   
@@ -40,7 +39,6 @@
 	  	  <tr id="payment-${payment.id}">
 		  		<td class="center"><fmt:formatDate value='${payment.paymentDate}' pattern='MM/dd/yyyy'/></td>
 		  		<td class="center">${payment.value}</td>
-		  		<td class="center">${payment.paymentTermDescription}</td>
 		  		<td class="center">
   	  			<a href="<c:url value='/orderPayments/${payment.id}'/>" class="btn btn-success"><i class="halflings-icon zoom-in halflings-icon"></i></a>
 				<a href="<c:url value='/orderPayments/delete/${payment.id}'/>" class="btn btn-danger"><i class="halflings-icon trash halflings-icon"></i></a>	        	 
@@ -62,19 +60,6 @@
 	       <div class="controls">
 			  <input type="text" class="input-xlarge span2" data-behaviour="datepicker" name="orderPayment.paymentDate" id="orderPayment.paymentDate" value="<fmt:formatDate value='${orderPayment.paymentDate}'  pattern='MM/dd/yyyy' />" />
 		   </div>
-		</div>
-    	<div class="control-group">
-		  <label class="control-label col-xs2">Payment Term:</label>
-		  <div class="controls">
-		    <select id="orderPayment.paymentTerm.id" name="orderPayment.paymentTerm.id" class="input-xlarge span6" >   
-              <option value="-1"> Payment Terms...</option>  
-              <c:forEach var="paymentTerm" items="${paymentTermList}">  
-                  <option value="${paymentTerm.id}" <c:if test="${paymentTerm.id == orderPayment.paymentTerm.id}">selected="true"</c:if>> 
-                  	${paymentTerm.description} 
-                  </option>  
-              </c:forEach> 
-          </select>
-		  </div>
 		</div>
 		<div class="control-group">
 		  <label class="control-label col-xs2">Value:</label>

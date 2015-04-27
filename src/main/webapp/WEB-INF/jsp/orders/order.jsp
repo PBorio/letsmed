@@ -27,7 +27,11 @@
 <input type="hidden" name="order.copyDocumentDate" value="${order.copyDocumentDate}" />
 <input type="hidden" name="order.originalDocumentDate" value="${order.originalDocumentDate}" />
 <div class="box-content">
-	
+	  
+	 <div class="box-header" data-original-title>
+		<h2><i class="halflings-icon edit"></i><span class="break"></span>Order Data</h2>
+	</div>
+	<div class="box-content">
 	  <fieldset>
 		<div class="control-group">
 		   <label class="control-label col-xs2">Order Date:</label>			 
@@ -68,13 +72,32 @@
 		  </div>
 		</div>
 		<div class="control-group">
-		  <label class="control-label col-xs2">Payment Term:</label>
+		  <label class="control-label col-xs2">Office:</label>
 		  <div class="controls">
-		    <select id="order.paymentTerm.id" name="order.paymentTerm.id" class="input-xlarge span6" >   
-              <option value="-1"> Payment Terms...</option>  
-              <c:forEach var="paymentTerm" items="${paymentTermList}">  
-                  <option value="${paymentTerm.id}" <c:if test="${paymentTerm.id == order.paymentTerm.id}">selected="true"</c:if>> 
-                  	${paymentTerm.description} 
+		    <select id="order.office.id" name="order.office.id" class="input-xlarge span6" >   
+              <option value="-1"> Offices...</option>  
+              <c:forEach var="office" items="${officeList}">  
+                  <option value="${office.id}" <c:if test="${office.id == order.office.id}">selected="true"</c:if>> 
+                  	${office.officeName} 
+                  </option>  
+              </c:forEach> 
+          </select>
+		  </div>
+		</div>
+		<div class="control-group">
+		  <label class="control-label col-xs2">Commision:</label>
+		  <div class="controls">
+		    <input type="text" class="input-xlarge span2" name="order.commision" id="order.commision" value="${order.commision}" />
+		  </div>
+		</div>
+		<div class="control-group">
+		  <label class="control-label col-xs2">Transaction Term:</label>
+		  <div class="controls">
+		    <select id="order.transactionTerm.id" name="order.transactionTerm.id" class="input-xlarge span6" >   
+              <option value="-1"> Transaction Terms...</option>  
+              <c:forEach var="transactionTerm" items="${transactionTermList}">  
+                  <option value="${transactionTerm.id}" <c:if test="${transactionTerm.id == order.transactionTerm.id}">selected="true"</c:if>> 
+                  	${transactionTerm.description} 
                   </option>  
               </c:forEach> 
           </select>
@@ -93,7 +116,23 @@
           </select>
 		  </div>
 		</div>
+		
 		<div class="control-group">
+		  <label class="control-label col-xs2">Additional Info:</label>
+		  <div class="controls">
+		    <textarea class="input-xlarge span6" name="order.additionalInfo" id="order.additionalInfo">${order.additionalInfo}</textarea> 
+		  </div>
+		</div>
+	  </fieldset>
+    </div>
+    
+    <hr class="hideInIE8"/>
+	<div class="box-header" data-original-title>
+		<h2><i class="halflings-icon edit"></i><span class="break"></span>Shipment Details</h2>
+	</div>
+	<div class="box-content">
+	   <fieldset>
+	    <div class="control-group">
 		  <label class="control-label col-xs2">Shipment Term:</label>
 		  <div class="controls">
 		    <select id="order.shipmentTerm.id" name="order.shipmentTerm.id" class="input-xlarge span6" >   
@@ -107,72 +146,114 @@
 		  </div>
 		</div>
 		<div class="control-group">
-		  <label class="control-label col-xs2">Additional Info:</label>
+		  <label class="control-label col-xs2">Delivery Date:</label>
 		  <div class="controls">
-		    <textarea class="input-xlarge span6" name="order.additionalInfo" id="order.additionalInfo">${order.additionalInfo}</textarea> 
+		     <input type="text" autocomplete="off" class="input-xlarge span2" data-behaviour="datepicker" name="order.deliveryDate" id="order.deliveryDate" value="<fmt:formatDate value='${order.deliveryDate}' pattern='MM/dd/yyyy'/>" />
 		  </div>
 		</div>
+		<div class="control-group">
+		  <label class="control-label col-xs2">Invoice Number:</label>
+		  <div class="controls">
+		    <input class="input-xlarge span6" name="order.invoiceNumber" value="${order.invoiceNumber}"/>
+		  </div>
+		</div>
+		<div class="control-group">
+		  <label class="control-label col-xs2">Terms:</label>
+		  <div class="controls">
+		    <input class="input-xlarge span6" name="order.terms" value="${order.terms}"/>
+		  </div>
+		</div>
+		<div class="control-group">
+		  <label class="control-label col-xs2">Landing Port:</label>
+		  <div class="controls">
+		    <input class="input-xlarge span6" name="order.landingPort" value="${order.landingPort}"/>
+		  </div>
+		</div>
+		<div class="control-group">
+		  <label class="control-label col-xs2">Destination Port:</label>
+		  <div class="controls">
+		    <input class="input-xlarge span6" name="order.destinationPort" value="${order.destinationPort}"/>
+		  </div>
+		</div>
+		<div class="control-group">
+		  <label class="control-label col-xs2">Insurance:</label>
+		  <div class="controls">
+		    <input class="input-xlarge span6" name="order.insurance" value="${order.insurance}"/>
+		  </div>
+		</div>
+		<div class="control-group">
+		  <label class="control-label col-xs2">Shipment:</label>
+		  <div class="controls">
+		    <input class="input-xlarge span6" name="order.shipment" value="${order.shipment}"/>
+		  </div>
+		</div>
+		
 	  </fieldset>
-	  <table class="table table-striped table-bordered" id="table-receita">
+	</div>
+    
+    <hr class="hideInIE8"/>
+	<div class="box-header" data-original-title>
+		<h2><i class="halflings-icon edit"></i><span class="break"></span>Products</h2>
+	</div>
+	<div class="box-content">
+	  <table class="table table-striped table-bordered" id="table-item">
 		<thead>
 		  <tr>
 			<td width="20%" >Product</td>
 			<td >Quantity</td>
 			<td width="15%" >Units</td>
-			<td >Unit Price</td>
+			<td >Price</td>
 			<td >Total</td>
-			<td width="20%" >Additional Info</td>
-			<td >Delivery Date</td>
+			<td >Commision</td>
 			<td ></td>
 		  </tr>
 		</thead>
 		<tbody id="tb-itens">
 		   <c:forEach var="item" items="${order.itens}" varStatus="idx">
-		 	<tr id="item-${item.id}">
-		 	  <td>
-		 	  	  <input type="hidden" name="order.itens[${idx.index}].id" value="${item.id}" />
-		 	  	  <input type="hidden" name="order.itens[${idx.index}].order.id" value="${order.id}" />
-		 	     <select id="order.itens[${idx.index}].product.id" name="order.itens[${idx.index}].product.id" class="input-xlarge span12" >   
-		              <option value="-1"> Products...</option>  
-		              <c:forEach var="product" items="${productList}">  
-		                  <option value="${product.id}" <c:if test="${product.id == item.product.id}">selected="true"</c:if>> 
-		                  	${product.description} 
-		                  </option>  
-		              </c:forEach>  
-		          </select>
+		 	<tr id='item-${item.id}'>
+		 	  <td><a data-toggle='modal' href='#myModal' id='a-product-${idx.index}' onclick='editItem(${idx.index});'>${item.product.description}</a>
+		          <input type='hidden' id='product-${idx.index}' name='order.itens[${idx.index}].product.id' value='${item.product.id}' />
+		 	  	  <input type='hidden' id='item-id-${idx.index}' name='order.itens[${idx.index}].id' value='${item.id}' />
+		 	  	  <input type='hidden' id='order-id-${idx.index}' name='order.itens[${idx.index}].order.id' value='${order.id}' />
+		 	  	  <input type='hidden' id='package-quantity-${idx.index}' name='order.itens[${idx.index}].packageQuantity' value='${item.packageQuantity}' />
+		 	  	  <input type='hidden' id='gross-weight-${idx.index}' name='order.itens[${idx.index}].grossWeight' value='${item.grossWeight}' />
+		 	  	  <input type='hidden' id='net-weight-${idx.index}' name='order.itens[${idx.index}].netWeight' value='${item.netWeight}' />
+		 	  	  <input type='hidden' id='volume-${idx.index}' name='order.itens[${idx.index}].volume' value='${item.volume}' />
+		 	  	  <input type='hidden' id='buy-price-${idx.index}' name='order.itens[${idx.index}].buyPrice' value='${item.buyPrice}' />
+		 	  	  <input type='hidden' id='additional-description-${idx.index}' name='order.itens[${idx.index}].additionalDescription' value='${item.additionalDescription}' />
+		 	      <input type='hidden' id='additional-info-${idx.index}' name='order.itens[${idx.index}].additionalInfo' value='${item.additionalInfo}' />
 		 	    </td>
-		 	  <td><input type="text" class="input-xlarge span12" name="order.itens[${idx.index}].quantity" value="${item.quantity}"  /></td>
-		 	  <td>
-		 	  	 <select id="order.itens[${idx.index}].unitOfMeasure.id" name="order.itens[${idx.index}].unitOfMeasure.id" class="input-xlarge span12" >   
-		              <option value="-1"> Units...</option>  
-		              <c:forEach var="unit" items="${unitsList}">  
-		                  <option value="${unit.id}" <c:if test="${unit.id == item.unitOfMeasure.id}">selected="true"</c:if>> 
-		                  	${unit.description} 
-		                  </option>  
-		              </c:forEach>  
-		          </select>
+		 	  <td><a data-toggle='modal' href='#myModal' id='a-quantity-${idx.index}' onclick='editItem(${idx.index});'>${item.quantity}</a>
+		 	     <input type='hidden' id='quantity-${idx.index}' name='order.itens[${idx.index}].quantity' value='${item.quantity}'  />
 		 	  </td>
-		 	  <td><input type="text" class="input-xlarge span12" data-behaviour="valor" name="order.itens[${idx.index}].unitPrice" value="${item.unitPrice}"/></td>
-		 	  <td><input type="text" class="input-xlarge span12" data-behaviour="valor" readonly="readonly" name="order.itens[${idx.index}].totalValue" value="<fmt:formatNumber value='${item.totalValue}' pattern='#,##0.00'/>"  /></td>
-		 	  <td><textarea class="input-xlarge span12" name="order.itens[${idx.index}].additionalInfo" id="order.itens[${idx.index}].additionalInfo">${item.additionalInfo}</textarea></td>
-		 	  <td><input autocomplete='off' value="<fmt:formatDate value='${item.deliveryDate}' pattern='MM/dd/yyyy' />" data-behaviour='datepicker' type='text' class='input-xlarge span12' name='order.itens[${idx.index}].deliveryDate'> </input></td>
-		 	  <td><c:if test="${order == null || order.toBeFilledIn}">
-		 	        <a href="" title="Delete" class="btn btn-danger" onclick="removeItem(${item.id}); return false;"><i class="halflings-icon trash halflings-icon"></i></a>
+		 	  <td><a data-toggle='modal' href='#myModal' id='a-unit-${idx.index}' onclick='editItem(${idx.index});'>${item.unitOfMeasure.description}</a>
+		 	  	 <input type='hidden' id='unit-${idx.index}' name='order.itens[${idx.index}].unitOfMeasure.id' value='${item.unitOfMeasure.id}'  />
+		 	  </td>
+		 	  <td><a data-toggle='modal' href='#myModal' id='a-unit-price-${idx.index}' onclick='editItem(${idx.index});'><fmt:formatNumber value='${item.unitPrice}' pattern='#,##0.00'/></a>
+		 	      <input type='hidden' id='unit-price-${idx.index}' name='order.itens[${idx.index}].unitPrice' value='<fmt:formatNumber value='${item.unitPrice}' pattern='#,##0.00'/>'/>
+		 	  </td>
+		 	  <td><a data-toggle='modal' href='#myModal' id='a-total-value-${idx.index}' onclick='editItem(${idx.index});'><fmt:formatNumber value='${item.totalValue}' pattern='#,##0.00'/></a>
+		 	  	<input type='hidden' id='total-value-${idx.index}' name='order.itens[${idx.index}].totalValue' value='<fmt:formatNumber value='${item.totalValue}' pattern='#,##0.00'/>'  />
+		 	  </td>
+		 	  <td><a data-toggle='modal' href='#myModal' id='a-commision-${idx.index}' onclick='editItem(${idx.index});'><fmt:formatNumber value='${item.commision}' pattern='#,##0.00'/></a>
+		 	  	<input type='hidden' id='commision-${idx.index}' name='order.itens[${idx.index}].commision' value='<fmt:formatNumber value='${item.commision}' pattern='#,##0.00'/>'  />
+		 	  </td>
+		 	  <td><c:if test='${order == null || order.toBeFilledIn}'>
+		 	        <a href='' title='Delete' class='btn btn-danger' onclick='removeItem(${item.id}); return false;'><i class='halflings-icon trash halflings-icon'></i></a>
 		 	       </c:if>
 		 	   </td>
 		 	</tr>
 		 </c:forEach>
 		</tbody>
-		<tbody id="tb-movimentos">
-		</tbody>
 	 </table>
 	 <div class="row-fluid">
 	   <c:if test="${order == null || order.toBeFilledIn}">
-		   <button id="new-item" type="button" class="btn btn-primary">
+		   <a data-toggle='modal' href='#myModal' id="new-item" class="btn btn-primary">
 		     New Item
-		   </button>
+		   </a>
 	   </c:if>
 	 </div>
+	</div>
     <hr class="hideInIE8"/>
    
 	<div class="form-actions">
@@ -180,17 +261,17 @@
 	    <c:when test="${order == null || order.toBeFilledIn}">
 		  <button id="singlebutton" name="singlebutton" class="btn btn-primary">Save</button>
 	    </c:when>
+	    <c:when test="${order.waitingSupplierProforma}">
+	       <a href="<c:url value='/supplierProforma/confirm/${order.id}'/>" class="btn btn-primary">Supplier Proforma Arrived</a>
+	    </c:when>
 	    <c:when test="${order.waitingProformaConfirmation}">
 	       <a href="<c:url value='/proformaConfirmation/confirm/${order.id}'/>" class="btn btn-primary">Proforma Confirmed</a>
-	    </c:when>
-	    <c:when test="${order.waitingArtworkConfirmation}">
-	       <a href="<c:url value='/artworkConfirmation/confirm/${order.id}'/>" class="btn btn-primary">Artwork Confirmed</a>
 	    </c:when>
 	    <c:when test="${order.waitingProductionStart}">
 	       <a href="<c:url value='/productionStartConfirmation/confirm/${order.id}'/>" class="btn btn-primary">Production Started</a>
 	    </c:when>
 	    <c:when test="${order.waitingShipment}">
-	       <a href="<c:url value='/shipment/confirm/${order.id}'/>" class="btn btn-primary">Shipped</a>
+	       <a href="<c:url value='/shipment/${order.id}'/>" class="btn btn-primary">Shipping Information</a>
 	    </c:when>
 	    <c:when test="${order.waitingForDocumentCopy}">
 	       <a href="<c:url value='/sendDocumentCopy/confirm/${order.id}'/>" class="btn btn-primary">Document Copy Sent</a>
@@ -210,96 +291,177 @@
 		  <a href="<c:url value='/orders/print/purchase/${order.id}'/>" class="btn btn-success">Print Purchase Order</a>
 		  <a href="<c:url value='/orders/print/proforma/${order.id}'/>" class="btn btn-success">Print Proforma Invoice</a>
 		  <a href="<c:url value='/orders/print/comercial/${order.id}'/>" class="btn btn-success">Print Comercial Invoice</a>
-		  
-		  <c:if test="${order.buyOrder != null}">
-		  	<a href="<c:url value='/orders/print/packing/${order.id}'/>" class="btn btn-success">Print Packing List</a>
-		  </c:if>
+  	  	  <a href="<c:url value='/orders/print/packing/${order.id}'/>" class="btn btn-success">Print Packing List</a>
 		  
 	  </c:if>
 	</div>
         
 </div>
 </form>
+
+<content tag="local_modal">
+<div class="modal hide fade modal-up" id="myModal">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">×</button>
+				<h3>Product</h3>
+			</div>
+			<div class="modal-body modal-body-item">
+				<%@include file="item.jsp" %>
+			</div>
+			<div class="modal-footer">
+			    <a href="#" class="btn btn-primary" data-dismiss="modal" onclick="addItem();">Add Item</a>
+				<a href="#" class="btn" data-dismiss="modal">Close</a>
+			</div>
+		</div>
+</content>
+
 <content tag="local_script">
 <script type="text/javascript">
 $(document).ready(function() {
 	$('[data-behaviour~=datepicker]').datepicker({dateFormat: "mm/dd/yy"});
 	$('[data-behaviour~=datepicker]').setMask({mask: '19/39/9999', autoTab: false});
-	
-	var nContItems = ${order.itensNumber};
-	$("#new-item").bind('click', function() {
-		addItem(nContItems);
-        nContItems++;
-	});
-	
 });
 	
-function addItem(nCountItems) {
+function addItem() {
+	
+	index = $('#item-index').val();
+	
+	if (!index){
+		index = $('#tb-itens >tbody >tr').length;
 		
-	var	cHtml = " <tr id='row-"+ nCountItems + "'> "+
-			 	" <td> "+
-			 	" <input type='hidden' name='order.itens["+nCountItems+"].id' /> "+
-		 	  	" <input type='hidden' name='order.itens["+nCountItems+"].order.id' />"+
-			 	" <select id='order.itens["+nCountItems+"].product.id' name='order.itens["+nCountItems+"].product.id' class='input-xlarge span12' >   "+
-			    "   <option value='-1'> Products...</option> "+  
-			    <c:forEach var="product" items="${productList}">  
-			    "   <option value='${product.id}'> "+ 
-			    "     ${product.description} "+ 
-			    "   </option> "+  
-			    </c:forEach>  
-			    " </select> "+
-			 	"</td> "+
-			 	" <td><input type='text' class='input-xlarge span12' name='order.itens["+nCountItems+"].quantity' id='quantity-"+nCountItems+"' /></td> "+
-			 	
-			 	" <td> "+
-			 	" <select id='order.itens["+nCountItems+"].unitOfMeasure.id' name='order.itens["+nCountItems+"].unitOfMeasure.id' class='input-xlarge span12' >   "+
-			    "   <option value='-1'> Units...</option> "+  
-			    <c:forEach var="unit" items="${unitsList}">  
-			    "   <option value='${unit.id}'> "+ 
-			    "     ${unit.description} "+ 
-			    "   </option> "+  
-			    </c:forEach>  
-			    " </select> "+
-			 	"</td> "+
-			 	
-			 	" <td><input type='text' class='input-xlarge span12' data-behaviour='valor' name='order.itens["+nCountItems+"].unitPrice' id='price-"+nCountItems+"' /></td> "+
-			 	" <td><input type='text' class='input-xlarge span12' data-behaviour='valor' readonly='readonly' name='order.itens["+nCountItems+"].totalValue' id='total-"+nCountItems+"' /></td> "+
-			 	" <td><textarea class='input-xlarge span12' name='order.itens["+nCountItems+"].additionalInfo' id='order.itens["+nCountItems+"].additionalInfo'></textarea></td> "+
-			 	" <td><input autocomplete='off' data-behaviour='datepicker' type='text' class='input-xlarge span12' id='delivery-date-"+nCountItems+"' name='order.itens[${idx.index}].deliveryDate'> </input></td> "+
-			 	" <td> <a id='delete-"+nCountItems+"' href='javascript:' class='btn btn-danger'><i class='halflings-icon trash halflings-icon'></i></a></td>"+
-			 	" </tr> ";
+		var	cHtml = " <tr id='row-"+ index + "'> "+
+					"	<td><a data-toggle='modal' href='#myModal' id='a-product-"+index+"' onclick='editItem("+index+");'></a> "+
+				    "    <input type='hidden' id='product-"+index+"' name='order.itens["+index+"].product.id' /> "+
+					"  	  <input type='hidden' id='item-id-"+index+"' name='order.itens["+index+"].id' /> "+
+					"  	  <input type='hidden' id='order-id-"+index+"' name='order.itens["+index+"].order.id'  /> "+
+					"  	  <input type='hidden' id='package-quantity-"+index+"' name='order.itens["+index+"].packageQuantity' /> "+
+					"  	  <input type='hidden' id='gross-weight-"+index+"' name='order.itens["+index+"].grossWeight' /> "+
+					"  	  <input type='hidden' id='net-weight-"+index+"' name='order.itens["+index+"].netWeight' /> "+
+					"  	  <input type='hidden' id='volume-"+index+"' name='order.itens["+index+"].volume' /> "+
+					"  	  <input type='hidden' id='buy-price-"+index+"' name='order.itens["+index+"].buyPrice' /> "+
+					"  	  <input type='hidden' id='additional-description-"+index+"' name='order.itens["+index+"].additionalDescription' /> "+
+					"     <input type='hidden' id='additional-info-"+index+"' name='order.itens["+index+"].additionalInfo' /> "+
+					"    </td> "+
+					"  <td><a data-toggle='modal' href='#myModal' id='a-quantity-"+index+"' onclick='editItem("+index+");'></a> "+
+					"     <input type='hidden' id='quantity-"+index+"' name='order.itens["+index+"].quantity' /> "+
+					"  </td> "+
+					"  <td><a data-toggle='modal' href='#myModal' id='a-unit-"+index+"' onclick='editItem("+index+");'></a> "+
+					"  	 <input type='hidden' id='unit-"+index+"' name='order.itens["+index+"].unitOfMeasure.id' /> "+
+					"  </td> "+
+					"  <td><a data-toggle='modal' href='#myModal' id='a-unit-price-"+index+"' onclick='editItem("+index+");'></a> "+
+					"      <input type='hidden' id='unit-price-"+index+"' name='order.itens["+index+"].unitPrice' /> "+
+					"  </td> "+
+					"  <td><a data-toggle='modal' href='#myModal' id='a-total-value-"+index+"' onclick='editItem("+index+");'></a> "+
+					"  	<input type='hidden' id='total-value-"+index+"' name='order.itens["+index+"].totalValue' /> "+
+					"  </td> "+
+					"  <td><a data-toggle='modal' href='#myModal' id='a-commision-"+index+"' onclick='editItem("+index+");'></a> "+
+			 	  	"  <input type='hidden' id='commision-"+index+"' name='order.itens["+index+"].commision'   /> "+
+			 	    " </td> "+
+				 	" <td> <a id='delete-"+index+"' href='javascript:' class='btn btn-danger'><i class='halflings-icon trash halflings-icon'></i></a></td>"+
+				 	" </tr> ";
+	
+			$("#tb-itens").append(cHtml);
+			$("#delete-"+index).on("click",{row : "row-" + index,item: "item-id-"+index},
+					function (event){
+				        //deleta o item da tela, ainda nao foi salvo no banco
+						$("#"+event.data.row).fadeOut('slow');
+						$("#"+event.data.row).remove();
+										
+						return false;
+			});
+	}
+	
+	    $("#a-product-"+index).html($("#product option:selected").text());
+	    $("#product-"+index).val($("#product").val());
+	    $("#item-id-"+index).val($("#item-id").val());
+	    $("#order-id-"+index).val($("#order-id").val());
+	    $("#package-quantity-"+index).val($("#package-quantity").val());
+	    $("#gross-weight-"+index).val($("#gw").val());
+	    $("#net-weight-"+index).val($("#nw").val());
+	    $("#volume-"+index).val($("#volume").val());
+	    $("#buy-price-"+index).val($("#buy-price").val());
+	    $("#additional-description-"+index).val($("#additional-description").val());
+	    $("#additional-info-"+index).val($("#additional-info").val());
+		
+	    $("#a-quantity-"+index).html($("#quantity").val());
+	    $("#quantity-"+index).val($("#quantity").val());
+	    
+	    $("#a-unit-"+index).html($("#unit option:selected").text());
+	    $("#unit-"+index).val($("#unit").val());
+	    
+	    $("#a-unit-price-"+index).html($("#sell-price").val());
+	    $("#unit-price-"+index).val($("#sell-price").val());
+	    
+	    $("#a-commision-"+index).html($("#commision").val());
+	    $("#commision-"+index).val($("#commision").val());
+		
+	    clearInputs();
+	    calculateTotalItem(index);
+}
 
-		$("#tb-itens").append(cHtml);
-		
-		$("#delete-"+nCountItems).on("click",{row : "row-" + nCountItems,item: "item-id-"+nCountItems},
-				function (event){
-			        //deleta o item da tela, ainda nao foi salvo no banco
-					$("#"+event.data.row).fadeOut('slow');
-					$("#"+event.data.row).remove();
-									
-					return false;
-		});
-		
-		$("#quantity-" + nCountItems).on("blur", nCountItems,
-				function(event) {
-					calculateTotalItem(event.data);
-				});
-		
-		$("#price-" + nCountItems).on("blur", nCountItems,
-				function(event) {
-					calculateTotalItem(event.data);
-				});
-		
-		$("#total-" + nCountItems).setMask('decimal');
-		$('#delivery-date-'+nCountItems).datepicker({dateFormat: "mm/dd/yy"});
-		$('#delivery-date-'+nCountItems).setMask({mask: '19/39/9999', autoTab: false});
+function clearInputs(){
+	
+	$("#item-index").val("");
+	$("#item-id").val("");
+    $("#order-id").val("");
+    $("#package-quantity").val("");
+    $("#gw").val("");
+    $("#nw").val("");
+    $("#volume").val("");
+    $("#buy-price").val("");
+    $("#additional-description").val("");
+    $("#product").val("-1");
+    $("#additional-info").val("");
+    $("#quantity").val("");
+    $("#unit").val("-1");
+    $("#sell-price").val("");
+}
+
+function editItem(index){
+    $("#item-index").val(index);
+    $("#product").val($("#product-"+index).val());
+	$("#item-id").val($("#item-id-"+index).val());
+    $("#order-id").val($("#order-id-"+index).val());
+    $("#package-quantity").val($("#package-quantity-"+index).val());
+    $("#gw").val($("#gross-weight-"+index).val());
+    $("#nw").val($("#net-weight-"+index).val());
+    $("#volume").val($("#volume-"+index).val());
+    $("#buy-price").val($("#buy-price-"+index).val());
+    $("#additional-description").val($("#additional-description-"+index).val());
+    $("#additional-info").val($("#additional-info-"+index).val());
+    $("#quantity").val($("#quantity-"+index).val());
+    $("#unit").val($("#unit-"+index).val());
+    $("#sell-price").val($("#unit-price-"+index).val());
+    calculateTotalBuy();
+    calculateTotalSell();
 }
 	
-function calculateTotalItem(nLinhaDeItem) {
-	var quantity  =  parseFloat($("#quantity-"+nLinhaDeItem ).val());
-	var price = parseFloat($("#price-" + nLinhaDeItem).val());
+function calculateTotalItem(index) {
+	var quantity  =  parseFloat($("#quantity-"+index).val());
+	var price = parseFloat($("#unit-price-"+index).val());
 	var total = price * quantity;
-	$("#total-" + nLinhaDeItem).val(total);
+	$("#a-total-value-"+index).html(total);
+	$("#total-value-"+index).val(total);
+}
+
+function calculateTotalBuy() {
+	var quantity  =  parseFloat($("#quantity").val());
+	var price = parseFloat($("#buy-price").val());
+	var total = price * quantity;
+	
+	if(total){
+		$("#total-buy-price").val(total);
+	}
+}
+
+function calculateTotalSell() {
+	var quantity  =  parseFloat($("#quantity").val());
+	var price = parseFloat($("#sell-price").val());
+	var total = price * quantity;
+	
+	if(total){
+		$("#total-sell-price").val(total);
+	}
 }
 
 function removeItem(id){

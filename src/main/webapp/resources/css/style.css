@@ -1,5 +1,5 @@
 /*
-* Author: Åukasz Holeczek
+* Author: Åukasz Holeczek
 * Template: Acme Dashboard -  Bootstrap Theme
 * Version: 1.0.2
 * Bootstrap version: 2.3.0
@@ -374,6 +374,17 @@ h6 {
 	-webkit-border-radius: 0px 0px 5px 5px;
 	   -moz-border-radius: 0px 0px 5px 5px;
           	border-radius: 0px 0px 5px 5px;
+}
+
+.modal-up{
+	left: 20%;
+    width: 90%;
+    top: 8%;
+    right: 20%;
+}
+
+.modal-body-item{
+	 max-height: 600px;
 }
 
 /* Header Section
@@ -2207,6 +2218,7 @@ x:-o-prefocus, .btn3d:before {
 .tab-menu.nav-tabs > .active > a:hover { 
 	background-color: #fafafa;
 }
+
 
 /* Forms
 =================================================================== */

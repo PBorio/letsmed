@@ -7,6 +7,7 @@
 	<queryString>
 		<![CDATA[select product.articleNumber as articleNumber,
 	   product.description as description,
+	   item.additionalDescription as additionalDescription,
 	   item.quantity as quantity,
 	   item.unitPrice as unitPrice,
        item.additionalInfo as additionalInfo,
@@ -23,6 +24,9 @@ where item.order_id = $P{order_id}]]>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="description" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="additionalDescription" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="quantity" class="java.lang.Integer">
@@ -55,7 +59,9 @@ where item.order_id = $P{order_id}]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Calibri" size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{additionalDescription} != null)
+  ? $F{description}+" "+$F{additionalDescription}
+  : $F{description}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="88def2c8-bf2d-46d2-aed5-8cb93dfd9050" x="238" y="0" width="80" height="15"/>

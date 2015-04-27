@@ -57,7 +57,6 @@ public class CustomersController {
 		validator.addIf(( customer.getName() == null || customer.getName().trim().equals("")),new I18nMessage("cus","customer.without.name"));
 		validator.addIf(( customer.getAddress() == null || customer.getAddress().trim().equals("")),new I18nMessage("cus","customer.without.address"));
 		validator.addIf(( customer.getPhoneNumber() == null || customer.getPhoneNumber().trim().equals("")),new I18nMessage("cus","customer.without.phone"));
-		validator.addIf(( customer.getOffice() == null || customer.getOffice().getId() == -1l),new I18nMessage("cus","customer.without.office"));
 		validator.addIf(( customer.getRevenueAccount() == null || customer.getRevenueAccount().getId() == -1l),new I18nMessage("cus","customer.without.revenue"));
 
 		if(validator.hasErrors()){

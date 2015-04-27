@@ -59,7 +59,7 @@ public class UnitsOfMeasuresController {
 	}
 	
 	@Get
-	@Path("/paymentTerms/{id}")
+	@Path("/unitsOfMeasures/{id}")
 	public void edit(Long id) {
 		UnitOfMeasure unitOfMeasure = entityManager.find(UnitOfMeasure.class, id);
 		result.include("controller", "unitOfMeasure");

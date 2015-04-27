@@ -35,13 +35,20 @@ public class Order {
 	@ManyToOne
 	private Customer customer;
 	
+	private Double commision;
+	
+	@ManyToOne
+	private Office office;
+	
 	@ManyToOne
 	private Supplier supplier;
 	
 	private Date confirmationDate;
 	
+	private Date supplierProformaDate;
+	
 	@ManyToOne
-	private PaymentTerm paymentTerm;
+	private TransactionTerm transactionTerm;
 	
 	@ManyToOne
 	private NegotiationTerm negotiationTerm;
@@ -63,6 +70,20 @@ public class Order {
 	
 	private Date conclusionDate;
 	
+	private String invoiceNumber;
+	
+	private String terms;
+	
+	private String landingPort;
+	
+	private String destinationPort;
+	
+	private String insurance;
+	
+	private String shipment;
+	
+	private Date deliveryDate;
+	
 	@OneToMany(mappedBy="order")
 	private List<OrderItem> itens = new ArrayList<OrderItem>();
 
@@ -73,11 +94,8 @@ public class Order {
 	private List<ForwardDetail> forwardDetails = new ArrayList<ForwardDetail>();
 
 	@OneToMany(mappedBy="order")
-	private  List<BuyOrder> buyOrders = new ArrayList<BuyOrder>();
-
-	@OneToMany(mappedBy="order")
 	private List<OrderPayment> payments = new ArrayList<OrderPayment>();
-	
+
 	public int getItensNumber(){
 		return this.itens.size();
 	}
@@ -90,6 +108,17 @@ public class Order {
 		Double result = 0.0;
 		for (OrderItem i :itens){
 			result += i.getTotalValue();
+		}
+		return new Arredondamento().arredondar(result);
+	}
+	
+	public Double getTotalBuyValue() {
+		if (this.itens == null)
+			return 0.0;
+		
+		Double result = 0.0;
+		for (OrderItem i :itens){
+			result += i.getTotalBuyValue();
 		}
 		return new Arredondamento().arredondar(result);
 	}
@@ -163,12 +192,6 @@ public class Order {
 		return (this.getPaidValue().doubleValue() > 0.0 && this.getBalance().doubleValue() > 0.0);
 	}
 
-	public BuyOrder getBuyOrder() {
-		if (this.buyOrders == null || this.buyOrders.size() == 0)
-			return null;
-		return buyOrders.get(0);
-	}
-	
 	public OrderStatus getStatus(){
 		return new OrderStatusFactory().getStatus(this);
 	}
@@ -181,12 +204,12 @@ public class Order {
 		return this.confirmationDate == null;
 	}
 
-	public boolean isToBeSentToFactory() {
-		return (this.confirmationDate != null && this.getBuyOrder() == null);
+	public boolean isWaitingSupplierProforma() {
+		return (this.confirmationDate != null && this.supplierProformaDate == null);
 	}
 
 	public boolean isWaitingProformaConfirmation() {
-		return (getBuyOrder() != null && this.proformaConfirmationDate == null);
+		return (this.supplierProformaDate != null && this.proformaConfirmationDate == null);
 	}
 
 	public boolean isWaitingArtworkConfirmation() {
@@ -200,7 +223,7 @@ public class Order {
 		
 		if (this.negotiationTerm.getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_AGAINST_COPY)||
 			this.negotiationTerm.getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT)){
-			return (this.artworkConfirmationDate != null && !this.isPaid() && !this.isAdvancedPaid());
+			return (this.proformaConfirmationDate != null && !this.isPaid() && !this.isAdvancedPaid());
 		}
 		return false;
 	}
@@ -218,7 +241,7 @@ public class Order {
 			this.negotiationTerm.getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT)){
 			return (this.isAdvancedPaid() && this.productionStartDate == null);
 		}
-		return (this.artworkConfirmationDate != null && this.productionStartDate == null);
+		return (this.proformaConfirmationDate != null && this.productionStartDate == null);
 	}
 
 	public boolean isWaitingForwardDetails() {
@@ -253,7 +276,7 @@ public class Order {
 			return false;
 		
 		if (NegotiationType.LC_AT_SIGHT.equals(this.negotiationTerm.getNegotiationType())){
-			return (this.artworkConfirmationDate != null && this.productionStartDate == null);
+			return (this.proformaConfirmationDate != null && this.productionStartDate == null);
 		}
 		
 		if (NegotiationType.TT_100_BEFORE_SHIPMENT.equals(this.negotiationTerm.getNegotiationType())||
@@ -323,13 +346,6 @@ public class Order {
 		this.confirmationDate = confirmationDate;
 	}
 
-	public PaymentTerm getPaymentTerm() {
-		return paymentTerm;
-	}
-
-	public void setPaymentTerm(PaymentTerm paymentTerm) {
-		this.paymentTerm = paymentTerm;
-	}
 
 	public NegotiationTerm getNegotiationTerm() {
 		return negotiationTerm;
@@ -395,8 +411,32 @@ public class Order {
 		this.itens = itens;
 	}
 
-	public Double getComissionValue() {
-		return this.customer.getComissionTo(this.getTotalValue());
+	public Double getRevenueValue() {
+		//TODO: Take conifg out of the code
+		if (this.transactionTerm == null || this.transactionTerm.getId() == null )
+			return 0.0;
+		
+		if (this.transactionTerm.getId().longValue() == 3l){
+			Double profit = this.getTotalValue() - this.getTotalBuyValue();
+			return new Arredondamento().arredondar(profit);
+		}else{
+			Double commisionValue = 0.0; //(this.getTotalValue() * (this.commision/100));
+			for (OrderItem item : this.itens){
+				commisionValue += item.getCommisionValue();
+			}
+			return new Arredondamento().arredondar(commisionValue);
+		}
+	}
+	
+	public Double getPartnerComissionValue(){
+		if (customer == null)
+			return 0.0;
+		
+		if (customer.getPartner() == null)
+			return 0.0;
+		
+		Double partnerComission = customer.getPartnerComissionTo(getRevenueValue());
+		return new Arredondamento().arredondar(partnerComission);
 	}
 
 	public Revenue getComissionRevenue() {
@@ -449,5 +489,100 @@ public class Order {
 	public void setShipmentTerm(ShipmentTerm shipmentTerm) {
 		this.shipmentTerm = shipmentTerm;
 	}
+
+	public TransactionTerm getTransactionTerm() {
+		return transactionTerm;
+	}
+
+	public void setTransactionTerm(TransactionTerm transactionTerm) {
+		this.transactionTerm = transactionTerm;
+	}
+
+	public String getInvoiceNumber() {
+		return invoiceNumber;
+	}
+
+	public void setInvoiceNumber(String invoiceNumber) {
+		this.invoiceNumber = invoiceNumber;
+	}
+
+	public String getTerms() {
+		return terms;
+	}
+
+	public void setTerms(String terms) {
+		this.terms = terms;
+	}
+
+	public String getLandingPort() {
+		return landingPort;
+	}
+
+	public void setLandingPort(String landingPort) {
+		this.landingPort = landingPort;
+	}
+
+	public String getDestinationPort() {
+		return destinationPort;
+	}
+
+	public void setDestinationPort(String destinationPort) {
+		this.destinationPort = destinationPort;
+	}
+
+	public String getInsurance() {
+		return insurance;
+	}
+
+	public void setInsurance(String insurance) {
+		this.insurance = insurance;
+	}
+
+	public String getShipment() {
+		return shipment;
+	}
+
+	public void setShipment(String shipment) {
+		this.shipment = shipment;
+	}
+
+	public Date getDeliveryDate() {
+		return deliveryDate;
+	}
+
+	public void setDeliveryDate(Date deliveryDate) {
+		this.deliveryDate = deliveryDate;
+	}
+
+	public Date getSupplierProformaDate() {
+		return supplierProformaDate;
+	}
+
+	public void setSupplierProformaDate(Date supplierProformaDate) {
+		this.supplierProformaDate = supplierProformaDate;
+	}
+
+	public Office getOffice() {
+		return office;
+	}
+
+	public void setOffice(Office office) {
+		this.office = office;
+	}
+
+	public Double getCommision() {
+		return commision;
+	}
+
+	public void setCommision(Double commision) {
+		this.commision = commision;
+	}
+
+	public boolean isRevenuePaid() {
+		if (this.getComissionRevenue() == null)
+			return false;
+		return this.getComissionRevenue().isPaid();
+	}
+	
 
 }

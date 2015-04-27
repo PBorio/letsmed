@@ -21,29 +21,29 @@ public class OrderStatusFactory {
 			status.setStatusDate(order.getOrderDate());
 			status.setLastMovement("Order Date");
 			status.setUrl("orders");
-		}else if (order.isToBeSentToFactory()){
-			status.setDescription("to_send_to_factory");
-			status.setTitle("Waiting to Be Send To Factory");
+		}else if (order.isWaitingSupplierProforma()){
+			status.setDescription("supplier_proforma");
+			status.setTitle("Waiting for Supplier Proforma");
 			status.setStatusDate(order.getConfirmationDate());
 			status.setLastMovement("Confirmation Date");
 			status.setUrl("orders");
 		}else if (order.isWaitingProformaConfirmation()){
 			status.setDescription("to_proforma");
 			status.setTitle("Waiting for Proforma Confirmation");
-			status.setStatusDate(order.getBuyOrder().getOrderDate());
-			status.setLastMovement("Buy Order Date");
+			status.setStatusDate(order.getSupplierProformaDate());
+			status.setLastMovement("Supplier Proforma Date");
 			status.setUrl("orders");
-		}else if (order.isWaitingArtworkConfirmation()){
-			status.setDescription("to_artwork");
-			status.setTitle("Waiting for Artwork Confirmation");
-			status.setStatusDate(order.getProformaConfirmationDate());
-			status.setLastMovement("Proforma Confirmation Date");
-			status.setUrl("orders");
+//		}else if (order.isWaitingArtworkConfirmation()){
+//			status.setDescription("to_artwork");
+//			status.setTitle("Waiting for Artwork Confirmation");
+//			status.setStatusDate(order.getProformaConfirmationDate());
+//			status.setLastMovement("Proforma Confirmation Date");
+//			status.setUrl("orders");
 		}else if (order.isWaitingAdvancedPayment()){
 			status.setDescription("to_advanced_paid");
 			status.setTitle("Waiting for Advanced Payment");
 			status.setStatusDate(order.getArtworkConfirmationDate());
-			status.setLastMovement("Artwork Confirmation Date");
+			status.setLastMovement("Proforma Confirmation Date");
 			status.setUrl("orderPayments/order");
 		}else if (order.isWaitingProductionStart()){
 			status = populateStatusToProductionSta1rt(order);
@@ -74,7 +74,11 @@ public class OrderStatusFactory {
 			status.setTitle("Waiting for Comission Payment");
 			status.setStatusDate(order.getOrderDate());
 			status.setLastMovement("Original Documents Date");
-			status.setUrl("orders");
+			
+			if (order.isRevenuePaid())
+				status.setUrl("orders");
+			else
+				status.setUrl("revenues/order");
 		}
 		return status;
 	}
@@ -83,7 +87,7 @@ public class OrderStatusFactory {
 		OrderStatus status = new OrderStatus();
 		status.setDescription("to_ship");
 		status.setTitle("Waiting for Shipment");
-		status.setUrl("orders");
+		status.setUrl("shipment/order");
 		
 		if (NegotiationType.TT_100_BEFORE_SHIPMENT.equals(order.getNegotiationTerm().getNegotiationType())||
 			NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT.equals(order.getNegotiationTerm().getNegotiationType())){

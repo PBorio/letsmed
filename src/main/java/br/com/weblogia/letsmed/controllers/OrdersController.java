@@ -2,6 +2,7 @@ package br.com.weblogia.letsmed.controllers;
 
 import java.io.ByteArrayInputStream;
 import java.sql.Connection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,14 +26,14 @@ import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validator;
 import br.com.weblogia.letsmed.domain.Customer;
 import br.com.weblogia.letsmed.domain.NegotiationTerm;
+import br.com.weblogia.letsmed.domain.Office;
 import br.com.weblogia.letsmed.domain.Order;
 import br.com.weblogia.letsmed.domain.OrderItem;
-import br.com.weblogia.letsmed.domain.PaymentTerm;
 import br.com.weblogia.letsmed.domain.Product;
 import br.com.weblogia.letsmed.domain.ShipmentTerm;
 import br.com.weblogia.letsmed.domain.Supplier;
+import br.com.weblogia.letsmed.domain.TransactionTerm;
 import br.com.weblogia.letsmed.domain.UnitOfMeasure;
-import br.com.weblogia.letsmed.domain.service.OrderService;
 import br.com.weblogia.letsmed.repositories.helpers.ConnectionFactory;
 
 @Controller
@@ -122,9 +123,8 @@ public class OrdersController {
 	@Transactional
 	public void confirm(Long id) {
 		Order order = entityManager.find(Order.class, id);
-		
-		OrderService service = new OrderService(entityManager);
-		service.confirm(order);
+		order.setConfirmationDate(new Date());
+		entityManager.merge(order);
 		
 		result.include("controller", "orders");
 		result.redirectTo(TimelineController.class).timeline();
@@ -271,14 +271,16 @@ public class OrdersController {
 		List<Product> productList = (List<Product>) entityManager.createQuery(" from Product p order by p.description ").getResultList();
 		List<Customer> customerList = (List<Customer>) entityManager.createQuery(" from Customer c order by c.name ").getResultList();
 		List<Supplier> supplierList = (List<Supplier>) entityManager.createQuery(" from Supplier s order by s.supplierName ").getResultList();
-		List<PaymentTerm> paymentTermList = (List<PaymentTerm>) entityManager.createQuery(" from PaymentTerm p order by p.description ").getResultList();
+		List<TransactionTerm> transactionTermList = (List<TransactionTerm>) entityManager.createQuery(" from TransactionTerm t order by t.description ").getResultList();
 		List<NegotiationTerm> negotiationTermList = (List<NegotiationTerm>) entityManager.createQuery(" from NegotiationTerm p order by p.description ").getResultList();
 		List<UnitOfMeasure> unitsList = (List<UnitOfMeasure>) entityManager.createQuery(" from UnitOfMeasure u order by u.description ").getResultList();
 		List<ShipmentTerm> shipmentTermList = (List<ShipmentTerm>) entityManager.createQuery(" from ShipmentTerm s order by s.description ").getResultList();
+		List<Office> officeList = (List<Office>) entityManager.createQuery(" from Office o order by o.officeName ").getResultList();
+		result.include("officeList", officeList);
 		result.include("productList", productList);
 		result.include("customerList", customerList);
 		result.include("supplierList", supplierList);
-		result.include("paymentTermList", paymentTermList);
+		result.include("transactionTermList", transactionTermList);
 		result.include("negotiationTermList", negotiationTermList);
 		result.include("shipmentTermList", shipmentTermList);
 		result.include("unitsList", unitsList);
@@ -287,8 +289,9 @@ public class OrdersController {
 	private void validateOrder(Order order) {
 		if (order.getCustomer().getId() == -1) 	order.setCustomer(null);
 		if (order.getSupplier().getId() == -1) 	order.setSupplier(null);
-		if (order.getPaymentTerm().getId() == -1) 	order.setPaymentTerm(null);
+		if (order.getTransactionTerm().getId() == -1) 	order.setTransactionTerm(null);
 		if (order.getNegotiationTerm().getId() == -1) 	order.setNegotiationTerm(null);
+		if (order.getShipmentTerm().getId() == -1) 	order.setShipmentTerm(null);
 		
 		for (OrderItem item : order.getItens()){
 			if (item.getProduct().getId() == -1) item.setProduct(null);
@@ -299,7 +302,7 @@ public class OrdersController {
 		
 		validator.addIf( order.getOrderDate() == null,new I18nMessage("cus","order.without.date"));
 		validator.addIf( order.getCustomer() == null,new I18nMessage("cus","order.without.customer"));
-		validator.addIf( order.getPaymentTerm() == null,new I18nMessage("cus","order.without.payment"));
+		validator.addIf( order.getTransactionTerm() == null,new I18nMessage("cus","order.without.transaction"));
 		validator.addIf( order.getNegotiationTerm() == null,new I18nMessage("cus","order.without.negotiation"));
 	}
 }

@@ -26,9 +26,6 @@ public class ExpensePayment {
 	private BankAccount bankAccount;
 	
 	@ManyToOne
-	private PaymentTerm paymentTerm;
-	
-	@ManyToOne
 	private Office office;
 	
 	private Double value;
@@ -49,14 +46,6 @@ public class ExpensePayment {
 
 	public void setPaymentDate(Date paymentDate) {
 		this.paymentDate = paymentDate;
-	}
-
-	public PaymentTerm getPaymentTerm() {
-		return paymentTerm;
-	}
-
-	public void setPaymentTerm(PaymentTerm paymentTerm) {
-		this.paymentTerm = paymentTerm;
 	}
 
 	public Double getValue() {

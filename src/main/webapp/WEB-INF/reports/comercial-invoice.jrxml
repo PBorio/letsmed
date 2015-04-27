@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="proforma-invoice" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="65b2ff10-6837-4062-931c-7f41e8fbe98f">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="228"/>
+	<property name="ireport.y" value="227"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -24,22 +24,21 @@
 	   customer.phoneNumber2 as customerFax,
 	   supplier.supplierName as supplierName,
        supplier.address as supplierAddress,
-       forward.invoiceNumber as invoiceNumber,
-	   forward.terms as terms,
-	   forward.shipment as shipment,
-	   forward.landingPort as landingPort,
-	   forward.destinationPort as destinationPort,
-	   forward.paymentConditions as paymentConditions,
-	   forward.insurance as insurance,
-       forward.deliveryDate as deliveryDate,
+       o.invoiceNumber as invoiceNumber,
+	   o.terms as terms,
+	   o.shipment as shipment,
+	   o.landingPort as landingPort,
+	   o.destinationPort as destinationPort,
+	   '' as paymentConditions,
+	   o.insurance as insurance,
+       o.deliveryDate as deliveryDate,
 	   (select sum(i.quantity) from order_itens i where i.order_id = o.id ) as totalQuantity,
 	   (select sum(i.quantity*i.unitPrice) from order_itens i where i.order_id = o.id ) as totalAmount,
 	   (select coalesce(0, sum(i.volume)) from order_itens i where i.order_id = o.id ) as totalVolume
 from orders o
   join customers customer on customer.id = o.customer_id
   left join forward_details forward on forward.order_id = o.id
-    left join buy_orders bo on bo.order_id = o.id
-		left join suppliers supplier on supplier.id = bo.supplier_id
+  left join suppliers supplier on supplier.id = o.supplier_id
 where o.id = $P{order_id}]]>
 	</queryString>
 	<field name="orderNumber" class="java.lang.Integer">
@@ -71,9 +70,7 @@ where o.id = $P{order_id}]]>
 	<field name="destinationPort" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="paymentConditions" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="paymentConditions" class="java.lang.String"/>
 	<field name="insurance" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>

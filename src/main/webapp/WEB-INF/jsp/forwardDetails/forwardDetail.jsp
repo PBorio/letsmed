@@ -57,54 +57,6 @@
 		    <textarea class="input-xlarge span8" name="forwardDetail.description">${forwardDetail.description}</textarea>
 		  </div>
 		</div>
-		<div class="control-group">
-		  <label class="control-label col-xs2">Invoice Number:</label>
-		  <div class="controls">
-		    <input class="input-xlarge span8" name="forwardDetail.invoiceNumber" value="${forwardDetail.invoiceNumber}"/>
-		  </div>
-		</div>
-		<div class="control-group">
-		  <label class="control-label col-xs2">Terms:</label>
-		  <div class="controls">
-		    <input class="input-xlarge span8" name="forwardDetail.terms" value="${forwardDetail.terms}"/>
-		  </div>
-		</div>
-		<div class="control-group">
-		  <label class="control-label col-xs2">Landing Port:</label>
-		  <div class="controls">
-		    <input class="input-xlarge span8" name="forwardDetail.landingPort" value="${forwardDetail.landingPort}"/>
-		  </div>
-		</div>
-		<div class="control-group">
-		  <label class="control-label col-xs2">Destination Port:</label>
-		  <div class="controls">
-		    <input class="input-xlarge span8" name="forwardDetail.destinationPort" value="${forwardDetail.destinationPort}"/>
-		  </div>
-		</div>
-		<div class="control-group">
-		  <label class="control-label col-xs2">Payment Conditions:</label>
-		  <div class="controls">
-		    <input class="input-xlarge span8" name="forwardDetail.paymentConditions" value="${forwardDetail.paymentConditions}"/>
-		  </div>
-		</div>
-		<div class="control-group">
-		  <label class="control-label col-xs2">Insurance:</label>
-		  <div class="controls">
-		    <input class="input-xlarge span8" name="forwardDetail.insurance" value="${forwardDetail.insurance}"/>
-		  </div>
-		</div>
-		<div class="control-group">
-		  <label class="control-label col-xs2">Shipment:</label>
-		  <div class="controls">
-		    <input class="input-xlarge span8" name="forwardDetail.shipment" value="${forwardDetail.shipment}"/>
-		  </div>
-		</div>
-		<div class="control-group">
-		  <label class="control-label col-xs2">Delivery Date:</label>
-		  <div class="controls">
-		     <input type="text" autocomplete="off" class="input-xlarge span2" data-behaviour="datepicker" name="forwardDetail.deliveryDate" id="forwardDetail.deliveryDate" value="<fmt:formatDate value='${forwardDetail.deliveryDate}' pattern='MM/dd/yyyy'/>" />
-		  </div>
-		</div>
 	</fieldset>
     </div>
     <hr class="hideInIE8"/>

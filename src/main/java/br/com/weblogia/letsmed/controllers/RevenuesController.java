@@ -15,7 +15,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validator;
 import br.com.weblogia.letsmed.domain.BankAccount;
-import br.com.weblogia.letsmed.domain.PaymentTerm;
+import br.com.weblogia.letsmed.domain.Order;
 import br.com.weblogia.letsmed.domain.Revenue;
 import br.com.weblogia.letsmed.domain.RevenuePayment;
 
@@ -42,6 +42,21 @@ public class RevenuesController {
 		result.include("revenue", revenue);
 		result.include("revenuePayment", revenuePayment);
 		result.include("controller", "revenuePayments");
+	}
+	
+	@Get
+	@Path("/revenues/order/{id}")
+	public void paymentOrder(Long id){
+		Order order = entityManager.find(Order.class, id);
+		Revenue revenue = entityManager.find(Revenue.class, order.getComissionRevenue().getId());
+		
+		RevenuePayment revenuePayment = new RevenuePayment();
+		revenuePayment.setRevenue(revenue);
+		loadLists();
+		result.include("revenue", revenue);
+		result.include("revenuePayment", revenuePayment);
+		result.include("controller", "revenuePayments");
+		result.of(this).payment(null);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -97,15 +112,14 @@ public class RevenuesController {
 
 	@SuppressWarnings("unchecked")
 	private void loadLists() {
-		List<PaymentTerm> paymentTermList = (List<PaymentTerm>) entityManager.createQuery(" from PaymentTerm p order by p.description ").getResultList();
+//		List<TransactionTerms> paymentTermList = (List<TransactionTerms>) entityManager.createQuery(" from PaymentTerm p order by p.description ").getResultList();
 		List<BankAccount> bankAccountList = (List<BankAccount>) entityManager.createQuery(" from BankAccount b order by b.description ").getResultList();
 		result.include("bankAccountList", bankAccountList);
-		result.include("paymentTermList", paymentTermList);
+//		result.include("paymentTermList", paymentTermList);
 	}
 	
 	private void validatePayment(RevenuePayment revenuePayment) {
 		if (revenuePayment.getRevenue().getId() == -1) 	revenuePayment.setRevenue(null);
-		if (revenuePayment.getPaymentTerm().getId() == -1) 	revenuePayment.setPaymentTerm(null);
 		
 		validator.addIf( revenuePayment.getPaymentDate() == null,new I18nMessage("rev","revenuepayment.without.date"));
 		validator.addIf( revenuePayment.getValue() == null,new I18nMessage("cus","revenuepayment.without.value"));

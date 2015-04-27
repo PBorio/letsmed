@@ -24,24 +24,22 @@
 	   customer.phoneNumber2 as customerFax,
 	   supplier.supplierName as supplierName,
        supplier.address as supplierAddress,
-       forward.invoiceNumber as invoiceNumber,
-	   forward.terms as terms,
-	   forward.shipment as shipment,
-	   forward.landingPort as landingPort,
-	   forward.destinationPort as destinationPort,
-	   forward.paymentConditions as paymentConditions,
-	   forward.insurance as insurance,
-       forward.deliveryDate as deliveryDate,
-	   (select sum(i.quantity) from buy_order_itens i where i.buyOrder_id = bo.id ) as totalQuantity,
-	   (select sum(i.packageQuantity) from buy_order_itens i where i.buyOrder_id = bo.id ) as totalPackageQuantity,
-	   (select sum(i.grossWeight) from buy_order_itens i where i.buyOrder_id = bo.id ) as totalGrossWeight,
-	   (select sum(i.netWeight) from buy_order_itens i where i.buyOrder_id = bo.id ) as totalNetWeight,
-	   (select sum(i.volume) from buy_order_itens i where i.buyOrder_id = bo.id ) as totalVolume
-from buy_orders bo
-  join orders o on bo.order_id = o.id
+       o.invoiceNumber as invoiceNumber,
+	   o.terms as terms,
+	   o.shipment as shipment,
+	   o.landingPort as landingPort,
+	   o.destinationPort as destinationPort,
+	   '' as paymentConditions,
+	   o.insurance as insurance,
+       o.deliveryDate as deliveryDate,
+	   (select sum(i.quantity) from order_itens i where i.order_id = o.id ) as totalQuantity,
+	   (select sum(i.packageQuantity) from order_itens i where i.order_id = o.id ) as totalPackageQuantity,
+	   (select sum(i.grossWeight) from order_itens i where i.order_id = o.id ) as totalGrossWeight,
+	   (select sum(i.netWeight) from order_itens i where i.order_id = o.id ) as totalNetWeight,
+	   (select sum(i.volume) from order_itens i where i.order_id = o.id ) as totalVolume
+from orders o
   join customers customer on customer.id = o.customer_id
-  join suppliers supplier on supplier.id = bo.supplier_id
-  left join forward_details forward on forward.order_id = o.id
+  join suppliers supplier on supplier.id = o.supplier_id
 where o.id = $P{order_id}]]>
 	</queryString>
 	<field name="orderNumber" class="java.lang.Integer">
@@ -73,9 +71,7 @@ where o.id = $P{order_id}]]>
 	<field name="destinationPort" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="paymentConditions" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="paymentConditions" class="java.lang.String"/>
 	<field name="insurance" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
