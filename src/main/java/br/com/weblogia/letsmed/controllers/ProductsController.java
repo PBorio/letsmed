@@ -14,6 +14,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validator;
 import br.com.weblogia.letsmed.domain.Product;
+import br.com.weblogia.letsmed.domain.ProductCategory;
 
 @Controller
 public class ProductsController {
@@ -29,6 +30,7 @@ public class ProductsController {
 	Validator validator;
 	
 	public void product(){
+		loadLists();
 		result.include("controller", "products");
 	}
 	
@@ -62,10 +64,16 @@ public class ProductsController {
 	@Get
 	@Path("/products/{id}")
 	public void edit(Long id) {
+		loadLists();
 		Product product = entityManager.find(Product.class, id);
 		result.include("controller", "products");
 		result.include("product", product);
 		result.of(this).product();
 	}
 
+	private void loadLists() {
+		@SuppressWarnings("unchecked")
+		List<ProductCategory> productCategoryList = (List<ProductCategory>) entityManager.createQuery(" from ProductCategory pc order by pc.description ").getResultList();
+		result.include("productCategoryList", productCategoryList);		
+	}
 }

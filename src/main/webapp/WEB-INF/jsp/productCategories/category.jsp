@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Product Categories</title>
+<title>Expense Categories</title>
 </head>
 <body>
 <c:forEach var="error" items="${errors}">
@@ -14,16 +14,16 @@
 	</div>
 </c:forEach>
 <div class="box-header" data-original-title>
-	<h2><i class="halflings-icon edit"></i><span class="break"></span>Product Categories</h2>
+	<h2><i class="halflings-icon edit"></i><span class="break"></span>Expense Categories</h2>
 </div>
-<form class="form-horizontal" action='<c:url value="/productCategories/save"/>' method="post">
-<input type="hidden" name="productCategory.id" value="${productCategory.id}" />
+<form class="form-horizontal" action='<c:url value="/expenseCategories/save"/>' method="post">
+<input type="hidden" name="expenseCategory.id" value="${expenseCategory.id}" />
 <div class="box-content">
 	  <fieldset>
 		<div class="control-group">
 		  <label class="control-label col-xs2">Description:</label>
 		  <div class="controls">
-		    <input type="text" class="input-xlarge span8" name="productCategory.description" id="productCategory.description" value="${productCategory.description}" />
+		    <input type="text" class="input-xlarge span8" name="expenseCategory.description" id="expenseCategory.description" value="${expenseCategory.description}" />
 		  </div>
 		</div>
 	  </fieldset>
@@ -31,7 +31,7 @@
    
 	<div class="form-actions">
 	  <button id="singlebutton" name="singlebutton" class="btn btn-primary">Confirm</button>
-      <a href="<c:url value='/productCategories'/>" class="btn btn-primary">Cancel</a>
+      <a href="<c:url value='/expenseCategories'/>" class="btn btn-primary">Cancel</a>
 	</div>
         
 </div>
@@ -39,7 +39,7 @@
 <content tag="local_script">
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#productCategory\\.description').focus();
+		$('#expenseCategory\\.description').focus();
 	});
 </script>
 </content>

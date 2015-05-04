@@ -56,19 +56,6 @@
 		  </div>
 		</div>
 		<div class="control-group">
-		  <label class="control-label col-xs2">Office:</label>
-		  <div class="controls">
-		    <select id="expense.office.id" name="expense.office.id" class="input-xlarge span6" >   
-              <option value="-1"> Offices...</option>  
-              <c:forEach var="office" items="${officeList}">  
-                  <option value="${office.id}" <c:if test="${office.id == expense.office.id}">selected="true"</c:if>> 
-                  	${office.officeName} 
-                  </option>  
-              </c:forEach> 
-          </select>
-		  </div>
-		</div>
-		<div class="control-group">
 		  <label class="control-label col-xs2">Value:</label>
 		  <div class="controls">
 		    <input type="text" class="input-xlarge span2" name="expense.value" id="expense.value" value="${expense.value}" />

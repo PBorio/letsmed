@@ -72,25 +72,6 @@
 		  </div>
 		</div>
 		<div class="control-group">
-		  <label class="control-label col-xs2">Office:</label>
-		  <div class="controls">
-		    <select id="order.office.id" name="order.office.id" class="input-xlarge span6" >   
-              <option value="-1"> Offices...</option>  
-              <c:forEach var="office" items="${officeList}">  
-                  <option value="${office.id}" <c:if test="${office.id == order.office.id}">selected="true"</c:if>> 
-                  	${office.officeName} 
-                  </option>  
-              </c:forEach> 
-          </select>
-		  </div>
-		</div>
-		<div class="control-group">
-		  <label class="control-label col-xs2">Commision:</label>
-		  <div class="controls">
-		    <input type="text" class="input-xlarge span2" name="order.commision" id="order.commision" value="${order.commision}" />
-		  </div>
-		</div>
-		<div class="control-group">
 		  <label class="control-label col-xs2">Transaction Term:</label>
 		  <div class="controls">
 		    <select id="order.transactionTerm.id" name="order.transactionTerm.id" class="input-xlarge span6" >   

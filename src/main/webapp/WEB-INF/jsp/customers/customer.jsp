@@ -25,13 +25,19 @@
 		<div class="control-group">
 		  <label class="control-label col-xs2">Name:</label>
 		  <div class="controls">
-		    <input type="text" class="input-xlarge span8" name="customer.name" id="customer.name" value="${customer.name}" />
+		    <input type="text" class="input-xlarge span6" name="customer.name" id="customer.name" value="${customer.name}" />
 		  </div>
 		</div>
 		<div class="control-group">
 		  <label class="control-label col-xs2">Address:</label>
 		  <div class="controls">
 		    <textarea class="input-xlarge span6" name="customer.address" id="partner.address">${customer.address}</textarea> 
+		  </div>
+		</div>
+		<div class="control-group">
+		  <label class="control-label col-xs2">Country:</label>
+		  <div class="controls">
+		    <input type="text" class="input-xlarge span6" name="customer.country" id="customer.country" value="${customer.country}" />
 		  </div>
 		</div>
 		<div class="control-group">
@@ -61,7 +67,7 @@
 		<div class="control-group">
 		  <label class="control-label col-xs2">Contact:</label>
 		  <div class="controls">
-		    <input type="text" class="input-xlarge span8" name="customer.contact" id="customer.contact" value="${customer.contact}" />
+		    <input type="text" class="input-xlarge span6" name="customer.contact" id="customer.contact" value="${customer.contact}" />
 		  </div>
 		</div>
 		<div class="control-group">

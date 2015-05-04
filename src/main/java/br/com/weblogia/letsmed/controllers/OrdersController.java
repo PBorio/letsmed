@@ -71,9 +71,14 @@ public class OrdersController {
 	@Transactional
 	public void save(Order order){
 		
+		if (order.getNegotiationTerm()!= null){
+			order.setNegotiationTerm(entityManager.find(NegotiationTerm.class, order.getNegotiationTerm().getId()));
+		}
+		
 		validateOrder(order);
 
 		if(validator.hasErrors()){
+			
 			loadLists();
 			result.include("order", order);
 			validator.onErrorUsePageOf(this).order();
@@ -91,6 +96,9 @@ public class OrdersController {
 
 	private void saveItens(Order order) {
 		for (OrderItem item : order.getItens()){
+			if (item.getCommision() == null)
+				item.setCommision(0.0);
+			
 			if (item.getId() == null){
 				item.setOrder(order);
 				entityManager.persist(item);
@@ -298,6 +306,9 @@ public class OrdersController {
 			validator.addIf( item.getProduct() == null,new I18nMessage("ord","item.without.product"));
 			validator.addIf( item.getUnitPrice() == null,new I18nMessage("ord","order.without.price"));
 			validator.addIf( item.getQuantity() == null,new I18nMessage("ord","order.without.quantity"));
+			if (order.getTransactionTerm().getId().intValue() != 3){
+				validator.addIf(item.getCommision() == null || item.getCommision().doubleValue() == 0.0, new I18nMessage("ord","item.without.commision"));
+			}
 		}
 		
 		validator.addIf( order.getOrderDate() == null,new I18nMessage("cus","order.without.date"));

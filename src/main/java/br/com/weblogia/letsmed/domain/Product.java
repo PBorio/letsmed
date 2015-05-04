@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -26,6 +27,9 @@ public class Product {
 	
 	private String differentOption4;
 
+	@ManyToOne
+	private ProductCategory productCategory;
+	
 	public Long getId() {
 		return id;
 	}
@@ -80,6 +84,14 @@ public class Product {
 
 	public void setDifferentOption4(String differentOption4) {
 		this.differentOption4 = differentOption4;
+	}
+
+	public ProductCategory getProductCategory() {
+		return productCategory;
+	}
+
+	public void setProductCategory(ProductCategory productCategory) {
+		this.productCategory = productCategory;
 	}
 	
 

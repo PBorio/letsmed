@@ -71,7 +71,7 @@ public class OrderStatusFactory {
 			status.setUrl("orders");
 		}else if (order.isWaitingForComissionPayment()){
 			status.setDescription("to_comisson_payment");
-			status.setTitle("Waiting for Comission Payment");
+			status.setTitle("Waiting for Commision Payment");
 			status.setStatusDate(order.getOrderDate());
 			status.setLastMovement("Original Documents Date");
 			

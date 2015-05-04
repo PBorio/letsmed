@@ -29,6 +29,8 @@ public class Supplier {
 	
 	private String contact;
 	
+	private String country;
+	
 	@ManyToOne
 	private ExpenseAccount expenseAccount;
 
@@ -102,6 +104,14 @@ public class Supplier {
 
 	public void setExpenseAccount(ExpenseAccount expenseAccount) {
 		this.expenseAccount = expenseAccount;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
 	}
 
 }

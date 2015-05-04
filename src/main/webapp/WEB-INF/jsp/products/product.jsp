@@ -35,29 +35,18 @@
 		  </div>
 		</div>
 		<div class="control-group">
-		  <label class="control-label col-xs2">Different Option 1:</label>
+		  <label class="control-label col-xs2">Category:</label>
 		  <div class="controls">
-		    <input type="text" class="input-xlarge span6" name="product.differentOption1" id="product.differentOption1" value="${product.differentOption1}" />
+		    <select id="producot.productCategory.id" name="product.productCategory.id" class="input-xlarge span6" >   
+              <option value="-1"> Categories...</option>  
+              <c:forEach var="productCategory" items="${productCategoryList}">  
+                  <option value="${productCategory.id}" <c:if test="${productCategory.id == product.productCategory.id}">selected="true"</c:if>> 
+                  	${productCategory.description} 
+                  </option>  
+              </c:forEach> 
+          </select>
 		  </div>
-		</div>
-		<div class="control-group">
-		  <label class="control-label col-xs2">Different Option 2:</label>
-		  <div class="controls">
-		    <input type="text" class="input-xlarge span6" name="product.differentOption2" id="product.differentOption2" value="${product.differentOption2}" />
-		  </div>
-		</div>
-		<div class="control-group">
-		  <label class="control-label col-xs2">Different Option 3:</label>
-		  <div class="controls">
-		    <input type="text" class="input-xlarge span6" name="product.differentOption3" id="product.differentOption3" value="${product.differentOption3}" />
-		  </div>
-		</div>
-		<div class="control-group">
-		  <label class="control-label col-xs2">Different Option 4:</label>
-		  <div class="controls">
-		    <input type="text" class="input-xlarge span6" name="product.differentOption4" id="product.differentOption4" value="${product.differentOption4}" />
-		  </div>
-		</div>
+		 </div>
 	  </fieldset>
     <hr class="hideInIE8"/>
    

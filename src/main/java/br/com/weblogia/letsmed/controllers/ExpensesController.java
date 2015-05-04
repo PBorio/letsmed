@@ -80,13 +80,11 @@ public class ExpensesController {
 	private void validateExpense(Expense expense) {
 		if (expense.getExpenseAccount().getId() == -1) 	expense.setExpenseAccount(null);
 		if (expense.getExpenseCategory().getId() == -1) expense.setExpenseCategory(null);
-		if (expense.getOffice().getId() == -1) expense.setOffice(null);
 		
 		validator.addIf( expense.getExpenseDate() == null,new I18nMessage("rev","expense.without.date"));
 		validator.addIf( expense.getValue() == null,new I18nMessage("cus","expense.without.value"));
 		validator.addIf( expense.getExpenseAccount() == null,new I18nMessage("cus","expense.without.account"));
 		validator.addIf( expense.getExpenseCategory() == null,new I18nMessage("cus","expense.without.category"));
-		validator.addIf( expense.getOffice() == null,new I18nMessage("cus","expense.without.office"));
 	}
 
 

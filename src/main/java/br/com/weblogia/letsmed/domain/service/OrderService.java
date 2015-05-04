@@ -25,7 +25,6 @@ public class OrderService {
 			expense.setExpenseDate(new Date());
 			expense.setExpenseAccount(order.getCustomer().getPartnerExpenseAccount());
 			expense.setExpenseCategory(order.getCustomer().getPartnerExpenseCategory());
-			expense.setOffice(order.getOffice());
 			expense.setOrder(order);
 			expense.setValue(order.getPartnerComissionValue());
 			expense.setAdditionalInfo("Expense from Order N. "+String.valueOf(order.getId()));
@@ -35,7 +34,6 @@ public class OrderService {
 		Revenue revenue = new Revenue();
 		revenue.setRevenueDate(new Date());
 		revenue.setRevenueAccount(order.getCustomer().getRevenueAccount());
-		revenue.setOffice(order.getOffice());
 		revenue.setOrder(order);
 		revenue.setValue(order.getRevenueValue());
 		revenue.setAdditionalInfo("Revenue from Order N. "+String.valueOf(order.getId()));

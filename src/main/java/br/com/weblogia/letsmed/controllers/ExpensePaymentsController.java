@@ -90,13 +90,11 @@ public class ExpensePaymentsController {
 	private void validatePayment(ExpensePayment expensePayment) {
 		if (expensePayment.getExpenseAccount().getId() == -1) 	expensePayment.setExpenseAccount(null);
 		if (expensePayment.getBankAccount().getId() == -1) 	expensePayment.setBankAccount(null);
-		if (expensePayment.getOffice().getId() == -1) expensePayment.setOffice(null);
 		
 		validator.addIf( expensePayment.getPaymentDate() == null,new I18nMessage("rev","expensepayment.without.date"));
 		validator.addIf( expensePayment.getValue() == null,new I18nMessage("cus","expensepayment.without.value"));
 		validator.addIf( expensePayment.getValue() == null,new I18nMessage("cus","expensepayment.without.expense"));
 		validator.addIf( expensePayment.getValue() == null,new I18nMessage("cus","expensepayment.without.bank"));
-		validator.addIf( expensePayment.getValue() == null,new I18nMessage("cus","expensepayment.without.office"));
 	}
 	
 	@SuppressWarnings("unchecked")

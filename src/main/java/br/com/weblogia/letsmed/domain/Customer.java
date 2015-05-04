@@ -31,6 +31,8 @@ public class Customer {
 	
 	private String contact;
 	
+	private String country;
+	
 	@ManyToOne
 	private RevenueAccount revenueAccount;
 	
@@ -146,6 +148,14 @@ public class Customer {
 
 	public void setPartner(Partner partner) {
 		this.partner = partner;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
 	}
 
 }
