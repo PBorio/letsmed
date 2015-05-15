@@ -71,10 +71,6 @@ public class OrdersController {
 	@Transactional
 	public void save(Order order){
 		
-		if (order.getNegotiationTerm()!= null){
-			order.setNegotiationTerm(entityManager.find(NegotiationTerm.class, order.getNegotiationTerm().getId()));
-		}
-		
 		validateOrder(order);
 
 		if(validator.hasErrors()){
@@ -295,6 +291,11 @@ public class OrdersController {
 	}
 	
 	private void validateOrder(Order order) {
+		
+		if (order.getNegotiationTerm()!= null && order.getNegotiationTerm().getId().intValue() != -1){
+			order.setNegotiationTerm(entityManager.find(NegotiationTerm.class, order.getNegotiationTerm().getId()));
+		}
+		
 		if (order.getCustomer().getId() == -1) 	order.setCustomer(null);
 		if (order.getSupplier().getId() == -1) 	order.setSupplier(null);
 		if (order.getTransactionTerm().getId() == -1) 	order.setTransactionTerm(null);
@@ -311,6 +312,7 @@ public class OrdersController {
 			}
 		}
 		
+		validator.addIf( order.getItens().size() == 0,new I18nMessage("cus","order.without.products"));
 		validator.addIf( order.getOrderDate() == null,new I18nMessage("cus","order.without.date"));
 		validator.addIf( order.getCustomer() == null,new I18nMessage("cus","order.without.customer"));
 		validator.addIf( order.getTransactionTerm() == null,new I18nMessage("cus","order.without.transaction"));

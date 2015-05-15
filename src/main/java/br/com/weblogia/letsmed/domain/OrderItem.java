@@ -47,10 +47,14 @@ public class OrderItem {
 	private UnitOfMeasure unitOfMeasure;
 	
 	public Double getTotalValue(){
+		if (this.quantity == null || this.unitPrice == null)
+			return 0.0;
 		return new Arredondamento().arredondar(this.quantity * this.unitPrice);
 	}
 	
 	public Double getTotalBuyValue() {
+		if (this.quantity == null || this.buyPrice == null)
+			return 0.0;
 		return new Arredondamento().arredondar(this.quantity * this.buyPrice);
 	}
 

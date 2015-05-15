@@ -64,7 +64,7 @@
 		<div class="control-group">
 		  <label class="control-label col-xs2">Value:</label>
 		  <div class="controls">
-		    <input type="text" class="input-xlarge span4" data-behaviour="valor" name="orderPayment.value" id="orderPayment.value" value="${orderPayment.value}" />
+		    <input type="text" class="input-xlarge span2" data-behaviour="valor" name="orderPayment.value" id="orderPayment.value" value="${orderPayment.value}" />
 		  </div>
 		</div>
 		</fieldset>

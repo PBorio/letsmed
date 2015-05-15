@@ -17,10 +17,10 @@
 	
 	<!-- start: CSS -->
 	<link id="bootstrap-style" href="<c:url value='/resources/css/bootstrap.min.css'/>" rel="stylesheet">
-	<link href="<c:url value='/resources/css/bootstrap-responsive.min.css" rel="stylesheet'/>">
-	<link id="base-style" href="<c:url value='/resources/css/style.css" rel="stylesheet'/>">
-	<link id="base-style-responsive" href="<c:url value='/resources/css/style-responsive.css" rel="stylesheet'/>">
-	<link href="<c:url value='/resources/css/timeline.css" rel="stylesheet'/>">
+	<link href="<c:url value='/resources/css/bootstrap-responsive.min.css'/>" rel="stylesheet">
+	<link id="base-style" href="<c:url value='/resources/css/style.css'/>" rel="stylesheet">
+	<link id="base-style-responsive" href="<c:url value='/resources/css/style-responsive.css'/>" rel="stylesheet">
+	<link href="<c:url value='/resources/css/timeline.css'/>" rel="stylesheet">
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
 
 	<decorator:head/>
@@ -40,6 +40,161 @@
 								
 				<!-- start: Header Menu -->
 				<div class="nav-no-collapse header-nav">
+				    <ul class="nav">
+				  <li class="dropdown hidden-phone">
+					  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+						Orders
+					  </a>
+					  <ul class="dropdown-menu tasks">
+					 	 <li 
+					 	 >
+					  	 		<a class="submenu" href="<c:url value='/timeline'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Timeline</span></a></li>
+							<li <c:if test="${controller eq 'orders'}"> class="active" </c:if>>
+								<a class="submenu" href="<c:url value='/orders'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Orders</span></a></li>
+							<li <c:if test="${controller eq 'timeline'}"> class="active" </c:if>>
+								<a class="submenu" href="<c:url value='/orderPayments'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Orders Payment</span></a></li>
+							<li <c:if test="${controller eq 'timeline'}"> class="active" </c:if>>
+								<a class="submenu" href="<c:url value='/forwardDetails'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Order Forward Detail</span></a></li>
+							<li <c:if test="${controller eq 'timeline'}"> class="active" </c:if>>
+								<a class="submenu" href="<c:url value='/customers'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Customers</span></a></li>
+							<li <c:if test="${controller eq 'timeline'}"> class="active" </c:if>>
+								<a class="submenu" href="<c:url value='/products'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Products</span></a></li>
+							<li <c:if test="${controller eq 'partner'}"> class="active" </c:if>>
+								<a class="submenu" href="<c:url value='/partners'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Partners</span></a></li>
+							<li <c:if test="${controller eq 'suppliers'}"> class="active" </c:if>>
+								<a class="submenu"  href="<c:url value='/suppliers'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Supplier</span></a></li>  	
+                      </ul>
+				   </li>
+				 <!-- start: Compras Dropdown -->
+				 <!-- end: Compras Dropdown -->
+             	 <!-- start: Vendas Dropdown -->
+				 <li class="dropdown hidden-phone">
+					 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+					 	Admin
+					 </a>
+					 <ul class="dropdown-menu tasks">
+						<li <c:if test="${controller eq 'accountDetails'}"> class="active" </c:if>>
+								<a class="submenu"  href="<c:url value='/accountDetails'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Acount Details</span></a></li>
+							<li <c:if test="${controller eq 'statement'}"> class="active" </c:if>>
+								<a class="submenu"  href="<c:url value='/statement'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Bank Statements</span></a></li>
+					  	 	<li <c:if test="${controller eq 'revenues'}"> class="active" </c:if>>
+					  	 		<a class="submenu"  href="<c:url value='/revenues'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Revenues</span></a></li>
+							<li <c:if test="${controller eq 'timeline'}"> class="active" </c:if>>
+								<a class="submenu"  href="<c:url value='/expenses'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Expenses</span></a></li>
+							<li <c:if test="${controller eq 'expensePayments'}"> class="active" </c:if>>
+								<a class="submenu"  href="<c:url value='/expensePayments'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Expense Payments</span></a></li>
+							<li <c:if test="${controller eq 'revenueAccounts'}"> class="active" </c:if>>
+								<a class="submenu"  href="<c:url value='/revenueAccounts'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Revenue Accounts</span></a></li>
+							<li <c:if test="${controller eq 'expenseAccounts'}"> class="active" </c:if>>
+								<a class="submenu"  href="<c:url value='/expenseAccounts'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Expense Accounts</span></a></li>
+							<li <c:if test="${controller eq 'expenseCategories'}"> class="active" </c:if>>
+								<a class="submenu"  href="<c:url value='/expenseCategories'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Expense Categories</span></a></li>
+							<li <c:if test="${controller eq 'offices'}"> class="active" </c:if>>
+								<a class="submenu"  href="<c:url value='/offices'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Offices</span></a></li>
+							<li <c:if test="${controller eq 'bankAccounts'}"> class="active" </c:if>>
+								<a class="submenu"  href="<c:url value='/bankAccounts'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Bank Accounts</span></a></li>
+							<li <c:if test="${controller eq 'negotiationTerms'}"> class="active" </c:if>>
+								<a class="submenu"  href="<c:url value='/negotiationTerms'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Negotiation Terms</span></a></li> 	
+					 </ul>
+				  </li>
+				  <!-- end: Vendas Dropdown -->
+            	  <!-- start: Estoque Dropdown -->
+					<!-- end: Calendario Dropdown -->
+            		<!-- start: Message Dropdown -->
+					<li class="dropdown hidden-phone">
+						<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+							<i class="halflings-icon white envelope"></i>
+						</a>
+						<ul class="dropdown-menu messages">
+						   <li><span class="dropdown-menu-title">You have 9 messages</span></li>
+						   <li><a href="#">
+						   		 <span class="avatar"></span>
+			   				     <span class="header">
+			   				       <span class="from">ERP</span>
+			      				   <span class="time">6 min</span>
+			      			     </span>
+                                 <span class="message">
+                                   Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                 </span>  
+                                </a>
+                           </li>
+                           <li><a href="#">
+								 <span class="avatar"></span>
+								 <span class="header">
+									 <span class="from">
+										Megan Abott
+									 </span>
+									 <span class="time">
+									    56 min
+									 </span>
+								 </span>
+                                 <span class="message">
+                                    Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                 </span>  
+                                </a>
+                            </li>
+                             <li>
+                                    <a href="#">
+										<span class="avatar"></span>
+										<span class="header">
+											<span class="from">
+										    	Kate Ross
+										     </span>
+											<span class="time">
+										    	3 hours
+										    </span>
+										</span>
+                                        <span class="message">
+                                            Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                        </span>  
+                                    </a>
+                                </li>
+								<li>
+                                    <a href="#">
+										<span class="avatar"></span>
+										<span class="header">
+											<span class="from">
+										    	Julie Blank
+										     </span>
+											<span class="time">
+										    	yesterday
+										    </span>
+										</span>
+                                        <span class="message">
+                                            Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                        </span>  
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+										<span class="avatar"></span>
+										<span class="header">
+											<span class="from">
+										    	Jane Sanders
+										     </span>
+											<span class="time">
+										    	Jul 25, 2012
+										    </span>
+										</span>
+                                        <span class="message">
+                                            Lorem ipsum dolor sit amet consectetur adipiscing elit, et al commore
+                                        </span>  
+                                    </a>
+                                </li>
+								<li>
+                            		<a class="dropdown-menu-sub-footer">View all messages</a>
+								</li>	
+							</ul>
+						</li>
+						<!-- end: Message Dropdown -->
+						<li>
+							<a class="btn" href="#">
+								<i class="halflings-icon white wrench"></i>
+							</a>
+						</li>
+						<!-- start: User Dropdown -->
+						<!-- end: User Dropdown -->
+					</ul>
 					<ul class="nav pull-right">
 						<li class="dropdown hidden-phone">
 							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
@@ -289,67 +444,6 @@
 		<div class="row-fluid">
 				
 			<!-- start: Main Menu -->
-			<div id="sidebar-left" class="span1">
-				<div class="nav-collapse sidebar-nav">
-					<ul class="nav nav-tabs nav-stacked main-menu">
-					  <li <c:if test="${controller eq 'dashboard'}"> class="active" </c:if>>
-					  	 <a href="#"><i class="fa-icon-folder-close-alt"></i><span class="hidden-tablet">Dashboard</span></a>
-					  <li>
-					  	 <a class="dropmenu" href="#"><i class="fa-icon-folder-close-alt"></i><span class="hidden-tablet"> Sell</span></a>
-					  	 <ul>
-					  	 	<li <c:if test="${controller eq 'timeline'}"> class="active" </c:if> >
-					  	 		<a class="submenu" href="<c:url value='/timeline'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Timeline</span></a></li>
-							<li <c:if test="${controller eq 'orders'}"> class="active" </c:if>>
-								<a class="submenu" href="<c:url value='/orders'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Orders</span></a></li>
-							<li <c:if test="${controller eq 'timeline'}"> class="active" </c:if>>
-								<a class="submenu" href="<c:url value='/orderPayments'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Orders Payment</span></a></li>
-							<li <c:if test="${controller eq 'timeline'}"> class="active" </c:if>>
-								<a class="submenu" href="<c:url value='/forwardDetails'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Order Forward Detail</span></a></li>
-							<li <c:if test="${controller eq 'timeline'}"> class="active" </c:if>>
-								<a class="submenu" href="<c:url value='/customers'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Customers</span></a></li>
-							<li <c:if test="${controller eq 'timeline'}"> class="active" </c:if>>
-								<a class="submenu" href="<c:url value='/products'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Products</span></a></li>
-							<li <c:if test="${controller eq 'partner'}"> class="active" </c:if>>
-								<a class="submenu" href="<c:url value='/partners'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Partners</span></a></li>
-					  	 </ul>
-					  </li>
-					  <li><a class="dropmenu" href="#"><i class="fa-icon-folder-close-alt"></i><span class="hidden-tablet"> Buy</span></a>
-					  	 <ul>
-					  	 	<li <c:if test="${controller eq 'buyOrders'}"> class="active" </c:if>>
-					  	 		<a class="submenu"  href="<c:url value='/buyOrders'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Buy Orders</span></a></li>
-							<li <c:if test="${controller eq 'suppliers'}"> class="active" </c:if>>
-								<a class="submenu"  href="<c:url value='/suppliers'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Supplier</span></a></li>
-					  	 </ul>
-					  </li>						
-					  <li><a class="dropmenu" href="#"><i class="fa-icon-folder-close-alt"></i><span class="hidden-tablet"> Financial</span></a>
-					  	 <ul>
-					  	 	<li <c:if test="${controller eq 'accountDetails'}"> class="active" </c:if>>
-								<a class="submenu"  href="<c:url value='/accountDetails'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Acount Details</span></a></li>
-							<li <c:if test="${controller eq 'statement'}"> class="active" </c:if>>
-								<a class="submenu"  href="<c:url value='/statement'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Bank Statements</span></a></li>
-					  	 	<li <c:if test="${controller eq 'revenues'}"> class="active" </c:if>>
-					  	 		<a class="submenu"  href="<c:url value='/revenues'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Revenues</span></a></li>
-							<li <c:if test="${controller eq 'timeline'}"> class="active" </c:if>>
-								<a class="submenu"  href="<c:url value='/expenses'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Expenses</span></a></li>
-							<li <c:if test="${controller eq 'expensePayments'}"> class="active" </c:if>>
-								<a class="submenu"  href="<c:url value='/expensePayments'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Expense Payments</span></a></li>
-							<li <c:if test="${controller eq 'revenueAccounts'}"> class="active" </c:if>>
-								<a class="submenu"  href="<c:url value='/revenueAccounts'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Revenue Accounts</span></a></li>
-							<li <c:if test="${controller eq 'expenseAccounts'}"> class="active" </c:if>>
-								<a class="submenu"  href="<c:url value='/expenseAccounts'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Expense Accounts</span></a></li>
-							<li <c:if test="${controller eq 'expenseCategories'}"> class="active" </c:if>>
-								<a class="submenu"  href="<c:url value='/expenseCategories'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Expense Categories</span></a></li>
-							<li <c:if test="${controller eq 'offices'}"> class="active" </c:if>>
-								<a class="submenu"  href="<c:url value='/offices'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Offices</span></a></li>
-							<li <c:if test="${controller eq 'bankAccounts'}"> class="active" </c:if>>
-								<a class="submenu"  href="<c:url value='/bankAccounts'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Bank Accounts</span></a></li>
-							<li <c:if test="${controller eq 'negotiationTerms'}"> class="active" </c:if>>
-								<a class="submenu"  href="<c:url value='/negotiationTerms'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Negotiation Terms</span></a></li>
-					  	 </ul>
-					  </li>
-					</ul>
-				</div>
-			</div>
 			<!-- end: Main Menu -->
 			
 			<noscript>
@@ -360,7 +454,7 @@
 			</noscript>
 			
 			<!-- start: Content -->
-			<div id="content" class="span11">
+			<div id="content" class="span12">
 				<div class="row-fluid sortable">
 					<div class="box span12">
 					  <decorator:body/>

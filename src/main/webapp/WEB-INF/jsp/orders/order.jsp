@@ -228,8 +228,8 @@
 		</tbody>
 	 </table>
 	 <div class="row-fluid">
-	   <c:if test="${order == null || order.toBeFilledIn}">
-		   <a data-toggle='modal' href='#myModal' id="new-item" class="btn btn-primary">
+	   <c:if test="${order.id == null || order.toBeFilledIn}">
+		   <a data-toggle='modal' href='#myModal' id="new-item" onclick="newItem();" class="btn btn-primary">
 		     New Item
 		   </a>
 	   </c:if>
@@ -239,7 +239,7 @@
    
 	<div class="form-actions">
 	  <c:choose>
-	    <c:when test="${order == null || order.toBeFilledIn}">
+	    <c:when test="${order.id == null || order.toBeFilledIn}">
 		  <button id="singlebutton" name="singlebutton" class="btn btn-primary">Save</button>
 	    </c:when>
 	    <c:when test="${order.waitingSupplierProforma}">
@@ -264,11 +264,12 @@
 	       <a href="<c:url value='/conclusion/confirm/${order.id}'/>" class="btn btn-primary">Finished</a>
 	    </c:when>
       </c:choose>
+      <a href="<c:url value='/orders'/>" class="btn btn-primary">Back to List</a>
+      <a href="<c:url value='/timeline'/>" class="btn btn-primary">Back to Timeline</a>
       <c:if test="${order.toBeFilledIn}">
 		 <a href="<c:url value='/orders/confirm/${order.id}'/>" class="btn btn-primary">Filled In Confirmation</a>
 	  </c:if>
 	  <c:if test="${order.id != null}">
-		  <a href="<c:url value='/timeline'/>" class="btn btn-primary">Back to Timeline</a>
 		  <a href="<c:url value='/orders/print/purchase/${order.id}'/>" class="btn btn-success">Print Purchase Order</a>
 		  <a href="<c:url value='/orders/print/proforma/${order.id}'/>" class="btn btn-success">Print Proforma Invoice</a>
 		  <a href="<c:url value='/orders/print/comercial/${order.id}'/>" class="btn btn-success">Print Comercial Invoice</a>
@@ -281,7 +282,7 @@
 </form>
 
 <content tag="local_modal">
-<div class="modal hide fade modal-up" id="myModal">
+<div class="modal hide modal-up" id="myModal">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">×</button>
 				<h3>Product</h3>
@@ -301,14 +302,22 @@
 $(document).ready(function() {
 	$('[data-behaviour~=datepicker]').datepicker({dateFormat: "mm/dd/yy"});
 	$('[data-behaviour~=datepicker]').setMask({mask: '19/39/9999', autoTab: false});
+	<c:if test="${order.id == null}">
+	    $('#order\\.orderDate').focus();
+	</c:if>
+	$('#order\\.orderNumber').setMask({mask: '99999999', autoTab: false});
 });
 	
+function newItem(){
+	$("#product").focus();
+}	
+
 function addItem() {
 	
 	index = $('#item-index').val();
 	
 	if (!index){
-		index = $('#tb-itens >tbody >tr').length;
+		index = $('#table-item >tbody >tr').length;
 		
 		var	cHtml = " <tr id='row-"+ index + "'> "+
 					"	<td><a data-toggle='modal' href='#myModal' id='a-product-"+index+"' onclick='editItem("+index+");'></a> "+
@@ -396,6 +405,9 @@ function clearInputs(){
     $("#quantity").val("");
     $("#unit").val("-1");
     $("#sell-price").val("");
+    $("#total-buy-price").val("");
+    $("#total-sell-price").val("");
+    $("#commision").val("");
 }
 
 function editItem(index){
@@ -415,6 +427,7 @@ function editItem(index){
     $("#sell-price").val($("#unit-price-"+index).val());
     calculateTotalBuy();
     calculateTotalSell();
+    $("#product").focus();
 }
 	
 function calculateTotalItem(index) {

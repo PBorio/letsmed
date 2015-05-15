@@ -201,7 +201,7 @@ public class Order {
 	}
 
 	public boolean isToBeFilledIn() {
-		return this.confirmationDate == null;
+		return (this.orderDate != null && this.confirmationDate == null);
 	}
 
 	public boolean isWaitingSupplierProforma() {

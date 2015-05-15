@@ -42,7 +42,7 @@ public class OrderStatusFactory {
 		}else if (order.isWaitingAdvancedPayment()){
 			status.setDescription("to_advanced_paid");
 			status.setTitle("Waiting for Advanced Payment");
-			status.setStatusDate(order.getArtworkConfirmationDate());
+			status.setStatusDate(order.getProformaConfirmationDate());
 			status.setLastMovement("Proforma Confirmation Date");
 			status.setUrl("orderPayments/order");
 		}else if (order.isWaitingProductionStart()){
@@ -123,8 +123,8 @@ public class OrderStatusFactory {
 			status.setLastMovement("Last Payment Date");
 			return status;
 		}
-		status.setStatusDate(order.getArtworkConfirmationDate());
-		status.setLastMovement("Artwork Confirmation Date");
+		status.setStatusDate(order.getProformaConfirmationDate());
+		status.setLastMovement("Proforma Confirmation Date");
 		
 		
 		return status;
@@ -138,8 +138,8 @@ public class OrderStatusFactory {
 		
 
 		if (NegotiationType.LC_AT_SIGHT.equals(order.getNegotiationTerm().getNegotiationType())){
-			status.setStatusDate(order.getArtworkConfirmationDate());
-			status.setLastMovement("Artwork confirmation Date");
+			status.setStatusDate(order.getProformaConfirmationDate());
+			status.setLastMovement("Proforma confirmation Date");
 		}
 		
 		if (NegotiationType.TT_100_BEFORE_SHIPMENT.equals(order.getNegotiationTerm().getNegotiationType())||
