@@ -95,6 +95,9 @@ public class Order {
 
 	@OneToMany(mappedBy="order")
 	private List<OrderPayment> payments = new ArrayList<OrderPayment>();
+	
+	@OneToMany(mappedBy="order")
+	private List<Complain> complains = new ArrayList<Complain>();
 
 	public int getItensNumber(){
 		return this.itens.size();
@@ -142,12 +145,25 @@ public class Order {
 		return new Arredondamento().arredondar(result);
 	}
 
-	
-
-	public boolean unsolvedComplains() {
-		// TODO Auto-generated method stub
+	public boolean isUnsolvedComplains() {
+		for (Complain complain : this.complains){
+			if (complain.getSolvedDate() == null)
+				return true;
+		}
 		return false;
 	}
+	
+	public Complain getFirstUnsolvedComplain() {
+		for (Complain complain : this.complains){
+			if (complain.getSolvedDate() == null)
+				return complain;
+		}
+		return null;
+	}
+	
+	
+	
+	
 
 	public boolean isPaid() {
 		if (this.getTotalValue().doubleValue() == 0.0)
@@ -582,6 +598,10 @@ public class Order {
 		if (this.getComissionRevenue() == null)
 			return false;
 		return this.getComissionRevenue().isPaid();
+	}
+
+	public List<Complain> getComplains() {
+		return complains;
 	}
 	
 

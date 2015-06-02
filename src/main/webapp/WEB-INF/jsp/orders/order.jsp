@@ -274,7 +274,7 @@
 		  <a href="<c:url value='/orders/print/proforma/${order.id}'/>" class="btn btn-success">Print Proforma Invoice</a>
 		  <a href="<c:url value='/orders/print/comercial/${order.id}'/>" class="btn btn-success">Print Comercial Invoice</a>
   	  	  <a href="<c:url value='/orders/print/packing/${order.id}'/>" class="btn btn-success">Print Packing List</a>
-		  
+		  <a href="<c:url value='/complains/order/${order.id}'/>" class="btn btn-danger">Register Complain</a>
 	  </c:if>
 	</div>
         
@@ -302,10 +302,18 @@
 $(document).ready(function() {
 	$('[data-behaviour~=datepicker]').datepicker({dateFormat: "mm/dd/yy"});
 	$('[data-behaviour~=datepicker]').setMask({mask: '19/39/9999', autoTab: false});
+	
 	<c:if test="${order.id == null}">
 	    $('#order\\.orderDate').focus();
 	</c:if>
+	
 	$('#order\\.orderNumber').setMask({mask: '99999999', autoTab: false});
+	
+	$('#myModal').on('shown', function (e) {
+	    setTimeout(function(){
+	    	$('#product-desc').focus();
+	    }, 300);                        
+	});
 });
 	
 function newItem(){
@@ -361,8 +369,8 @@ function addItem() {
 			});
 	}
 	
-	    $("#a-product-"+index).html($("#product option:selected").text());
-	    $("#product-"+index).val($("#product").val());
+	    $("#a-product-"+index).html($("#product-desc").val());
+	    $("#product-"+index).val($("#product-id").val());
 	    $("#item-id-"+index).val($("#item-id").val());
 	    $("#order-id-"+index).val($("#order-id").val());
 	    $("#package-quantity-"+index).val($("#package-quantity").val());
@@ -400,7 +408,8 @@ function clearInputs(){
     $("#volume").val("");
     $("#buy-price").val("");
     $("#additional-description").val("");
-    $("#product").val("-1");
+    $("#product-id").val("");
+    $("#product-desc").val("");
     $("#additional-info").val("");
     $("#quantity").val("");
     $("#unit").val("-1");
@@ -412,7 +421,8 @@ function clearInputs(){
 
 function editItem(index){
     $("#item-index").val(index);
-    $("#product").val($("#product-"+index).val());
+    $("#product-id").val($("#product-"+index).val());
+    $("#product-desc").val($("#a-product-"+index).html());
 	$("#item-id").val($("#item-id-"+index).val());
     $("#order-id").val($("#order-id-"+index).val());
     $("#package-quantity").val($("#package-quantity-"+index).val());
@@ -427,7 +437,7 @@ function editItem(index){
     $("#sell-price").val($("#unit-price-"+index).val());
     calculateTotalBuy();
     calculateTotalSell();
-    $("#product").focus();
+    $("#additional-description").focus();
 }
 	
 function calculateTotalItem(index) {
@@ -469,6 +479,41 @@ function removeItem(id){
 			 $('#item-'+id).remove();
 		 });   
    }
+}
+
+function autoComplete(obj){
+	var result = [];
+	texto = $(obj).val();
+	if (texto.length != 1)
+		return false;
+	$.getJSON('/letsmed/products/searchByDescription.json', {
+		term : texto
+		}, function(json_result) {
+			for (i = 0; i < json_result.length; i++){
+				result[i] = json_result[i].description;
+			}
+			var options = {updater: function(item){
+				             setProduct(item);
+				           	 return item;
+				           }};
+			$(obj).typeahead(options);
+			var autocomplete = $(obj).typeahead();
+			autocomplete.data('typeahead').source = result;
+		}
+	);
+	
+}
+
+function setProduct(item){
+	$.getJSON('/letsmed/products/find.json', {
+		description : item
+		}, function(json_result) {
+			alert(json_result.description);
+			$('#product-id').val(json_result.id);
+			$('#product-desc').val(json_result.description);
+			alert($('#product-desc').val());
+		}
+	);
 }
 </script>
 </content>

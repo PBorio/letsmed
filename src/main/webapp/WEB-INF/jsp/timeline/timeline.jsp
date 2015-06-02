@@ -17,18 +17,19 @@
 
 					  <thead>
 						  <tr>
-						   <th width="20%"></th>
-					 	   <th>Waiting For Complete Fill In</th>
-					 	   <th>Waiting for Supplier Proforma</th>
-					 	   <th>Waiting for Proforma Confirmation</th>
-					 	   <th>Waiting for Advanced Payment</th>
-					 	   <th>Waiting for Production Start</th>
-					 	   <th>Waiting for Forward Details</th>
-					 	   <th>Waiting for Shipment</th>
-					 	   <th>Waiting for Documents Copy to Be Sent</th>
-					 	   <th>Waiting Order To Be Paid</th>
-					 	   <th>Waiting for Original Documents To Be Sent</th>
-					 	   <th>Waiting for Commision Payment</th>
+						   <th width="16%"></th>
+					 	   <th width="7%">Waiting For Complete Fill In</th>
+					 	   <th width="7%">Waiting for Supplier Proforma</th>
+					 	   <th width="7%">Waiting for Proforma Confirmation</th>
+					 	   <th width="7%">Waiting for Advanced Payment</th>
+					 	   <th width="7%">Waiting for Production Start</th>
+					 	   <th width="7%">Waiting for Forward Details</th>
+					 	   <th width="7%">Waiting for Shipment</th>
+					 	   <th width="7%">Waiting for Copies to Be Sent</th>
+					 	   <th width="7%">Waiting Order To Be Paid</th>
+					 	   <th width="7%">Waiting for Originals To Be Sent</th>
+					 	   <th width="7%">Waiting for Commision Payment</th>
+					 	   <th width="7%">Waiting for Commision Payment</th>
 						  </tr>
 					  </thead>   
 					  <tbody>
@@ -112,6 +113,13 @@
 					  	  			  <div class="circle"><fmt:formatDate value="${order.status.statusDate}" pattern='MM/dd/yyyy'/></div>
 					  	  			</a> 
 					  	  		  </c:if> 
+						        </td>
+						        <td>
+					  	  		  <c:if test="${order.status.description == 'complain' }">
+					  	  			<a href="<c:url value='/${order.status.url}/${order.firstUnsolvedComplain.id}'/>">
+					  	  			  <div class="circle"><fmt:formatDate value="${order.status.statusDate}" pattern='MM/dd/yyyy'/></div>
+					  	  			</a> 
+					  	  		  </c:if>    	 
 						        </td>
 					  	  </tr>
 					  	</c:forEach>

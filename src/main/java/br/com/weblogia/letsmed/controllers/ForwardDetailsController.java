@@ -68,7 +68,7 @@ public class ForwardDetailsController {
 		}else{
 			entityManager.merge(forwardDetail);
 		}
-		result.redirectTo(this).forwardDetail(forwardDetail.getOrder().getId());
+		result.redirectTo(TimelineController.class).timeline();
 	}
 
 	@Get

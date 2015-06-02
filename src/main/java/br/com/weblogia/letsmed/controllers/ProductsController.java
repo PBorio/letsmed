@@ -1,10 +1,13 @@
 package br.com.weblogia.letsmed.controllers;
 
+import static br.com.caelum.vraptor.view.Results.json;
+
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import br.com.caelum.vraptor.Controller;
@@ -69,6 +72,40 @@ public class ProductsController {
 		result.include("controller", "products");
 		result.include("product", product);
 		result.of(this).product();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Get
+	@Path("/products/searchByDescription.json")
+	public void buscarClientesPorNome(String term) {
+		StringBuilder sql = new StringBuilder();
+		sql.append(" from Product p ");
+		sql.append(" where p.description like :description ");
+		
+		Query q = entityManager.createQuery(sql.toString());
+		q.setParameter("description", "%"+term+"%");
+		result.use(json()).withoutRoot()
+				.from((List<Product>)q.getResultList()).recursive()
+				.serialize();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Get
+	@Path("/products/find.json")
+	public void buscarUmClientePeloNome(String description) {
+		StringBuilder sql = new StringBuilder();
+		sql.append(" from Product p ");
+		sql.append(" where p.description = :description ");
+		
+		Query q = entityManager.createQuery(sql.toString());
+		q.setParameter("description", description);
+		
+		List<Product> products = (List<Product>)q.getResultList();
+		
+		if (products.size() > 0){
+			Product product = products.get(0);
+			result.use(json()).withoutRoot().from(product).recursive().serialize();
+		}
 	}
 
 	private void loadLists() {

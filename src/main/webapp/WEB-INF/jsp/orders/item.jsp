@@ -4,18 +4,12 @@
 		<div class="control-group">
 		   <label class="control-label col-xs2">Product:</label>			 
 	       <div class="controls">
+				<input type="text" class="input-xlarge span12" id="product-desc" onkeypress="autoComplete(this);" />
 			    <input type="hidden" id="item-index" />
 			    <input type="hidden" id="item-id" />
 		 	  	<input type="hidden" id="order-id" />
 		 	  	
-		 	     <select id="product" class="input-xlarge span12" >   
-		              <option value="-1"> Products...</option>  
-		              <c:forEach var="product" items="${productList}">  
-		                  <option value="${product.id}"> 
-		                  	${product.description} 
-		                  </option>  
-		              </c:forEach>  
-		          </select>
+		 	  	<input type="hidden" id="product-id" />
 		   </div>
 		</div>
 		<div class="control-group">

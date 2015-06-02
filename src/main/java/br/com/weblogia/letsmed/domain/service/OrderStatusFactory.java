@@ -9,7 +9,7 @@ public class OrderStatusFactory {
 	
 	public OrderStatus getStatus( Order order){
 		OrderStatus status = new OrderStatus();
-		if (order.unsolvedComplains()){
+		if (order.isUnsolvedComplains()){
 			status.setDescription("complain");
 			status.setTitle("Order with Complains");
 			status.setStatusDate(new Date());
