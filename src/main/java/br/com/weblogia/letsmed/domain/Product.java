@@ -29,6 +29,12 @@ public class Product {
 
 	@ManyToOne
 	private ProductCategory productCategory;
+
+	private Double buyPrice;
+
+	private Double sellPrice;
+	
+	private Double commision;
 	
 	public Long getId() {
 		return id;
@@ -92,6 +98,55 @@ public class Product {
 
 	public void setProductCategory(ProductCategory productCategory) {
 		this.productCategory = productCategory;
+	}
+
+	public void setBuyPrice(Double buyPrice) {
+		this.buyPrice = buyPrice;
+	}
+
+	public Double getBuyPrice() {
+		return buyPrice;
+	}
+
+	public void setSellPrice(Double sellPrice) {
+		this.sellPrice = sellPrice;
+	}
+
+	public Double getSellPrice() {
+		return sellPrice;
+	}
+
+	public void setCommision(Double commision) {
+		this.commision = commision;
+	}
+
+	public Double getCommision() {
+		return commision;
+	}
+
+	@Override
+	public int hashCode() {
+		if (id == null) return super.hashCode();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Product other = (Product) obj;
+		if (id == null) 
+			return false;
+		 if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 	
 

@@ -57,7 +57,7 @@ public class SuppliersController {
 			validator.onErrorUsePageOf(this).supplier();
 		}
 		
-		if (supplier.getExpenseAccount().getId() == -1)
+		if (supplier.getExpenseAccount().getId() == null || supplier.getExpenseAccount().getId() == -1)
 			supplier.setExpenseAccount(null);
 		
 		if (supplier.getId() == null){

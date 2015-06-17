@@ -14,6 +14,12 @@
 		<strong>Erro:</strong> ${error.message}
 	</div>
 </c:forEach>
+<c:if test="${order.itemDuplicated}">
+	<div class="alert alert-block">
+		<button type="button" class="close" data-dismiss="alert">×</button>
+		<strong>Warning:</strong> Order with duplicated itens
+	</div>
+</c:if>
 <div class="box-header" data-original-title>
 	<h2><i class="halflings-icon edit"></i><span class="break"></span>Order N. ${order.id}</h2>
 </div>
@@ -42,12 +48,13 @@
 		<div class="control-group">
 		  <label class="control-label col-xs2">Order Number:</label>
 		  <div class="controls">
-		    <input type="text" class="input-xlarge span6" name="order.orderNumber" id="order.orderNumber" value="${order.orderNumber}" />
+		    <input type="text" class="input-xlarge span6" tabindex="-1" name="order.orderNumber" id="order.orderNumber" value="${order.orderNumber}" />
 		  </div>
 		</div>
 		<div class="control-group">
 		  <label class="control-label col-xs2">Customer:</label>
 		  <div class="controls">
+		  	<input type="hidden" name="order.customer.code" value="${order.customer.code}" />
 		    <select id="order.customer.id" name="order.customer.id" class="input-xlarge span6" >   
               <option value="-1"> Customers...</option>  
               <c:forEach var="customer" items="${customerList}">  
@@ -85,7 +92,7 @@
 		  </div>
 		</div>
 		<div class="control-group">
-		  <label class="control-label col-xs2">Negotiation Term:</label>
+		  <label class="control-label col-xs2">Payment Term:</label>
 		  <div class="controls">
 		    <select id="order.negotiationTerm.id" name="order.negotiationTerm.id" class="input-xlarge span6" >   
               <option value="-1"> Negotiation Terms...</option>  
@@ -95,6 +102,13 @@
                   </option>  
               </c:forEach> 
           </select>
+		  </div>
+		</div>
+		
+		<div class="control-group">
+		  <label class="control-label col-xs2">Total Value:</label>
+		  <div class="controls">
+		    <input type="text" class="input-xlarge span3" data-behaviour="valor" value="<fmt:formatNumber value='${order.totalValue}' pattern='#,##0.00'/>" tabindex="-1" readonly="readonly" id="total-sell-price"  />
 		  </div>
 		</div>
 		
@@ -192,32 +206,17 @@
 		<tbody id="tb-itens">
 		   <c:forEach var="item" items="${order.itens}" varStatus="idx">
 		 	<tr id='item-${item.id}'>
-		 	  <td><a data-toggle='modal' href='#myModal' id='a-product-${idx.index}' onclick='editItem(${idx.index});'>${item.product.description}</a>
-		          <input type='hidden' id='product-${idx.index}' name='order.itens[${idx.index}].product.id' value='${item.product.id}' />
-		 	  	  <input type='hidden' id='item-id-${idx.index}' name='order.itens[${idx.index}].id' value='${item.id}' />
-		 	  	  <input type='hidden' id='order-id-${idx.index}' name='order.itens[${idx.index}].order.id' value='${order.id}' />
-		 	  	  <input type='hidden' id='package-quantity-${idx.index}' name='order.itens[${idx.index}].packageQuantity' value='${item.packageQuantity}' />
-		 	  	  <input type='hidden' id='gross-weight-${idx.index}' name='order.itens[${idx.index}].grossWeight' value='${item.grossWeight}' />
-		 	  	  <input type='hidden' id='net-weight-${idx.index}' name='order.itens[${idx.index}].netWeight' value='${item.netWeight}' />
-		 	  	  <input type='hidden' id='volume-${idx.index}' name='order.itens[${idx.index}].volume' value='${item.volume}' />
-		 	  	  <input type='hidden' id='buy-price-${idx.index}' name='order.itens[${idx.index}].buyPrice' value='${item.buyPrice}' />
-		 	  	  <input type='hidden' id='additional-description-${idx.index}' name='order.itens[${idx.index}].additionalDescription' value='${item.additionalDescription}' />
-		 	      <input type='hidden' id='additional-info-${idx.index}' name='order.itens[${idx.index}].additionalInfo' value='${item.additionalInfo}' />
+		 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-product-${idx.index}' >${item.product.description}</a>
 		 	    </td>
-		 	  <td><a data-toggle='modal' href='#myModal' id='a-quantity-${idx.index}' onclick='editItem(${idx.index});'>${item.quantity}</a>
-		 	     <input type='hidden' id='quantity-${idx.index}' name='order.itens[${idx.index}].quantity' value='${item.quantity}'  />
+		 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>'  id='a-quantity-${idx.index}' >${item.quantity}</a>
 		 	  </td>
-		 	  <td><a data-toggle='modal' href='#myModal' id='a-unit-${idx.index}' onclick='editItem(${idx.index});'>${item.unitOfMeasure.description}</a>
-		 	  	 <input type='hidden' id='unit-${idx.index}' name='order.itens[${idx.index}].unitOfMeasure.id' value='${item.unitOfMeasure.id}'  />
+		 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-unit-${idx.index}' >${item.unitOfMeasure.description}</a>
 		 	  </td>
-		 	  <td><a data-toggle='modal' href='#myModal' id='a-unit-price-${idx.index}' onclick='editItem(${idx.index});'><fmt:formatNumber value='${item.unitPrice}' pattern='#,##0.00'/></a>
-		 	      <input type='hidden' id='unit-price-${idx.index}' name='order.itens[${idx.index}].unitPrice' value='<fmt:formatNumber value='${item.unitPrice}' pattern='#,##0.00'/>'/>
+		 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-unit-price-${idx.index}' ><fmt:formatNumber value='${item.unitPrice}' pattern='#,##0.00'/></a>
 		 	  </td>
-		 	  <td><a data-toggle='modal' href='#myModal' id='a-total-value-${idx.index}' onclick='editItem(${idx.index});'><fmt:formatNumber value='${item.totalValue}' pattern='#,##0.00'/></a>
-		 	  	<input type='hidden' id='total-value-${idx.index}' name='order.itens[${idx.index}].totalValue' value='<fmt:formatNumber value='${item.totalValue}' pattern='#,##0.00'/>'  />
+		 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-total-value-${idx.index}' ><fmt:formatNumber value='${item.totalValue}' pattern='#,##0.00'/></a>
 		 	  </td>
-		 	  <td><a data-toggle='modal' href='#myModal' id='a-commision-${idx.index}' onclick='editItem(${idx.index});'><fmt:formatNumber value='${item.commision}' pattern='#,##0.00'/></a>
-		 	  	<input type='hidden' id='commision-${idx.index}' name='order.itens[${idx.index}].commision' value='<fmt:formatNumber value='${item.commision}' pattern='#,##0.00'/>'  />
+		 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-commision-${idx.index}' ><fmt:formatNumber value='${item.commision}' pattern='#,##0.00'/></a>
 		 	  </td>
 		 	  <td><c:if test='${order == null || order.toBeFilledIn}'>
 		 	        <a href='' title='Delete' class='btn btn-danger' onclick='removeItem(${item.id}); return false;'><i class='halflings-icon trash halflings-icon'></i></a>
@@ -228,8 +227,8 @@
 		</tbody>
 	 </table>
 	 <div class="row-fluid">
-	   <c:if test="${order.id == null || order.toBeFilledIn}">
-		   <a data-toggle='modal' href='#myModal' id="new-item" onclick="newItem();" class="btn btn-primary">
+	   <c:if test="${order.toBeFilledIn}">
+		   <a href="<c:url value='/orders/item/${order.id}'/>" id="new-item" class="btn btn-primary">
 		     New Item
 		   </a>
 	   </c:if>
@@ -264,7 +263,6 @@
 	       <a href="<c:url value='/conclusion/confirm/${order.id}'/>" class="btn btn-primary">Finished</a>
 	    </c:when>
       </c:choose>
-      <a href="<c:url value='/orders'/>" class="btn btn-primary">Back to List</a>
       <a href="<c:url value='/timeline'/>" class="btn btn-primary">Back to Timeline</a>
       <c:if test="${order.toBeFilledIn}">
 		 <a href="<c:url value='/orders/confirm/${order.id}'/>" class="btn btn-primary">Filled In Confirmation</a>
@@ -281,22 +279,6 @@
 </div>
 </form>
 
-<content tag="local_modal">
-<div class="modal hide modal-up" id="myModal">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">×</button>
-				<h3>Product</h3>
-			</div>
-			<div class="modal-body modal-body-item">
-				<%@include file="item.jsp" %>
-			</div>
-			<div class="modal-footer">
-			    <a href="#" class="btn btn-primary" data-dismiss="modal" onclick="addItem();">Add Item</a>
-				<a href="#" class="btn" data-dismiss="modal">Close</a>
-			</div>
-		</div>
-</content>
-
 <content tag="local_script">
 <script type="text/javascript">
 $(document).ready(function() {
@@ -306,8 +288,6 @@ $(document).ready(function() {
 	<c:if test="${order.id == null}">
 	    $('#order\\.orderDate').focus();
 	</c:if>
-	
-	$('#order\\.orderNumber').setMask({mask: '99999999', autoTab: false});
 	
 	$('#myModal').on('shown', function (e) {
 	    setTimeout(function(){
@@ -440,33 +420,7 @@ function editItem(index){
     $("#additional-description").focus();
 }
 	
-function calculateTotalItem(index) {
-	var quantity  =  parseFloat($("#quantity-"+index).val());
-	var price = parseFloat($("#unit-price-"+index).val());
-	var total = price * quantity;
-	$("#a-total-value-"+index).html(total);
-	$("#total-value-"+index).val(total);
-}
 
-function calculateTotalBuy() {
-	var quantity  =  parseFloat($("#quantity").val());
-	var price = parseFloat($("#buy-price").val());
-	var total = price * quantity;
-	
-	if(total){
-		$("#total-buy-price").val(total);
-	}
-}
-
-function calculateTotalSell() {
-	var quantity  =  parseFloat($("#quantity").val());
-	var price = parseFloat($("#sell-price").val());
-	var total = price * quantity;
-	
-	if(total){
-		$("#total-sell-price").val(total);
-	}
-}
 
 function removeItem(id){
 	
@@ -479,41 +433,6 @@ function removeItem(id){
 			 $('#item-'+id).remove();
 		 });   
    }
-}
-
-function autoComplete(obj){
-	var result = [];
-	texto = $(obj).val();
-	if (texto.length != 1)
-		return false;
-	$.getJSON('/letsmed/products/searchByDescription.json', {
-		term : texto
-		}, function(json_result) {
-			for (i = 0; i < json_result.length; i++){
-				result[i] = json_result[i].description;
-			}
-			var options = {updater: function(item){
-				             setProduct(item);
-				           	 return item;
-				           }};
-			$(obj).typeahead(options);
-			var autocomplete = $(obj).typeahead();
-			autocomplete.data('typeahead').source = result;
-		}
-	);
-	
-}
-
-function setProduct(item){
-	$.getJSON('/letsmed/products/find.json', {
-		description : item
-		}, function(json_result) {
-			alert(json_result.description);
-			$('#product-id').val(json_result.id);
-			$('#product-desc').val(json_result.description);
-			alert($('#product-desc').val());
-		}
-	);
 }
 </script>
 </content>

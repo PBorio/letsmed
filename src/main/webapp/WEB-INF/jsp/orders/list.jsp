@@ -24,7 +24,7 @@
   <tbody>
   	<c:forEach var="order" items="${orderList}">
   	  <tr>
-  	  		<td class="center"><a href="<c:url value='/${url}/${order.id}'/>">${order.id}</a></td>
+  	  		<td class="center"><a href="<c:url value='/${url}/${order.id}'/>">${order.orderNumber}</a></td>
 	  		<td class="center"><a href="<c:url value='/${url}/${order.id}'/>"><fmt:formatDate value='${order.orderDate}' pattern='MM/dd/yyyy'/></a></td>
 	  		<td class="center"><a href="<c:url value='/${url}/${order.id}'/>">${order.customer.name}</a></td>
 	  		<td class="center"><a href="<c:url value='/${url}/${order.id}'/>">${order.negotiationTerm.description}</a></td>

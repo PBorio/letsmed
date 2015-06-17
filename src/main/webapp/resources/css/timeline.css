@@ -3,25 +3,27 @@ Timeline UI Base
 ***/
 
 .circle {
-    width: 80px;
-    height: 80px;
     -webkit-border-radius: 25px;
     -moz-border-radius: 25px;
     border-radius: 25px;
     background-color: #4e8ad5; 
     border: none;
     text-align: center;
-    line-height: 80px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 #timeline th{
 	border: 1px;
 	border-style: solid;
+	font-size: 11px;
+	background-color: white;
 }
 
 #timeline td{
 	border: 1px;
-	border-style: solid;	
+	border-style: solid;
+	font-size: 11px;	
 }
 
 }

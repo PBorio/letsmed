@@ -63,7 +63,8 @@
 							<li <c:if test="${controller eq 'partner'}"> class="active" </c:if>>
 								<a class="submenu" href="<c:url value='/partners'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Partners</span></a></li>
 							<li <c:if test="${controller eq 'suppliers'}"> class="active" </c:if>>
-								<a class="submenu"  href="<c:url value='/suppliers'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Supplier</span></a></li>  	
+								<a class="submenu"  href="<c:url value='/suppliers'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Supplier</span></a></li>
+							<li><a class="submenu"  href="<c:url value='/unitsOfMeasures'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet">Units</span></a></li>  	
                       </ul>
 				   </li>
 				 <!-- start: Compras Dropdown -->

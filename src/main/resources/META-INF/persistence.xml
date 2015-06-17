@@ -7,14 +7,13 @@
 	<persistence-unit name="default">
 	<properties>
 	
-        
-		<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/letsmed"></property>
-		<property name="javax.persistence.jdbc.user" value="root"></property>
-		<property name="javax.persistence.jdbc.password" value="borios"></property>    
+<!-- 		<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/letsmed"></property> -->
+<!-- 		<property name="javax.persistence.jdbc.user" value="root"></property> -->
+<!-- 		<property name="javax.persistence.jdbc.password" value="borios"></property>     -->
 		 
-<!--  		<property name="javax.persistence.jdbc.url" value="jdbc:mysql://mysql-env-3062575.jelasticlw.com.br/letsmed"></property>  -->
-<!--  		<property name="javax.persistence.jdbc.user" value="hotel-admin"></property>   -->
-<!--  		<property name="javax.persistence.jdbc.password" value="borios"></property> -->
+ 		<property name="javax.persistence.jdbc.url" value="jdbc:mysql://mysql-env-3062575.jelasticlw.com.br/letsmed"></property> 
+ 		<property name="javax.persistence.jdbc.user" value="hotel-admin"></property>  
+ 		<property name="javax.persistence.jdbc.password" value="borios"></property>
 		
 		<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"></property>
 		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect"/>

@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.observer.download.InputStreamDownload;
 import br.com.caelum.vraptor.validator.I18nMessage;
@@ -34,6 +35,7 @@ import br.com.weblogia.letsmed.domain.ShipmentTerm;
 import br.com.weblogia.letsmed.domain.Supplier;
 import br.com.weblogia.letsmed.domain.TransactionTerm;
 import br.com.weblogia.letsmed.domain.UnitOfMeasure;
+import br.com.weblogia.letsmed.domain.service.OrderService;
 import br.com.weblogia.letsmed.repositories.helpers.ConnectionFactory;
 
 @Controller
@@ -74,34 +76,93 @@ public class OrdersController {
 		validateOrder(order);
 
 		if(validator.hasErrors()){
-			
 			loadLists();
 			result.include("order", order);
 			validator.onErrorUsePageOf(this).order();
 		}
 		
-		if (order.getId() == null){
-			entityManager.persist(order);
-			saveItens(order);
-		}else{
-			entityManager.merge(order);
-			saveItens(order);
-		}
-		result.redirectTo(this).list();
-	}
-
-	private void saveItens(Order order) {
-		for (OrderItem item : order.getItens()){
-			if (item.getCommision() == null)
-				item.setCommision(0.0);
-			
-			if (item.getId() == null){
-				item.setOrder(order);
-				entityManager.persist(item);
-			}else{
-				entityManager.merge(item);
+		boolean novo = (order.getId() == null);
+		try{
+			OrderService orderService = new OrderService(entityManager);
+			orderService.save(order);
+		}catch(RuntimeException e){
+			validator.add(new I18nMessage("ord", e.getMessage()));
+			if (validator.hasErrors()){
+				loadLists();
+				result.include("order", order);
+				validator.onErrorUsePageOf(this).order();
 			}
 		}
+		
+		if (novo) 
+			result.redirectTo(this).item(order.getId()); 
+		else
+			result.redirectTo(this).edit(order.getId()) ; 
+	}
+	
+	@Transactional
+	@Post
+	@Path("/orders/item/save")
+	public void saveItem(OrderItem item){
+		
+		if (item.getProduct() != null)
+			if (item.getProduct().getId() == null || item.getProduct().getId() == -1) item.setProduct(null);
+		
+		if (item.getUnitOfMeasure() != null)
+			if (item.getUnitOfMeasure().getId() == null || item.getUnitOfMeasure().getId() == -1) item.setUnitOfMeasure(null);
+		validator.addIf( item.getProduct() == null,new I18nMessage("ord","item.without.product"));
+		validator.addIf( item.getUnitOfMeasure() == null,new I18nMessage("ord","item.without.unit"));
+		validator.addIf( item.getUnitPrice() == null,new I18nMessage("ord","item.without.price"));
+		validator.addIf( item.getQuantity() == null,new I18nMessage("ord","item.without.quantity"));
+		
+		if (item.getCommision() == null)
+			item.setCommision(0.0);
+		
+		if(validator.hasErrors()){
+			loadLists();
+			result.include("item", item);
+			result.include("order", item.getOrder());
+			validator.onErrorUsePageOf(this).item(item.getOrder().getId());
+		}
+		
+		Product p = entityManager.find(Product.class, item.getProduct().getId());
+		p.setBuyPrice(item.getBuyPrice());
+		p.setSellPrice(item.getUnitPrice());
+		p.setCommision(item.getCommision());
+		entityManager.merge(p);
+		
+		if (item.getId() == null){
+			entityManager.persist(item);
+			result.redirectTo(this).item(item.getOrder().getId());
+		}else{
+			entityManager.merge(item);
+			result.redirectTo(this).edit(item.getOrder().getId());
+		}
+		
+		
+	}
+
+	@Get
+	@Path("/orders/item/{id}")
+	public void item(Long id) {
+		Order order = entityManager.find(Order.class, id);
+		
+		OrderItem item = new OrderItem();
+		item.setOrder(order);
+		
+		loadLists();
+		result.include("item", item);
+		result.include("order", order);
+	}
+	
+	@Get
+	@Path("/orders/edit/item/{id}")
+	public void editItem(Long id) {
+		OrderItem item = entityManager.find(OrderItem.class, id);
+		loadLists();
+		result.include("order", item.getOrder());
+		result.include("item", item);
+		result.of(this).item(id);
 	}
 
 	@Get
@@ -127,6 +188,14 @@ public class OrdersController {
 	@Transactional
 	public void confirm(Long id) {
 		Order order = entityManager.find(Order.class, id);
+		
+		validator.addIf( order.getItens().size() == 0,new I18nMessage("cus","order.without.products"));
+		if(validator.hasErrors()){
+			loadLists();
+			result.include("order", order);
+			validator.onErrorUsePageOf(this).order();
+		}
+		
 		order.setConfirmationDate(new Date());
 		entityManager.merge(order);
 		
@@ -303,16 +372,12 @@ public class OrdersController {
 		if (order.getShipmentTerm().getId() == -1) 	order.setShipmentTerm(null);
 		
 		for (OrderItem item : order.getItens()){
-			if (item.getProduct().getId() == -1) item.setProduct(null);
+			if (item.getProduct().getId() == null || item.getProduct().getId() == -1) item.setProduct(null);
 			validator.addIf( item.getProduct() == null,new I18nMessage("ord","item.without.product"));
 			validator.addIf( item.getUnitPrice() == null,new I18nMessage("ord","order.without.price"));
 			validator.addIf( item.getQuantity() == null,new I18nMessage("ord","order.without.quantity"));
-			if (order.getTransactionTerm().getId().intValue() != 3){
-				validator.addIf(item.getCommision() == null || item.getCommision().doubleValue() == 0.0, new I18nMessage("ord","item.without.commision"));
-			}
 		}
 		
-		validator.addIf( order.getItens().size() == 0,new I18nMessage("cus","order.without.products"));
 		validator.addIf( order.getOrderDate() == null,new I18nMessage("cus","order.without.date"));
 		validator.addIf( order.getCustomer() == null,new I18nMessage("cus","order.without.customer"));
 		validator.addIf( order.getTransactionTerm() == null,new I18nMessage("cus","order.without.transaction"));

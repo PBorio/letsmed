@@ -49,7 +49,6 @@ public class ProductsController {
 	public void save(Product product){
 		
 		validator.addIf(( product.getDescription() == null || product.getDescription().trim().equals("")),new I18nMessage("off","product.without.description"));
-		validator.addIf(( product.getArticleNumber() == null || product.getArticleNumber().trim().equals("")),new I18nMessage("off","product.without.articlenumber"));
 
 		if(validator.hasErrors()){
 			result.include("product", product);

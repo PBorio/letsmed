@@ -33,6 +33,8 @@ public class Customer {
 	
 	private String country;
 	
+	private String code;
+	
 	@ManyToOne
 	private RevenueAccount revenueAccount;
 	
@@ -156,6 +158,14 @@ public class Customer {
 
 	public void setCountry(String country) {
 		this.country = country;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 }

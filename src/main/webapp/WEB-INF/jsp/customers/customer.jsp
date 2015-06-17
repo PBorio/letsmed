@@ -17,7 +17,8 @@
 	<h2><i class="halflings-icon edit"></i><span class="break"></span>Customer</h2>
 </div>
 <form class="form-horizontal" action='<c:url value="/customers/save"/>' method="post">
-<input type="hidden" name="partner.id" value="${partner.id}" />
+<input type="hidden" name="customer.id" value="${customer.id}" />
+<input type="hidden" name="customer.revenueAccount.id" value="${customer.revenueAccount.id}" />
 <div class="box-content">
     
 	
@@ -26,6 +27,12 @@
 		  <label class="control-label col-xs2">Name:</label>
 		  <div class="controls">
 		    <input type="text" class="input-xlarge span6" name="customer.name" id="customer.name" value="${customer.name}" />
+		  </div>
+		</div>
+		<div class="control-group">
+		  <label class="control-label col-xs2">Code:</label>
+		  <div class="controls">
+		    <input type="text" class="input-xlarge span2" name="customer.code" id="customer.code" value="${customer.code}" />
 		  </div>
 		</div>
 		<div class="control-group">
@@ -68,19 +75,6 @@
 		  <label class="control-label col-xs2">Contact:</label>
 		  <div class="controls">
 		    <input type="text" class="input-xlarge span6" name="customer.contact" id="customer.contact" value="${customer.contact}" />
-		  </div>
-		</div>
-		<div class="control-group">
-		  <label class="control-label col-xs2">Revenue Account:</label>
-		  <div class="controls">
-		    <select id="customer.revenueAccount.id" name="customer.revenueAccount.id" class="input-xlarge span6" >   
-              <option value="-1"> Revenue Accounts...</option>  
-              <c:forEach var="revenueAccount" items="${revenueAccountList}">  
-                  <option value="${revenueAccount.id}" <c:if test="${revenueAccount.id == customer.revenueAccount.id}">selected="true"</c:if>> 
-                  	${revenueAccount.description} 
-                  </option>  
-              </c:forEach> 
-          </select>
 		  </div>
 		</div>
 		<div class="control-group">

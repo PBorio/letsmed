@@ -55,16 +55,9 @@ public class CustomersController {
 	public void save(Customer customer){
 		
 		validator.addIf(( customer.getName() == null || customer.getName().trim().equals("")),new I18nMessage("cus","customer.without.name"));
-		validator.addIf(( customer.getAddress() == null || customer.getAddress().trim().equals("")),new I18nMessage("cus","customer.without.address"));
-		validator.addIf(( customer.getPhoneNumber() == null || customer.getPhoneNumber().trim().equals("")),new I18nMessage("cus","customer.without.phone"));
-		validator.addIf(( customer.getRevenueAccount() == null || customer.getRevenueAccount().getId() == -1l),new I18nMessage("cus","customer.without.revenue"));
 
 		if(validator.hasErrors()){
-			List<RevenueAccount> revenueAccountList = (List<RevenueAccount>) entityManager.createQuery(" from RevenueAccount ea order by ea.description ").getResultList();
-			List<Office> officeList = (List<Office>) entityManager.createQuery(" from Office o order by o.officeName ").getResultList();
 			List<Partner> partnerList = (List<Partner>) entityManager.createQuery(" from Partner p order by p.partnerName ").getResultList();
-			result.include("revenueAccountList", revenueAccountList);
-			result.include("officeList", officeList);
 			result.include("partnerList", partnerList);
 			result.include("customer", customer);
 			validator.onErrorUsePageOf(this).customer();
@@ -75,6 +68,7 @@ public class CustomersController {
 			customer.setPartner(null);
 		
 		if (customer.getId() == null){
+			createRevenue(customer);
 			entityManager.persist(customer);
 		}else{
 			entityManager.merge(customer);
@@ -82,6 +76,13 @@ public class CustomersController {
 		result.redirectTo(this).list();
 	}
 	
+	private void createRevenue(Customer customer) {
+		RevenueAccount account = new RevenueAccount();
+		account.setDescription(customer.getName());
+		entityManager.persist(account);
+		customer.setRevenueAccount(account);
+	}
+
 	@SuppressWarnings("unchecked")
 	@Get
 	@Path("/customers/{id}")

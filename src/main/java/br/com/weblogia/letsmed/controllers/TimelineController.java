@@ -30,7 +30,7 @@ public class TimelineController {
 	@Get
 	@Path("/timeline")
 	public void timeline(){
-		List<Order> orderList = (List<Order>) entityManager.createQuery(" from Order o where o.conclusionDate is null order by o.orderDate desc, o.id desc ").getResultList();
+		List<Order> orderList = (List<Order>) entityManager.createQuery(" from Order o where o.conclusionDate is null order by o.id desc ").getResultList();
 		result.include("orderList", orderList);
 		result.include("controller", "timeline");
 	}

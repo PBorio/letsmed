@@ -16,109 +16,144 @@
 					<table id="timeline" class="table table-striped">
 
 					  <thead>
+					  	  <tr><th colspan="13"><a href="<c:url value='/orders/order'/>" class="btn btn-primary">New Order</a></th></tr>	
 						  <tr>
-						   <th width="16%"></th>
-					 	   <th width="7%">Waiting For Complete Fill In</th>
-					 	   <th width="7%">Waiting for Supplier Proforma</th>
-					 	   <th width="7%">Waiting for Proforma Confirmation</th>
-					 	   <th width="7%">Waiting for Advanced Payment</th>
-					 	   <th width="7%">Waiting for Production Start</th>
-					 	   <th width="7%">Waiting for Forward Details</th>
-					 	   <th width="7%">Waiting for Shipment</th>
-					 	   <th width="7%">Waiting for Copies to Be Sent</th>
-					 	   <th width="7%">Waiting Order To Be Paid</th>
-					 	   <th width="7%">Waiting for Originals To Be Sent</th>
-					 	   <th width="7%">Waiting for Commision Payment</th>
-					 	   <th width="7%">Waiting for Commision Payment</th>
+					 	   <th width="8%">Waiting For Complete Fill In</th>
+					 	   <th width="8%">Waiting for Supplier Proforma</th>
+					 	   <th width="8%">Waiting for Proforma Confirmation</th>
+					 	   <th width="8%">Waiting for Advanced Payment</th>
+					 	   <th width="8%">Waiting for Production Start</th>
+					 	   <th width="8%">Waiting for Forward Details</th>
+					 	   <th width="8%">Waiting for Shipment</th>
+					 	   <th width="8%">Waiting for Copies to Be Sent</th>
+					 	   <th width="8%">Waiting Order To Be Paid</th>
+					 	   <th width="8%">Waiting for Originals To Be Sent</th>
+					 	   <th width="8%">Waiting for Commision Payment</th>
+					 	   <th width="8%">Complains</th>
 						  </tr>
 					  </thead>   
 					  <tbody>
 					  	<c:forEach var="order" items="${orderList }">
 					  	  <tr>
-						  		<td><a href="<c:url value='/orders/${order.id}'/>"><strong>Order:</strong> ${order.id} - ${order.customer.name}</br> <strong>Terms:</strong> ${order.negotiationTerm.description}</a></td>
 					  	  		<td>
 					  	  		  <c:if test="${order.status.description == 'to_fill_in' }">
-					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-					  	  			  <div class="circle"><fmt:formatDate value="${order.status.statusDate}" pattern='MM/dd/yyyy'/></div>
-					  	  			</a> 
+					  	  		  	 <div class="circle">
+						  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
+						  	  			  	${order.orderNumber} <br/>
+						  	  			  	${order.supplier.supplierName}
+						  	  			</a>
+					  	  			</div>
 					  	  		  </c:if>    	 
 						        </td>
 						        <td>
 					  	  		  <c:if test="${order.status.description == 'supplier_proforma' }">
+					  	  		  <div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-					  	  			  <div class="circle"><fmt:formatDate value="${order.status.statusDate}" pattern='MM/dd/yyyy'/></div>
+					  	  			  ${order.orderNumber} <br/>
+						  	  			  	${order.supplier.supplierName}
 					  	  			</a> 
+					  	  			</div>
 					  	  		  </c:if>    	 
 						        </td>
 						        <td>
 					  	  		  <c:if test="${order.status.description == 'to_proforma' }">
+					  	  		    <div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-					  	  			  <div class="circle"><fmt:formatDate value="${order.status.statusDate}" pattern='MM/dd/yyyy'/></div>
+					  	  			  ${order.orderNumber} <br/>
+						  	  			  	${order.supplier.supplierName}
 					  	  			</a> 
+					  	  			</div>
 					  	  		  </c:if>    	 
 						        </td>
 						         <td>
 					  	  		  <c:if test="${order.status.description == 'to_advanced_paid' }">
+					  	  			<div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-					  	  			  <div class="circle"><fmt:formatDate value="${order.status.statusDate}" pattern='MM/dd/yyyy'/></div>
+					  	  			 ${order.orderNumber} <br/>
+						  	  			  	${order.supplier.supplierName}
 					  	  			</a> 
+					  	  			</div>
 					  	  		  </c:if>    	 
 						        </td>
 						        <td>
 					  	  		  <c:if test="${order.status.description == 'to_producing' }">
+					  	  		  <div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-					  	  			  <div class="circle"><fmt:formatDate value="${order.status.statusDate}" pattern='MM/dd/yyyy'/></div>
+					  	  			  ${order.orderNumber} <br/>
+						  	  			  	${order.supplier.supplierName}
 					  	  			</a> 
+					  	  			</div>
 					  	  		  </c:if>    	 
 						        </td>
 						         <td>
 					  	  		  <c:if test="${order.status.description == 'to_forward_detail' }">
+					  	  		    <div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-					  	  			  <div class="circle"><fmt:formatDate value="${order.status.statusDate}" pattern='MM/dd/yyyy'/></div>
+					  	  			  ${order.orderNumber} <br/>
+						  	  			  	${order.supplier.supplierName}
 					  	  			</a> 
+					  	  			</div>
 					  	  		  </c:if>    	 
 						        </td>
 						        <td>
 					  	  		  <c:if test="${order.status.description == 'to_ship' }">
+					  	  		  <div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-					  	  			  <div class="circle"><fmt:formatDate value="${order.status.statusDate}" pattern='MM/dd/yyyy'/></div>
+					  	  			  ${order.orderNumber} <br/>
+						  	  			  	${order.supplier.supplierName}
 					  	  			</a> 
+					  	  			</div>
 					  	  		  </c:if>    	 
 						        </td>
 						        <td>
 					  	  		  <c:if test="${order.status.description == 'to_copy_doc_sent' }">
+					  	  		  <div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-					  	  			  <div class="circle"><fmt:formatDate value="${order.status.statusDate}" pattern='MM/dd/yyyy'/></div>
+					  	  			  ${order.orderNumber} <br/>
+						  	  			  	${order.supplier.supplierName}
 					  	  			</a> 
+					  	  			</div>
 					  	  		  </c:if>    	 
 						        </td>
 						        <td>
 					  	  		  <c:if test="${order.status.description == 'to_be_paid' }">
+					  	  		  <div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-					  	  			  <div class="circle"><fmt:formatDate value="${order.status.statusDate}" pattern='MM/dd/yyyy'/></div>
+					  	  			  ${order.orderNumber} <br/>
+						  	  			  	${order.supplier.supplierName}
 					  	  			</a> 
+					  	  			</div>
 					  	  		  </c:if>    	 
 						        </td>
 						        
 						        <td>
 					  	  		  <c:if test="${order.status.description == 'to_original_doc_sent' }">
+					  	  		  <div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-					  	  			  <div class="circle"><fmt:formatDate value="${order.status.statusDate}" pattern='MM/dd/yyyy'/></div>
+					  	  			  ${order.orderNumber} <br/>
+						  	  		  ${order.supplier.supplierName}
 					  	  			</a> 
+					  	  			</div>
 					  	  		  </c:if>    	 
 						        </td>
 						         <td>
 					  	  		    <c:if test="${order.status.description == 'to_comisson_payment' }">
+					  	  		    <div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-					  	  			  <div class="circle"><fmt:formatDate value="${order.status.statusDate}" pattern='MM/dd/yyyy'/></div>
+					  	  			  ${order.orderNumber} <br/>
+						  	  		  ${order.supplier.supplierName}
 					  	  			</a> 
+					  	  			</div>
 					  	  		  </c:if> 
 						        </td>
 						        <td>
 					  	  		  <c:if test="${order.status.description == 'complain' }">
+					  	  		   <div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.firstUnsolvedComplain.id}'/>">
-					  	  			  <div class="circle"><fmt:formatDate value="${order.status.statusDate}" pattern='MM/dd/yyyy'/></div>
+					  	  			  ${order.orderNumber} <br/>
+						  	  		  ${order.supplier.supplierName}
 					  	  			</a> 
+					  	  			</div>
 					  	  		  </c:if>    	 
 						        </td>
 					  	  </tr>
@@ -127,6 +162,16 @@
 					</table>
 					
 				</div>
+<content tag="local_script">
+	<script src="<c:url value='/resources/js/plugins/stickytableheaders.min.js'/>"></script>
+	<script type="text/javascript">
+		
+$(function(){
+	
+  $("#timeline").stickyTableHeaders();
 
+});
+</script>
+</content>
 </body>
 </html>

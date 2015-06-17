@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.joda.time.DateTime;
@@ -27,6 +28,7 @@ public class Order {
 	private Long id;
 	
 	private Date orderDate;
+	
 	
 	private String orderNumber;
 	
@@ -85,6 +87,7 @@ public class Order {
 	private Date deliveryDate;
 	
 	@OneToMany(mappedBy="order")
+	@OrderBy("id")
 	private List<OrderItem> itens = new ArrayList<OrderItem>();
 
 	@OneToMany(mappedBy="order")
@@ -604,5 +607,21 @@ public class Order {
 		return complains;
 	}
 	
+	public Double getCommisionValue() {
+		Double result = 0.0;
+		for (OrderItem i : this.itens){
+			result += i.getCommisionValue();
+		}
+		return result;
+	}
 
+	public boolean isItemDuplicated(){
+		List<Product> products = new ArrayList<Product>();
+		for (OrderItem i : this.itens){
+			if (products.contains(i.getProduct()))
+				return true;
+			products.add(i.getProduct());
+		}
+		return false;
+	}
 }

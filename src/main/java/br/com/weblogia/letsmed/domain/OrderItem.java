@@ -41,7 +41,7 @@ public class OrderItem {
 	private Double grossWeight = 0.0;
 	private Double netWeight = 0.0;
 	private Double volume = 0.0;
-	private Double commision;
+	private Double commision = 0.0;
 	
 	@ManyToOne
 	private UnitOfMeasure unitOfMeasure;
@@ -179,7 +179,7 @@ public class OrderItem {
 	}
 
 	public Double getCommisionValue() {
-		return (this.getTotalValue() * (this.commision/100));
+		return ((this.quantity * this.unitPrice) * (this.commision/100));
 	}
 
 	
