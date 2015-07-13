@@ -64,7 +64,8 @@
 								<a class="submenu" href="<c:url value='/partners'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Partners</span></a></li>
 							<li <c:if test="${controller eq 'suppliers'}"> class="active" </c:if>>
 								<a class="submenu"  href="<c:url value='/suppliers'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Supplier</span></a></li>
-							<li><a class="submenu"  href="<c:url value='/unitsOfMeasures'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet">Units</span></a></li>  	
+							<li><a class="submenu"  href="<c:url value='/unitsOfMeasures'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet">Units</span></a></li>
+							<li><a class="submenu"  href="<c:url value='/countries'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet">Countries</span></a></li>  	
                       </ul>
 				   </li>
 				 <!-- start: Compras Dropdown -->
@@ -99,6 +100,19 @@
 								<a class="submenu"  href="<c:url value='/negotiationTerms'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Negotiation Terms</span></a></li> 	
 					 </ul>
 				  </li>
+				  
+				   <li class="dropdown hidden-phone">
+					 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+					 	Statistics
+					 </a>
+					 <ul class="dropdown-menu tasks">
+						<li><a class="submenu"  href="<c:url value='/orderStatistics/orders'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Orders</span></a></li>
+						<li><a class="submenu"  href="<c:url value='/orderStatistics/products/categories'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Values By Product Category</span></a></li>
+						<li><a class="submenu"  href="<c:url value='/orderStatistics/countries'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Values By Country</span></a></li>
+						<li><a class="submenu"  href="<c:url value='/orderStatistics/customers'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Values By Customer</span></a></li>
+					 </ul>
+				  </li>
+				  
 				  <!-- end: Vendas Dropdown -->
             	  <!-- start: Estoque Dropdown -->
 					<!-- end: Calendario Dropdown -->

@@ -30,7 +30,13 @@ public class TimelineController {
 	@Get
 	@Path("/timeline")
 	public void timeline(){
-		List<Order> orderList = (List<Order>) entityManager.createQuery(" from Order o where o.conclusionDate is null order by o.id desc ").getResultList();
+		StringBuilder sql = new StringBuilder();
+		sql.append(" from Order o ");
+		sql.append(" where o.conclusionDate is null ");
+		sql.append(" or exists (select 1 from Complain c where c.solvedDate is null and c.order.id = o.id ) ");
+		sql.append(" order by o.supplier.supplierName ");
+
+		List<Order> orderList = (List<Order>) entityManager.createQuery(sql.toString()).getResultList();
 		result.include("orderList", orderList);
 		result.include("controller", "timeline");
 	}

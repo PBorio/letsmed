@@ -224,7 +224,7 @@ public class Order {
 	}
 
 	public boolean isWaitingSupplierProforma() {
-		return (this.confirmationDate != null && this.supplierProformaDate == null);
+		return (this.orderDate != null && this.supplierProformaDate == null);
 	}
 
 	public boolean isWaitingProformaConfirmation() {
@@ -242,7 +242,7 @@ public class Order {
 		
 		if (this.negotiationTerm.getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_AGAINST_COPY)||
 			this.negotiationTerm.getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT)){
-			return (this.proformaConfirmationDate != null && !this.isPaid() && !this.isAdvancedPaid());
+			return ((this.proformaConfirmationDate != null && this.artworkConfirmationDate != null) && !this.isPaid() && !this.isAdvancedPaid());
 		}
 		return false;
 	}
@@ -260,11 +260,23 @@ public class Order {
 			this.negotiationTerm.getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT)){
 			return (this.isAdvancedPaid() && this.productionStartDate == null);
 		}
-		return (this.proformaConfirmationDate != null && this.productionStartDate == null);
+		return ((this.proformaConfirmationDate != null && this.artworkConfirmationDate != null) && this.productionStartDate == null);
 	}
 
 	public boolean isWaitingForwardDetails() {
-		return (productionStartDate != null && !this.isForwardDetailsSent());
+		
+		if (negotiationTerm == null)
+			return false;
+		
+		if (this.negotiationTerm.getNegotiationType().equals(NegotiationType.LC_AT_SIGHT)){
+			return (this.isPaid() && !this.isForwardDetailsSent());
+		}
+		
+		if (this.negotiationTerm.getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_AGAINST_COPY)||
+			this.negotiationTerm.getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT)){
+			return (this.isAdvancedPaid() && !this.isForwardDetailsSent());
+		}
+		return ((this.proformaConfirmationDate != null && this.artworkConfirmationDate != null) && !this.isForwardDetailsSent());
 	}
 
 	public boolean isWaitingShipment() {
@@ -295,7 +307,7 @@ public class Order {
 			return false;
 		
 		if (NegotiationType.LC_AT_SIGHT.equals(this.negotiationTerm.getNegotiationType())){
-			return (this.proformaConfirmationDate != null && this.productionStartDate == null);
+			return ((this.proformaConfirmationDate != null && this.artworkConfirmationDate != null) && !this.isForwardDetailsSent());
 		}
 		
 		if (NegotiationType.TT_100_BEFORE_SHIPMENT.equals(this.negotiationTerm.getNegotiationType())||

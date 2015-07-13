@@ -77,12 +77,19 @@ public class ProductsController {
 	@Get
 	@Path("/products/searchByDescription.json")
 	public void buscarClientesPorNome(String term) {
+		String[] terms = term.split(" ");
 		StringBuilder sql = new StringBuilder();
 		sql.append(" from Product p ");
-		sql.append(" where p.description like :description ");
+		sql.append(" where 1 = 1 ");
+		for (int i = 0; i < terms.length; i++){
+			sql.append(" and p.description like :description"+i);
+		}
 		
 		Query q = entityManager.createQuery(sql.toString());
-		q.setParameter("description", "%"+term+"%");
+		
+		for (int i = 0; i < terms.length; i++){
+			q.setParameter("description"+i, "%"+terms[i]+"%");
+		}
 		result.use(json()).withoutRoot()
 				.from((List<Product>)q.getResultList()).recursive()
 				.serialize();

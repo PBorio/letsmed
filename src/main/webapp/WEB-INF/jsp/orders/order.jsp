@@ -237,18 +237,18 @@
     <hr class="hideInIE8"/>
    
 	<div class="form-actions">
-	  <c:choose>
-	    <c:when test="${order.id == null || order.toBeFilledIn}">
+		<c:if test="${order.id == null || order.waitingSupplierProforma}">
 		  <button id="singlebutton" name="singlebutton" class="btn btn-primary">Save</button>
-	    </c:when>
+	    </c:if>
+	  <c:choose>
 	    <c:when test="${order.waitingSupplierProforma}">
 	       <a href="<c:url value='/supplierProforma/confirm/${order.id}'/>" class="btn btn-primary">Supplier Proforma Arrived</a>
 	    </c:when>
 	    <c:when test="${order.waitingProformaConfirmation}">
 	       <a href="<c:url value='/proformaConfirmation/confirm/${order.id}'/>" class="btn btn-primary">Proforma Confirmed</a>
 	    </c:when>
-	    <c:when test="${order.waitingProductionStart}">
-	       <a href="<c:url value='/productionStartConfirmation/confirm/${order.id}'/>" class="btn btn-primary">Production Started</a>
+	     <c:when test="${order.waitingArtworkConfirmation}">
+	       <a href="<c:url value='/artworkConfirmation/confirm/${order.id}'/>" class="btn btn-primary">Artwork Confirmed</a>
 	    </c:when>
 	    <c:when test="${order.waitingShipment}">
 	       <a href="<c:url value='/shipment/${order.id}'/>" class="btn btn-primary">Shipping Information</a>
@@ -264,9 +264,6 @@
 	    </c:when>
       </c:choose>
       <a href="<c:url value='/timeline'/>" class="btn btn-primary">Back to Timeline</a>
-      <c:if test="${order.toBeFilledIn}">
-		 <a href="<c:url value='/orders/confirm/${order.id}'/>" class="btn btn-primary">Filled In Confirmation</a>
-	  </c:if>
 	  <c:if test="${order.id != null}">
 		  <a href="<c:url value='/orders/print/purchase/${order.id}'/>" class="btn btn-success">Print Purchase Order</a>
 		  <a href="<c:url value='/orders/print/proforma/${order.id}'/>" class="btn btn-success">Print Proforma Invoice</a>

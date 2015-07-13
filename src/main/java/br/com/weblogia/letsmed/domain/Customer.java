@@ -31,7 +31,10 @@ public class Customer {
 	
 	private String contact;
 	
-	private String country;
+	private String countryDesc;
+	
+	@ManyToOne
+	private Country country;
 	
 	private String code;
 	
@@ -152,12 +155,12 @@ public class Customer {
 		this.partner = partner;
 	}
 
-	public String getCountry() {
-		return country;
+	public String getCountryDesc() {
+		return countryDesc;
 	}
 
-	public void setCountry(String country) {
-		this.country = country;
+	public void setCountryDesc(String countryDesc) {
+		this.countryDesc = countryDesc;
 	}
 
 	public String getCode() {
@@ -167,5 +170,40 @@ public class Customer {
 	public void setCode(String code) {
 		this.code = code;
 	}
+
+	public Country getCountry() {
+		return country;
+	}
+
+	public void setCountry(Country country) {
+		this.country = country;
+	}
+
+	@Override
+	public int hashCode() {
+		if (id == null) return super.hashCode();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Customer other = (Customer) obj;
+		if (id == null) 
+				return false;
+		if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+	
+	
 
 }

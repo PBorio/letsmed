@@ -44,7 +44,14 @@
 		<div class="control-group">
 		  <label class="control-label col-xs2">Country:</label>
 		  <div class="controls">
-		    <input type="text" class="input-xlarge span6" name="customer.country" id="customer.country" value="${customer.country}" />
+		    <select id="customer.country.id" name="customer.country.id" class="input-xlarge span6" >   
+              <option value="-1"> Country...</option>  
+              <c:forEach var="country" items="${countryList}">  
+                  <option value="${country.id}" <c:if test="${country.id == customer.country.id}">selected="true"</c:if>> 
+                  	${country.name} 
+                  </option>  
+              </c:forEach> 
+          </select>
 		  </div>
 		</div>
 		<div class="control-group">

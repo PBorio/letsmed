@@ -7,14 +7,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="product_categories")
-public class ProductCategory {
+@Table(name="countries")
+public class Country {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private String description;
+	private String name;
 
 	public Long getId() {
 		return id;
@@ -24,12 +24,12 @@ public class ProductCategory {
 		this.id = id;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getName() {
+		return name;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
@@ -49,12 +49,14 @@ public class ProductCategory {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ProductCategory other = (ProductCategory) obj;
+		Country other = (Country) obj;
 		if (id == null) 
-			return false;
+				return false;
 		if (!id.equals(other.id))
 			return false;
 		return true;
 	}
+	
+	
 
 }

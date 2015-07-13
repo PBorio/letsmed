@@ -18,11 +18,10 @@
 					  <thead>
 					  	  <tr><th colspan="13"><a href="<c:url value='/orders/order'/>" class="btn btn-primary">New Order</a></th></tr>	
 						  <tr>
-					 	   <th width="8%">Waiting For Complete Fill In</th>
+						   <th width="20%">Suppliers</th>	
 					 	   <th width="8%">Waiting for Supplier Proforma</th>
-					 	   <th width="8%">Waiting for Proforma Confirmation</th>
+					 	   <th width="8%">Waiting for Proforma and Artwork Confirmation</th>
 					 	   <th width="8%">Waiting for Advanced Payment</th>
-					 	   <th width="8%">Waiting for Production Start</th>
 					 	   <th width="8%">Waiting for Forward Details</th>
 					 	   <th width="8%">Waiting for Shipment</th>
 					 	   <th width="8%">Waiting for Copies to Be Sent</th>
@@ -35,22 +34,13 @@
 					  <tbody>
 					  	<c:forEach var="order" items="${orderList }">
 					  	  <tr>
-					  	  		<td>
-					  	  		  <c:if test="${order.status.description == 'to_fill_in' }">
-					  	  		  	 <div class="circle">
-						  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-						  	  			  	${order.orderNumber} <br/>
-						  	  			  	${order.supplier.supplierName}
-						  	  			</a>
-					  	  			</div>
-					  	  		  </c:if>    	 
-						        </td>
+					  	  		<td>${order.supplier.supplierName}</td>
 						        <td>
 					  	  		  <c:if test="${order.status.description == 'supplier_proforma' }">
 					  	  		  <div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
 					  	  			  ${order.orderNumber} <br/>
-						  	  			  	${order.supplier.supplierName}
+						  	  			${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
 					  	  			</a> 
 					  	  			</div>
 					  	  		  </c:if>    	 
@@ -60,7 +50,7 @@
 					  	  		    <div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
 					  	  			  ${order.orderNumber} <br/>
-						  	  			  	${order.supplier.supplierName}
+						  	  		${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
 					  	  			</a> 
 					  	  			</div>
 					  	  		  </c:if>    	 
@@ -70,17 +60,7 @@
 					  	  			<div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
 					  	  			 ${order.orderNumber} <br/>
-						  	  			  	${order.supplier.supplierName}
-					  	  			</a> 
-					  	  			</div>
-					  	  		  </c:if>    	 
-						        </td>
-						        <td>
-					  	  		  <c:if test="${order.status.description == 'to_producing' }">
-					  	  		  <div class="circle">
-					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-					  	  			  ${order.orderNumber} <br/>
-						  	  			  	${order.supplier.supplierName}
+						  	  			${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
 					  	  			</a> 
 					  	  			</div>
 					  	  		  </c:if>    	 
@@ -90,7 +70,7 @@
 					  	  		    <div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
 					  	  			  ${order.orderNumber} <br/>
-						  	  			  	${order.supplier.supplierName}
+						  	  			 ${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
 					  	  			</a> 
 					  	  			</div>
 					  	  		  </c:if>    	 
@@ -100,7 +80,7 @@
 					  	  		  <div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
 					  	  			  ${order.orderNumber} <br/>
-						  	  			  	${order.supplier.supplierName}
+						  	  		${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
 					  	  			</a> 
 					  	  			</div>
 					  	  		  </c:if>    	 
@@ -110,7 +90,7 @@
 					  	  		  <div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
 					  	  			  ${order.orderNumber} <br/>
-						  	  			  	${order.supplier.supplierName}
+						  	  		${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
 					  	  			</a> 
 					  	  			</div>
 					  	  		  </c:if>    	 
@@ -120,7 +100,7 @@
 					  	  		  <div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
 					  	  			  ${order.orderNumber} <br/>
-						  	  			  	${order.supplier.supplierName}
+						  	  		${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
 					  	  			</a> 
 					  	  			</div>
 					  	  		  </c:if>    	 
@@ -131,7 +111,7 @@
 					  	  		  <div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
 					  	  			  ${order.orderNumber} <br/>
-						  	  		  ${order.supplier.supplierName}
+						  	  		 ${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
 					  	  			</a> 
 					  	  			</div>
 					  	  		  </c:if>    	 
@@ -141,7 +121,7 @@
 					  	  		    <div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
 					  	  			  ${order.orderNumber} <br/>
-						  	  		  ${order.supplier.supplierName}
+						  	  		 ${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
 					  	  			</a> 
 					  	  			</div>
 					  	  		  </c:if> 
@@ -151,7 +131,7 @@
 					  	  		   <div class="circle">
 					  	  			<a href="<c:url value='/${order.status.url}/${order.firstUnsolvedComplain.id}'/>">
 					  	  			  ${order.orderNumber} <br/>
-						  	  		  ${order.supplier.supplierName}
+						  	  		${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
 					  	  			</a> 
 					  	  			</div>
 					  	  		  </c:if>    	 

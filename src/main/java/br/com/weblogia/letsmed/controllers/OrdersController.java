@@ -67,7 +67,7 @@ public class OrdersController {
 	public List<Order> list(){
 		result.include("controller", "orders");
 		result.include("url", "orders");
-		return (List<Order>) entityManager.createQuery(" from Order o where o.conclusionDate is null order by o.id desc ").getResultList();
+		return (List<Order>) entityManager.createQuery(" from Order o order by o.id desc ").getResultList();
 	}
 	
 	@Transactional

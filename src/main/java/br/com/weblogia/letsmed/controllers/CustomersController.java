@@ -13,6 +13,7 @@ import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validator;
+import br.com.weblogia.letsmed.domain.Country;
 import br.com.weblogia.letsmed.domain.Customer;
 import br.com.weblogia.letsmed.domain.Office;
 import br.com.weblogia.letsmed.domain.Partner;
@@ -31,16 +32,10 @@ public class CustomersController {
 	@Inject 
 	Validator validator;
 	
-	@SuppressWarnings("unchecked")
 	public void customer(){
-		List<RevenueAccount> revenueAccountList = (List<RevenueAccount>) entityManager.createQuery(" from RevenueAccount ea order by ea.description ").getResultList();
-		List<Office> officeList = (List<Office>) entityManager.createQuery(" from Office o order by o.officeName ").getResultList();
-		List<Partner> partnerList = (List<Partner>) entityManager.createQuery(" from Partner p order by p.partnerName ").getResultList();
-		result.include("revenueAccountList", revenueAccountList);
-		result.include("officeList", officeList);
-		result.include("partnerList", partnerList);
-		result.include("controller", "customers");
+		loadLists();
 	}
+
 	
 	@SuppressWarnings("unchecked")
 	@Get
@@ -53,6 +48,9 @@ public class CustomersController {
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public void save(Customer customer){
+		
+		if (customer.getCountry() != null && (customer.getCountry().getId() == -1))
+			customer.setCountry(null);
 		
 		validator.addIf(( customer.getName() == null || customer.getName().trim().equals("")),new I18nMessage("cus","customer.without.name"));
 
@@ -83,20 +81,25 @@ public class CustomersController {
 		customer.setRevenueAccount(account);
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	@Get
 	@Path("/customers/{id}")
 	public void edit(Long id) {
 		Customer customer = entityManager.find(Customer.class, id);
-		List<RevenueAccount> revenueAccountList = (List<RevenueAccount>) entityManager.createQuery(" from RevenueAccount ea order by ea.description ").getResultList();
-		List<Office> officeList = (List<Office>) entityManager.createQuery(" from Office o order by o.officeName ").getResultList();
-		List<Partner> partnerList = (List<Partner>) entityManager.createQuery(" from Partner p order by p.partnerName ").getResultList();
-		result.include("revenueAccountList", revenueAccountList);
-		result.include("officeList", officeList);
-		result.include("partnerList", partnerList);
+		loadLists();
 		result.include("customer", customer);
-		result.include("controller", "customers");
 		result.of(this).customer();
 	}
 	
+	@SuppressWarnings("unchecked")
+	private void loadLists() {
+		List<RevenueAccount> revenueAccountList = (List<RevenueAccount>) entityManager.createQuery(" from RevenueAccount ea order by ea.description ").getResultList();
+		List<Office> officeList = (List<Office>) entityManager.createQuery(" from Office o order by o.officeName ").getResultList();
+		List<Partner> partnerList = (List<Partner>) entityManager.createQuery(" from Partner p order by p.partnerName ").getResultList();
+		List<Country> countryList = (List<Country>) entityManager.createQuery(" from Country c order by c.name ").getResultList();
+		result.include("revenueAccountList", revenueAccountList);
+		result.include("officeList", officeList);
+		result.include("partnerList", partnerList);
+		result.include("countryList", countryList);
+	}
 }
