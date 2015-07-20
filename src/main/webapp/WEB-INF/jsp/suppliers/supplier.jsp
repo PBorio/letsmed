@@ -83,6 +83,21 @@
           </select>
 		  </div>
 		</div>
+		
+		<div class="control-group">
+		  <label class="control-label col-xs2">User:</label>
+		  <div class="controls">
+		    <select id="supplier.user.id" name="supplier.user.id" class="input-xlarge span6" >   
+              <option value=""> Users...</option>  
+              <c:forEach var="user" items="${userList}">  
+                  <option value="${user.id}" <c:if test="${user.id == supplier.user.id}">selected="true"</c:if>> 
+                  	${user.name} 
+                  </option>  
+              </c:forEach> 
+          </select>
+		  </div>
+		</div>
+		
 	  </fieldset>
     <hr class="hideInIE8"/>
    

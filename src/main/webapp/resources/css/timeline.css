@@ -6,11 +6,30 @@ Timeline UI Base
     -webkit-border-radius: 25px;
     -moz-border-radius: 25px;
     border-radius: 25px;
-    background-color: #4e8ad5; 
     border: none;
     text-align: center;
     padding-top: 20px;
     padding-bottom: 20px;
+    
+}
+
+.circle a {
+	color: black;
+}
+.axel {
+	background-color: #5db137;
+}
+
+.jie {
+	background-color: #fedc01;
+}
+
+.stella{
+	background-color: #ed2b43;
+}
+
+.yang{
+	background-color: #4e8ad5;
 }
 
 #timeline th{

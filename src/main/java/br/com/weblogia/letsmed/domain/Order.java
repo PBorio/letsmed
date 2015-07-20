@@ -113,9 +113,10 @@ public class Order {
 		
 		Double result = 0.0;
 		for (OrderItem i :itens){
-			result += i.getTotalValue();
+			result += i.getTotalProducts();
 		}
 		return new Arredondamento().arredondar(result);
+		
 	}
 	
 	public Double getTotalBuyValue() {
@@ -187,6 +188,23 @@ public class Order {
 		}
 		
 		return ultimaData.toDate();
+	}
+	
+	public Date getAdvancedPaymentDate() {
+		if (this.payments == null || this.payments.size() == 0)
+			return null;
+		
+		if (this.isPaid() && this.payments.size() == 1)
+			return null;
+		
+		DateTime firstDate = null;
+		
+		for (OrderPayment op : this.payments){
+			if (firstDate == null || firstDate.isAfter(new DateTime(op.getPaymentDate().getTime())))
+				firstDate = new DateTime(op.getPaymentDate().getTime());
+		}
+		
+		return firstDate.toDate();
 	}
 	
 	public Date getLastForwardDetailDate(){
@@ -613,6 +631,13 @@ public class Order {
 		if (this.getComissionRevenue() == null)
 			return false;
 		return this.getComissionRevenue().isPaid();
+	}
+	
+	public Date getCommisionPaymentDate() {
+		if (!isRevenuePaid())
+			return null;
+		
+		return this.getComissionRevenue().getLastPaymentDate();
 	}
 
 	public List<Complain> getComplains() {

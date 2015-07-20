@@ -46,15 +46,22 @@
     </div>
     <div class="box-content">
     <fieldset>
-    	<div class="control-group">
-		   <label class="control-label col-xs2">Product:</label>			 
-	       <div class="controls">
-	       		<input id="product-select" type="hidden" class="input-xlarge span12" name="item.product.id" value="${item.product.id}"/>
-			    <input type="hidden" id="item.id" name="item.id" value="${item.id}" />
-			    <input type="hidden" id="item.product.description" name="item.product.description" value="${item.product.description}" />
-		 	  	<input type="hidden" id="item.order.id" name="item.order.id" value="${item.order.id}" />
-		 	  	<input type="hidden" id="item.order.transactionTerm.id" name="item.order.transactionTerm.id" value="${item.order.transactionTerm.id}"/>
-		   </div>
+    	<div class="row-fluid">
+    	  <div class="span10">
+	    	<div class="control-group">
+			   <label class="control-label col-xs2">Product:</label>			 
+		       <div class="controls">
+		       		<input id="product-select" type="hidden" class="input-xlarge span12" name="item.product.id" value="${item.product.id}"/>
+				    <input type="hidden" id="item.id" name="item.id" value="${item.id}" />
+				    <input type="hidden" id="item.product.description" name="item.product.description" value="${item.product.description}" />
+			 	  	<input type="hidden" id="item.order.id" name="item.order.id" value="${item.order.id}" />
+			 	  	<input type="hidden" id="item.order.transactionTerm.id" name="item.order.transactionTerm.id" value="${item.order.transactionTerm.id}"/>
+			   </div>
+			</div>
+		  </div>
+		  <div class="span2">
+				<a href="<c:url value='/products/product'/>" target="_blank" class="btn btn-small"><i class="halflings-icon file"></i>New Product</a>
+		  </div>
 		</div>
 		<div class="control-group">
 		   <label class="control-label col-xs2">Additional Description:</label>			 
@@ -72,7 +79,7 @@
 			</div>
 			
 		 </div>
-		  <div class="span6">
+		  <div class="span4">
 		    <div class="control-group">
 			  <label class="control-label col-xs2">Units:</label>
 			  <div class="controls">
@@ -87,6 +94,9 @@
 			  </div>
 			</div>
 		  </div>
+		   <div class="span2">
+		  		<a href="<c:url value='/unitsOfMeasures/unit'/>" target="_blank" class="btn btn-small"><i class="halflings-icon file"></i>New Unit</a>
+		  	</div>
 		</div>
 		<div class="row-fluid">
 		   <div class="span3">
@@ -117,16 +127,28 @@
 			<div class="control-group">
 			  <label class="control-label col-xs2">Total Sell Price:</label>
 			  <div class="controls">
-			    <input type="text" class="input-xlarge span12" data-behaviour="valor" value="<fmt:formatNumber value='${item.totalValue}' pattern='#,##0.00'/>" tabindex="-1" readonly="readonly" id="total-sell-price"  />
+			    <input type="text" class="input-xlarge span12" data-behaviour="valor" value="<fmt:formatNumber value='${item.totalProducts}' pattern='#,##0.00'/>" tabindex="-1" readonly="readonly" id="total-sell-price"  />
 			  </div>
 			</div>
 		 </div>
 		</div>
-		<div class="control-group">
-		  <label class="control-label col-xs2">Commision:</label>
-		  <div class="controls">
-		    <input type="text" class="input-xlarge span2" data-behaviour="valor" id="item.commision" name="item.commision" value="<fmt:formatNumber value='${item.commision }' pattern='#,##0.00'/>"  />
-		  </div>
+		<div class="row-fluid">
+			 <div class="span3">
+				<div class="control-group">
+				  <label class="control-label col-xs2">Commision:</label>
+				  <div class="controls">
+				    <input type="text" class="input-xlarge span12" data-behaviour="valor" id="item.commision" name="item.commision" value="<fmt:formatNumber value='${item.commision }' pattern='#,##0.00'/>" onchange="calculateTotalSell(); return false;"  />
+				  </div>
+				</div>
+			</div>
+			 <div class="span3">
+				<div class="control-group">
+				  <label class="control-label col-xs2">Total Value:</label>
+				  <div class="controls">
+				    <input type="text" class="input-xlarge span12" data-behaviour="valor" value="<fmt:formatNumber value='${item.totalWithCommision}' pattern='#,##0.00'/>" tabindex="-1" readonly="readonly" id="total-price"  />
+				  </div>
+				</div>
+		 </div>
 		</div>
 		<div class="row-fluid">
 			<div class="span3">
@@ -207,10 +229,18 @@ function calculateTotalBuy() {
 function calculateTotalSell() {
 	var quantity  =  parseFloat($("#item\\.quantity").val());
 	var price = parseFloat($("#item\\.unitPrice").val());
-	var total = price * quantity;
+	var commision = parseFloat($("#item\\.commision").val());
 	
-	if(total){
-		$("#total-sell-price").val(total);
+	if (!commision) commision = 0.0;
+	
+	var totalSell = price * quantity;
+	if(totalSell){
+		$("#total-sell-price").val(totalSell);
+		
+		var commisionValue = (totalSell * (commision/100));
+		
+		$("#total-sell-price").val(totalSell);
+		$("#total-price").val(totalSell+commisionValue);
 	}
 }
 

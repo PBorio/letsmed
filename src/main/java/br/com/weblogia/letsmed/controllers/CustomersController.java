@@ -1,10 +1,13 @@
 package br.com.weblogia.letsmed.controllers;
 
+import static br.com.caelum.vraptor.view.Results.json;
+
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import br.com.caelum.vraptor.Controller;
@@ -101,5 +104,23 @@ public class CustomersController {
 		result.include("officeList", officeList);
 		result.include("partnerList", partnerList);
 		result.include("countryList", countryList);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Get
+	@Path("/customers/searchByName.json")
+	public void buscarClientesPorNome(String term) {
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append(" from Customer c ");
+		sql.append(" where 1 = 1 ");
+			sql.append(" and c.name like :name");
+		
+		Query q = entityManager.createQuery(sql.toString());
+		
+		q.setParameter("name", "%"+term+"%");
+		result.use(json()).withoutRoot()
+				.from((List<Customer>)q.getResultList()).recursive()
+				.serialize();
 	}
 }

@@ -46,7 +46,7 @@ public class OrderItem {
 	@ManyToOne
 	private UnitOfMeasure unitOfMeasure;
 	
-	public Double getTotalValue(){
+	public Double getTotalProducts(){
 		if (this.quantity == null || this.unitPrice == null)
 			return 0.0;
 		return new Arredondamento().arredondar(this.quantity * this.unitPrice);
@@ -56,6 +56,20 @@ public class OrderItem {
 		if (this.quantity == null || this.buyPrice == null)
 			return 0.0;
 		return new Arredondamento().arredondar(this.quantity * this.buyPrice);
+	}
+	
+	public Double getTotalWithCommision(){
+		if (this.quantity == null || this.unitPrice == null)
+			return 0.0;
+		
+		if (this.commision != null){
+			Double total = this.quantity * this.unitPrice;
+			Double commisionValue = total * (commision/100);
+			total += commisionValue;
+			return new Arredondamento().arredondar(total);
+		}
+		
+		return new Arredondamento().arredondar(this.quantity * this.unitPrice);
 	}
 
 	public Long getId() {
@@ -182,7 +196,15 @@ public class OrderItem {
 		return ((this.quantity * this.unitPrice) * (this.commision/100));
 	}
 
-	
+	public String getCompleteDescription(){
+		if (this.product == null)
+			return this.additionalDescription;
+		
+		if (this.additionalDescription == null || "".equals(this.additionalDescription.trim()))
+			return this.product.getDescription();
+		
+		return (this.product.getDescription()+" - "+this.additionalDescription);
+	}
 	
 	
 

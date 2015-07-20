@@ -18,8 +18,8 @@ public class OrderStatusFactory {
 		}else if (order.isWaitingSupplierProforma()){
 			status.setDescription("supplier_proforma");
 			status.setTitle("Waiting for Supplier Proforma");
-			status.setStatusDate(order.getConfirmationDate());
-			status.setLastMovement("Confirmation Date");
+			status.setStatusDate(order.getOrderDate());
+			status.setLastMovement("Order Date");
 			status.setUrl("orders");
 		}else if (order.isWaitingProformaConfirmation()||order.isWaitingArtworkConfirmation()){
 			status.setDescription("to_proforma");
@@ -70,7 +70,7 @@ public class OrderStatusFactory {
 		}else if (order.isWaitingForComissionPayment()){
 			status.setDescription("to_comisson_payment");
 			status.setTitle("Waiting for Commision Payment");
-			status.setStatusDate(order.getOrderDate());
+			status.setStatusDate(order.getOriginalDocumentDate());
 			status.setLastMovement("Original Documents Date");
 			
 			if (order.isRevenuePaid())

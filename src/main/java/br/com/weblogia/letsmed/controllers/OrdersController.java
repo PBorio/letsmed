@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.servlet.ServletContext;
 import javax.transaction.Transactional;
 
@@ -65,7 +66,6 @@ public class OrdersController {
 	@Get
 	@Path("/orders")
 	public List<Order> list(){
-		result.include("controller", "orders");
 		result.include("url", "orders");
 		return (List<Order>) entityManager.createQuery(" from Order o order by o.id desc ").getResultList();
 	}
@@ -110,8 +110,9 @@ public class OrdersController {
 		
 		if (item.getUnitOfMeasure() != null)
 			if (item.getUnitOfMeasure().getId() == null || item.getUnitOfMeasure().getId() == -1) item.setUnitOfMeasure(null);
-		validator.addIf( item.getProduct() == null,new I18nMessage("ord","item.without.product"));
-		validator.addIf( item.getUnitOfMeasure() == null,new I18nMessage("ord","item.without.unit"));
+		
+		validator.addIf( (item.getProduct() == null) && (item.getAdditionalDescription() == null || "".equals(item.getAdditionalDescription().trim())),new I18nMessage("ord","item.without.product"));
+		validator.addIf( (item.getProduct() != null) && (item.getUnitOfMeasure() == null),new I18nMessage("ord","item.without.unit"));
 		validator.addIf( item.getUnitPrice() == null,new I18nMessage("ord","item.without.price"));
 		validator.addIf( item.getQuantity() == null,new I18nMessage("ord","item.without.quantity"));
 		
@@ -125,11 +126,13 @@ public class OrdersController {
 			validator.onErrorUsePageOf(this).item(item.getOrder().getId());
 		}
 		
-		Product p = entityManager.find(Product.class, item.getProduct().getId());
-		p.setBuyPrice(item.getBuyPrice());
-		p.setSellPrice(item.getUnitPrice());
-		p.setCommision(item.getCommision());
-		entityManager.merge(p);
+		if (item.getProduct() != null){
+			Product p = entityManager.find(Product.class, item.getProduct().getId());
+			p.setBuyPrice(item.getBuyPrice());
+			p.setSellPrice(item.getUnitPrice());
+			p.setCommision(item.getCommision());
+			entityManager.merge(p);
+		}
 		
 		if (item.getId() == null){
 			entityManager.persist(item);
@@ -339,6 +342,22 @@ public class OrdersController {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public void search(Customer customer) {
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append(" from Order o ");
+		sql.append(" where 1 = 1 ");
+		sql.append(" and o.customer.id = :id ");
+		
+		Query q = entityManager.createQuery(sql.toString());
+		
+		q.setParameter("id", customer.getId());
+		result.include("orderList", (List<Customer>)q.getResultList());
+		result.include("customer", customer);
+		result.of(this).list();
+	}
+	
 	@SuppressWarnings("unchecked")
 	private void loadLists() {
 		List<Product> productList = (List<Product>) entityManager.createQuery(" from Product p order by p.description ").getResultList();

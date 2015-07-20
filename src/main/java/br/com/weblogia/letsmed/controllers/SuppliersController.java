@@ -1,10 +1,13 @@
 package br.com.weblogia.letsmed.controllers;
 
+import static br.com.caelum.vraptor.view.Results.json;
+
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import br.com.caelum.vraptor.Controller;
@@ -15,6 +18,7 @@ import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validator;
 import br.com.weblogia.letsmed.domain.ExpenseAccount;
 import br.com.weblogia.letsmed.domain.Supplier;
+import br.com.weblogia.letsmed.domain.User;
 
 @Controller
 public class SuppliersController {
@@ -29,13 +33,10 @@ public class SuppliersController {
 	@Inject 
 	Validator validator;
 	
-	@SuppressWarnings("unchecked")
 	public void supplier(){
-		List<ExpenseAccount> expenseAccountList = (List<ExpenseAccount>) entityManager.createQuery(" from ExpenseAccount ea order by ea.description ").getResultList();
-		result.include("expenseAccountList", expenseAccountList);
-		result.include("controller", "suppliers");
+		loadList();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Get
 	@Path("/suppliers")
@@ -44,15 +45,13 @@ public class SuppliersController {
 		return (List<Supplier>) entityManager.createQuery(" from Supplier s order by s.supplierName ").getResultList();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Transactional
 	public void save(Supplier supplier){
 		
 		validator.addIf(( supplier.getSupplierName() == null || supplier.getSupplierName().trim().equals("")),new I18nMessage("off","supplier.without.name"));
 
 		if(validator.hasErrors()){
-			List<ExpenseAccount> expenseAccountList = (List<ExpenseAccount>) entityManager.createQuery(" from ExpenseAccount ea order by ea.description ").getResultList();
-			result.include("expenseAccountList", expenseAccountList);
+			loadList();
 			result.include("partner", supplier);
 			validator.onErrorUsePageOf(this).supplier();
 		}
@@ -68,16 +67,42 @@ public class SuppliersController {
 		result.redirectTo(this).list();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Get
 	@Path("/suppliers/{id}")
 	public void edit(Long id) {
 		Supplier supplier = entityManager.find(Supplier.class, id);
-		List<ExpenseAccount> expenseAccountList = (List<ExpenseAccount>) entityManager.createQuery(" from ExpenseAccount ea order by ea.description ").getResultList();
-		result.include("expenseAccountList", expenseAccountList);
+		loadList();
 		result.include("controller", "suppliers");
 		result.include("supplier", supplier);
 		result.of(this).supplier();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Get
+	@Path("/suppliers/searchByName.json")
+	public void buscarClientesPorNome(String term) {
+		
+		StringBuilder sql = new StringBuilder();
+		sql.append(" from Supplier s ");
+		sql.append(" where 1 = 1 ");
+			sql.append(" and s.supplierName like :name");
+		
+		Query q = entityManager.createQuery(sql.toString());
+		
+		q.setParameter("name", "%"+term+"%");
+		result.use(json()).withoutRoot()
+				.from((List<Supplier>)q.getResultList()).recursive()
+				.serialize();
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	private void loadList() {
+		List<ExpenseAccount> expenseAccountList = (List<ExpenseAccount>) entityManager.createQuery(" from ExpenseAccount ea order by ea.description ").getResultList();
+		List<User> userList = (List<User>) entityManager.createQuery(" from User u order by u.name ").getResultList();
+		
+		result.include("expenseAccountList", expenseAccountList);
+		result.include("userList", userList);
 	}
 
 }

@@ -34,7 +34,7 @@ public class TimelineController {
 		sql.append(" from Order o ");
 		sql.append(" where o.conclusionDate is null ");
 		sql.append(" or exists (select 1 from Complain c where c.solvedDate is null and c.order.id = o.id ) ");
-		sql.append(" order by o.supplier.supplierName ");
+		sql.append(" order by o.supplier.supplierName asc, o.id desc ");
 
 		List<Order> orderList = (List<Order>) entityManager.createQuery(sql.toString()).getResultList();
 		result.include("orderList", orderList);

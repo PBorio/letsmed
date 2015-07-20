@@ -72,7 +72,7 @@ public class ProductCategoryLineDemo {
 
 	public void sumItemValue(OrderItem item) {
 		int mes  = new DateTime(item.getOrder().getOrderDate()).getMonthOfYear();
-		Double valor = item.getTotalValue();
+		Double valor = item.getTotalProducts();
 		if (mes == 1){
 			this.januaryValue += valor;
 		}else if (mes==2){

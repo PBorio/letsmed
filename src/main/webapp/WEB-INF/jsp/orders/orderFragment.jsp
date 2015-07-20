@@ -12,9 +12,7 @@
 	</div>
 	<table class="table table-striped table-bordered">
 	  <thead>
-	  	  <tr>
-	  	    <th colspan="4">Order Itens</th>
-	  	  </tr>
+	  	  <tr><th colspan="4">Order Itens</th></tr>
 		  <tr>
 		   <th width="40%">Description</th>
 		   <th width="10%">Quantity</th>
@@ -28,7 +26,7 @@
 		  		<td class="center">${item.product.description}</td>
 		  		<td class="center">${item.quantity}</td>
 		  		<td class="center">${item.unitPrice}</td>
-		  		<td class="center">${item.totalValue}</td>
+		  		<td class="center">${item.totalProducts}</td>
 	  	  </tr>
 	  	</c:forEach>
 	  </tbody>

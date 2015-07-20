@@ -76,7 +76,7 @@ public class ProductsController {
 	@SuppressWarnings("unchecked")
 	@Get
 	@Path("/products/searchByDescription.json")
-	public void buscarClientesPorNome(String term) {
+	public void searchProductsByDescripion(String term) {
 		String[] terms = term.split(" ");
 		StringBuilder sql = new StringBuilder();
 		sql.append(" from Product p ");

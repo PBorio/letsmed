@@ -33,6 +33,9 @@ public class Supplier {
 	
 	@ManyToOne
 	private ExpenseAccount expenseAccount;
+	
+	@ManyToOne
+	private User user;
 
 	public Long getId() {
 		return id;
@@ -112,6 +115,14 @@ public class Supplier {
 
 	public void setCountry(String country) {
 		this.country = country;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }
