@@ -8,7 +8,7 @@ ADD CONSTRAINT `fk_supplier_user`
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
   
- update suppliers set user_id = 4 where id =  2;
+update suppliers set user_id = 4 where id =  2;
 update suppliers set user_id = 1 where id = 3;
 update suppliers set user_id =1 where id = 4;
 update suppliers set user_id =2 where id = 5;
