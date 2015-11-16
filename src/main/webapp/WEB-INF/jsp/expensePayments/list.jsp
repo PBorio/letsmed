@@ -28,7 +28,7 @@
 	  		<td class="center"><a href="<c:url value='/expensePayments/${expensePayment.id}'/>">${expensePayment.expenseAccount.description}</a></td>
 	  		<td class="center"><a href="<c:url value='/expensePayments/${expensePayment.id}'/>">${expensePayment.bankAccount.description}</a></td>
 	  		<td class="center"><a href="<c:url value='/expensePayments/${expensePayment.id}'/>">${expensePayment.office.officeName}</a></td>
-	  		<td class="center"><a href="<c:url value='/expensePayments/${expensePayment.id}'/>">${expensePayment.value}</a></td>
+	  		<td class="center"><a href="<c:url value='/expensePayments/${expensePayment.id}'/>"><fmt:formatNumber value='${expensePayment.value}' pattern='#,##0.00'/></a></td>
   	  		<td class="center">
 				<a href="" onclick="remove(${expensePayment.id}); return false;" class="btn btn-danger"><i class="halflings-icon trash halflings-icon"></i></a>	        	 
 	        </td>

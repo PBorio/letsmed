@@ -45,5 +45,15 @@ public class ProformaConfirmationController {
 		entityManager.merge(order);
 		result.redirectTo(TimelineController.class).timeline();
 	}
-
+	
+	@Get
+	@Path("/proformaConfirmation/confirBoth/{id}")
+	@Transactional
+	public void confirmBoth(Long id) {
+		Order order = entityManager.find(Order.class, id);
+		order.setProformaConfirmationDate(new Date());
+		order.setArtworkConfirmationDate(new Date());
+		entityManager.merge(order);
+		result.redirectTo(TimelineController.class).timeline();
+	}
 }

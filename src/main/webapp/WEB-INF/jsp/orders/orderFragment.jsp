@@ -2,9 +2,11 @@
 	<div class="task low">
 		<div class="desc">
 			<input type="hidden" value="${order.id}" name="order.id" />
-			<div class="title">Order N. ${order.id} - ${order.customer.name}</div>
+			<div class="title">Order: ${order.orderNumber} - ${order.customer.name}</div>
 			<div>Value: <fmt:formatNumber value='${order.totalValue}' pattern='#,##0.00'/></div>
+			<div>Commission: <fmt:formatNumber value='${order.commisionValue}' pattern='#,##0.00'/></div>
 			<div>Balance: <fmt:formatNumber value='${order.balance}' pattern='#,##0.00'/></div>
+			<div>Supplier Balance: <fmt:formatNumber value='${order.supplierBalance}' pattern='#,##0.00'/></div>
 		</div>
 		<div class="time">
 			<div class="date"><fmt:formatDate value='${order.orderDate}'  pattern='MM/dd/yyyy' /></div>
@@ -24,9 +26,9 @@
 	  	<c:forEach var="item" items="${order.itens}" varStatus="idx">	
 	  	  <tr>
 		  		<td class="center">${item.product.description}</td>
-		  		<td class="center">${item.quantity}</td>
-		  		<td class="center">${item.unitPrice}</td>
-		  		<td class="center">${item.totalProducts}</td>
+		  		<td class="center"><fmt:formatNumber value='${item.quantity}' pattern='#,###'/></td>
+		  		<td class="center"><fmt:formatNumber value='${item.unitPrice}' pattern='#,##0.00000'/></td>
+		  		<td class="center"><fmt:formatNumber value='${item.totalProducts}' pattern='#,##0.00'/></td>
 	  	  </tr>
 	  	</c:forEach>
 	  </tbody>

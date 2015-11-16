@@ -157,10 +157,11 @@
 	    <li class="active"><a href="#tab1" data-toggle="tab">Itens</a></li>
 	    <li><a href="#tab2" data-toggle="tab">Shipment Details</a></li>
 	    <li><a href="#tab3" data-toggle="tab">Status Details</a></li>
+	    <li><a href="#tab4" data-toggle="tab">Delivery Date History</a></li>
 	  </ul>
 	  <div class="tab-content">
 	    <div class="tab-pane active" id="tab1">
-	      <div class="box-header" data-original-title>
+	        <div class="box-header" data-original-title>
 				<h2><i class="halflings-icon edit"></i><span class="break"></span>Products</h2>
 			</div>
 			<div class="box-content">
@@ -170,9 +171,12 @@
 					<td width="20%" >Product</td>
 					<td >Quantity</td>
 					<td width="15%" >Units</td>
+					<td >Buy Price</td>
 					<td >Price</td>
+					<td >Total Buy Price</td>
 					<td >Total Products</td>
-					<td >Commision</td>
+					<td >Commission %</td>
+					<td >Commission Value</td>
 					<td >Total</td>
 					<td ></td>
 				  </tr>
@@ -182,15 +186,21 @@
 				 	<tr id='item-${item.id}'>
 				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-product-${idx.index}' >${item.completeDescription} </a>
 				 	    </td>
-				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>'  id='a-quantity-${idx.index}' >${item.quantity}</a>
+				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>'  id='a-quantity-${idx.index}' ><fmt:formatNumber value='${item.quantity}' pattern='#,###'/></a>
 				 	  </td>
 				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-unit-${idx.index}' >${item.unitOfMeasure.description}</a>
 				 	  </td>
-				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-unit-price-${idx.index}' ><fmt:formatNumber value='${item.unitPrice}' pattern='#,##0.00'/></a>
+				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-unit-price-${idx.index}' ><fmt:formatNumber value='${item.buyPrice}' pattern='#,##0.00000'/></a>
+				 	  </td>
+				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-unit-price-${idx.index}' ><fmt:formatNumber value='${item.unitPrice}' pattern='#,##0.00000'/></a>
+				 	  </td>
+				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-total-value-${idx.index}' ><fmt:formatNumber value='${item.totalBuyValue}' pattern='#,##0.00'/></a>
 				 	  </td>
 				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-total-value-${idx.index}' ><fmt:formatNumber value='${item.totalProducts}' pattern='#,##0.00'/></a>
 				 	  </td>
-				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-commision-${idx.index}' ><fmt:formatNumber value='${item.commision}' pattern='#,##0.00'/></a>
+				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-commision-${idx.index}' ><fmt:formatNumber value='${item.commision}' pattern='#,##0.00000'/></a>
+				 	  </td>
+				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-commision-${idx.index}' ><fmt:formatNumber value='${item.commisionValue}' pattern='#,##0.00'/></a>
 				 	  </td>
 				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-commision-${idx.index}' ><fmt:formatNumber value='${item.totalWithCommision}' pattern='#,##0.00'/></a>
 				 	  </td>
@@ -336,7 +346,7 @@
 				 	  <td><fmt:formatDate value='${order.originalDocumentDate}' pattern='MM/dd/yyyy'/></td>
 				 	</tr>
 				 	<tr>
-				 	  <td>Commision Payment</td>
+				 	  <td>Commission Payment</td>
 				 	  <td><fmt:formatDate value='${order.commisionPaymentDate}' pattern='MM/dd/yyyy'/></td>
 				 	</tr>
 				</tbody>
@@ -349,6 +359,29 @@
 			   </c:if>
 			 </div>
 			</div>
+	    </div>
+	    <div class="tab-pane" id="tab4">
+	    	<div class="box-header" data-original-title>
+				<h2><i class="halflings-icon edit"></i><span class="break"></span>Delivery Date History</h2>
+			</div>
+			<div class="box-content">
+			  <table class="table table-striped table-bordered" id="table-item">
+				<thead>
+				  <tr>
+					<td width="20%" >Changed At</td>
+					<td width="20%" >Previous Delivery Dates</td>
+					<td ></td>
+				  </tr>
+				</thead>
+				<tbody id="tb-itens">
+				   <c:forEach var="history" items="${order.orderHistories}" varStatus="idx">
+				 	<tr>
+				 	  <td><fmt:formatDate value='${history.changeDate}' pattern='MM/dd/yyyy'/></td>
+				 	  <td><fmt:formatDate value='${history.deliveryDate}' pattern='MM/dd/yyyy'/></td>
+				 	</tr>
+				 </c:forEach>
+				</tbody>
+			 </table>
 	    </div>
 	  </div>
 	</div>
@@ -365,6 +398,11 @@
 	    <c:when test="${order.waitingSupplierProforma}">
 	       <a href="<c:url value='/supplierProforma/confirm/${order.id}'/>" class="btn btn-primary">Supplier Proforma Arrived</a>
 	    </c:when>
+	    <c:when test="${order.waitingProformaConfirmationAndArtwork}">
+		      <a href="<c:url value='/proformaConfirmation/confirm/${order.id}'/>" class="btn btn-primary">Proforma Confirmed</a>
+		      <a href="<c:url value='/artworkConfirmation/confirm/${order.id}'/>" class="btn btn-primary">Artwork Confirmed</a>
+		      <a href="<c:url value='/proformaConfirmation/confirBoth/${order.id}'/>" class="btn btn-primary">Proforma and Artwork Confirmed</a>
+	  	 </c:when>
 	    <c:when test="${order.waitingProformaConfirmation}">
 	       <a href="<c:url value='/proformaConfirmation/confirm/${order.id}'/>" class="btn btn-primary">Proforma Confirmed</a>
 	    </c:when>
@@ -384,6 +422,7 @@
 	       <a href="<c:url value='/conclusion/confirm/${order.id}'/>" class="btn btn-primary">Finished</a>
 	    </c:when>
       </c:choose>
+      
       <a href="<c:url value='/timeline'/>" class="btn btn-primary">Back to Timeline</a>
 	  <c:if test="${order.id != null}">
 		  <a href="<c:url value='/orders/print/purchase/${order.id}'/>" class="btn btn-success">Print Purchase Order</a>
@@ -430,6 +469,13 @@ $(document).ready(function() {
 function setCostumer(customer){
 	$('#order\\.customer\\.name').val(customer.text);
 	$('#order\\.customer\\.code').val(customer.code);
+	
+	$.getJSON('/letsmed/customers/nextnumber.json', {
+		id : customer.id
+		}, function(json_result) {
+			console.log(json_result);
+			$('#order\\.orderNumber').val(json_result);
+	});  
 }
 
 function setSupplier(supplier){

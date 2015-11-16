@@ -15,10 +15,13 @@ import javax.persistence.Table;
 
 import org.joda.time.DateTime;
 
+import br.com.weblogia.domain.OrderCommisionPayment;
+import br.com.weblogia.domain.OrderSupplierPayment;
 import br.com.weblogia.letsmed.domain.helpers.Arredondamento;
 import br.com.weblogia.letsmed.domain.service.OrderStatus;
 import br.com.weblogia.letsmed.domain.service.OrderStatusFactory;
 import br.com.weblogia.letsmed.domain.tipos.NegotiationType;
+import br.com.weblogia.letsmed.domain.tipos.TransactionType;
 
 @Entity
 @Table(name="orders")
@@ -100,7 +103,16 @@ public class Order {
 	private List<OrderPayment> payments = new ArrayList<OrderPayment>();
 	
 	@OneToMany(mappedBy="order")
+	private List<OrderSupplierPayment> supplierPayments = new ArrayList<OrderSupplierPayment>();
+	
+	@OneToMany(mappedBy="order")
 	private List<Complain> complains = new ArrayList<Complain>();
+
+	@OneToMany(mappedBy="order")
+	private List<OrderCommisionPayment> comissionPayments = new ArrayList<OrderCommisionPayment>();
+	
+	@OneToMany(mappedBy="order")
+	private List<OrderHistory> orderHistories = new ArrayList<OrderHistory>();
 
 	public int getItensNumber(){
 		return this.itens.size();
@@ -139,10 +151,29 @@ public class Order {
 		return new Arredondamento().arredondar(value - paidValue);
 	}
 	
+	public Double getSupplierBalance() {
+		Double value = this.getTotalBuyValue();
+		Double paidValue = 0.0;
+		
+		paidValue = this.getSupplierPaidValue();
+		
+		return new Arredondamento().arredondar(value - paidValue);
+	}
+
 	public Double getPaidValue() {
 		Double result = 0.0;
 		
 		for (OrderPayment payment : this.payments){
+			result += payment.getValue();
+		}
+		
+		return new Arredondamento().arredondar(result);
+	}
+	
+	private Double getSupplierPaidValue() {
+		Double result = 0.0;
+		
+		for (OrderSupplierPayment payment : this.supplierPayments){
 			result += payment.getValue();
 		}
 		
@@ -175,6 +206,13 @@ public class Order {
 		
 		return (this.getBalance() <= 0.0);
 	}
+	
+	private boolean isSupplierPaid() {
+		if (this.getTotalBuyValue().doubleValue() == 0.0)
+			return false;
+		
+		return (this.getSupplierBalance() <= 0.0);
+	}
 
 	public Date getLastPaymentDate() {
 		if (this.payments == null || this.payments.size() == 0)
@@ -183,6 +221,20 @@ public class Order {
 		DateTime ultimaData = null;
 		
 		for (OrderPayment op : this.payments){
+			if (ultimaData == null || ultimaData.isBefore(new DateTime(op.getPaymentDate().getTime())))
+				ultimaData = new DateTime(op.getPaymentDate().getTime());
+		}
+		
+		return ultimaData.toDate();
+	}
+	
+	public Date getLastSupplierPaymentDate() {
+		if (this.supplierPayments == null || this.supplierPayments.size() == 0)
+			return null;
+		
+		DateTime ultimaData = null;
+		
+		for (OrderSupplierPayment op : this.supplierPayments){
 			if (ultimaData == null || ultimaData.isBefore(new DateTime(op.getPaymentDate().getTime())))
 				ultimaData = new DateTime(op.getPaymentDate().getTime());
 		}
@@ -228,6 +280,13 @@ public class Order {
 		
 		return (this.getPaidValue().doubleValue() > 0.0 && this.getBalance().doubleValue() > 0.0);
 	}
+	
+	public boolean isSupplierAdvancedPaid() {
+		if (this.getTotalBuyValue().doubleValue() == 0.0)
+			return false;
+		
+		return (this.getSupplierPaidValue().doubleValue() > 0.0 && this.getSupplierBalance().doubleValue() > 0.0);
+	}
 
 	public OrderStatus getStatus(){
 		return new OrderStatusFactory().getStatus(this);
@@ -253,6 +312,13 @@ public class Order {
 		return (this.proformaConfirmationDate != null && this.artworkConfirmationDate == null);
 	}
 
+	public boolean isWaitingProformaConfirmationAndArtwork(){
+		if (supplierProformaDate == null)
+			return false;
+		
+		return (this.proformaConfirmationDate == null && this.artworkConfirmationDate == null);
+	}
+	
 	public boolean isWaitingAdvancedPayment() {
 		
 		if(negotiationTerm == null)
@@ -262,6 +328,21 @@ public class Order {
 			this.negotiationTerm.getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT)){
 			return ((this.proformaConfirmationDate != null && this.artworkConfirmationDate != null) && !this.isPaid() && !this.isAdvancedPaid());
 		}
+		return false;
+	}
+	
+	public boolean isWaitingAdvancedSupplierPayment() {
+		if(negotiationTerm == null)
+			return false;
+
+		if (isWaitingAdvancedPayment())
+			return false;
+		
+		if (this.negotiationTerm.getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_AGAINST_COPY)||
+			this.negotiationTerm.getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT)){
+			return ((this.proformaConfirmationDate != null && this.artworkConfirmationDate != null) && !this.isSupplierPaid() && !this.isSupplierAdvancedPaid());
+		}
+		
 		return false;
 	}
 
@@ -337,6 +418,34 @@ public class Order {
 			NegotiationType.TT_ADVANCE_AND_BALANCE_AGAINST_COPY.equals(this.negotiationTerm.getNegotiationType())){
 			return (this.copyDocumentDate != null && this.originalDocumentDate == null);
 		}
+		return false;
+	}
+	
+	public boolean isWaitingSupplierToBePaid() {
+		
+		if (negotiationTerm == null)
+			return false;
+		
+		if (this.isSupplierPaid())
+			return false;
+		
+		if (isWaitingOrderToBePaid())
+			return false;
+		
+		if (NegotiationType.LC_AT_SIGHT.equals(this.negotiationTerm.getNegotiationType())){
+			return ((this.proformaConfirmationDate != null && this.artworkConfirmationDate != null) && !this.isForwardDetailsSent());
+		}
+		
+		if (NegotiationType.TT_100_BEFORE_SHIPMENT.equals(this.negotiationTerm.getNegotiationType())||
+			NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT.equals(this.negotiationTerm.getNegotiationType())){
+			return (this.isForwardDetailsSent() && this.shipDate == null);
+		}
+		
+		if (NegotiationType.TT_100_AGAINST_COPY.equals(this.negotiationTerm.getNegotiationType())||
+			NegotiationType.TT_ADVANCE_AND_BALANCE_AGAINST_COPY.equals(this.negotiationTerm.getNegotiationType())){
+			return (this.copyDocumentDate != null && this.originalDocumentDate == null);
+		}
+		
 		return false;
 	}
 
@@ -461,7 +570,6 @@ public class Order {
 	}
 
 	public Double getRevenueValue() {
-		//TODO: Take conifg out of the code
 		if (this.transactionTerm == null || this.transactionTerm.getId() == null )
 			return 0.0;
 		
@@ -661,4 +769,29 @@ public class Order {
 		}
 		return false;
 	}
+
+	public List<OrderSupplierPayment> getSupplierPayments() {
+		return this.supplierPayments;
+	}
+
+	public List<OrderCommisionPayment> getCommisionPayments() {
+		return this.comissionPayments ;
+	}
+
+	public boolean isProfit(){
+		if (this.transactionTerm == null)
+			return false;
+		
+		return (TransactionType.PROFIT.equals(this.transactionTerm.getTransactionType()));
+	}
+
+	public List<Revenue> getComissionRevenues() {
+		return comissionRevenues;
+	}
+
+	public List<OrderHistory> getOrderHistories() {
+		return orderHistories;
+	}
+
+
 }

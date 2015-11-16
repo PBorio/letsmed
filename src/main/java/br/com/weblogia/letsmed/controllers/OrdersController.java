@@ -401,5 +401,6 @@ public class OrdersController {
 		validator.addIf( order.getCustomer() == null,new I18nMessage("cus","order.without.customer"));
 		validator.addIf( order.getTransactionTerm() == null,new I18nMessage("cus","order.without.transaction"));
 		validator.addIf( order.getNegotiationTerm() == null,new I18nMessage("cus","order.without.negotiation"));
+		validator.addIf( order.getOrderNumber() == null,new I18nMessage("cus","order.without.number"));
 	}
 }

@@ -26,7 +26,7 @@ public class OrderItem {
 	@ManyToOne
 	private Product product;
 	
-	private Integer quantity = 0;
+	private Double quantity = 0.0;
 	
 	private Double unitPrice = 0.0;
 	
@@ -96,11 +96,11 @@ public class OrderItem {
 		this.product = product;
 	}
 
-	public Integer getQuantity() {
+	public Double getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Integer quantity) {
+	public void setQuantity(Double quantity) {
 		this.quantity = quantity;
 	}
 
@@ -193,6 +193,10 @@ public class OrderItem {
 	}
 
 	public Double getCommisionValue() {
+		
+		if (quantity == null || unitPrice == null || commision == null)
+			return 0.0;
+		
 		return ((this.quantity * this.unitPrice) * (this.commision/100));
 	}
 

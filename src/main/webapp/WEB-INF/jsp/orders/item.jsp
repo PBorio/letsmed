@@ -31,10 +31,11 @@
 	<div class="task low">
 		<div class="desc">
 			<input type="hidden" value="${order.id}" name="order.id" />
-			<div class="title">Order N. ${order.id} - ${order.customer.name}</div>
+			<div class="title">Order: ${order.orderNumber} - ${order.customer.name}</div>
 			<div>Value: <fmt:formatNumber value='${order.totalValue}' pattern='#,##0.00'/></div>
+			<div>Commission: <fmt:formatNumber value='${order.commisionValue}' pattern='#,##0.00'/></div>
 			<div>Balance: <fmt:formatNumber value='${order.balance}' pattern='#,##0.00'/></div>
-			<div>Comission: <fmt:formatNumber value='${order.commisionValue}' pattern='#,##0.00'/></div>
+			<div>Supplier Balance: <fmt:formatNumber value='${order.supplierBalance}' pattern='#,##0.00'/></div>
 		</div>
 		<div class="time">
 			<div class="date"><fmt:formatDate value='${order.orderDate}'  pattern='MM/dd/yyyy' /></div>
@@ -74,7 +75,8 @@
 			<div class="control-group">
 			  <label class="control-label col-xs2">Quantity:</label>
 			  <div class="controls">
-			    <input type="text" class="input-xlarge span12" data-behaviour="inteiro" id="item.quantity" name="item.quantity" value="${item.quantity }" onchange="calculateTotalSell(); calculateTotalBuy(); return false;" />
+			    <input type="text" class="input-xlarge span12" data-behaviour="inteiro" id="item.quantity" name="item.quantity" 
+			    		value="<fmt:formatNumber value='${item.quantity}' pattern='#,###'/>" onchange="calculateTotalSell(); calculateTotalBuy(); return false;" />
 			  </div>
 			</div>
 			
@@ -133,14 +135,24 @@
 		 </div>
 		</div>
 		<div class="row-fluid">
-			 <div class="span3">
-				<div class="control-group">
-				  <label class="control-label col-xs2">Commision:</label>
-				  <div class="controls">
-				    <input type="text" class="input-xlarge span12" data-behaviour="valor" id="item.commision" name="item.commision" value="<fmt:formatNumber value='${item.commision }' pattern='#,##0.00'/>" onchange="calculateTotalSell(); return false;"  />
-				  </div>
+			<c:if test="${not item.order.profit}">
+				 <div class="span3">
+					<div class="control-group">
+					  <label class="control-label col-xs2">Commission %:</label>
+					  <div class="controls">
+					    <input type="text" class="input-xlarge span12" data-behaviour="valordecimal" id="item.commision" name="item.commision" value="<fmt:formatNumber value='${item.commision }' pattern='#,##0.00000'/>" onchange="calculateTotalSell(); return false;"  />
+					  </div>
+					</div>
 				</div>
-			</div>
+				<div class="span3">
+					<div class="control-group">
+					  <label class="control-label col-xs2">Commission Value:</label>
+					  <div class="controls">
+					    <input type="text" class="input-xlarge span12" data-behaviour="valor" id="item.commisionValue" name="item.commisionValue" value="<fmt:formatNumber value='${item.commisionValue}' pattern='#,##0.00'/>" onchange="calculateCommisionPercentual(); return false;"  />
+					  </div>
+					</div>
+				</div>
+			</c:if>
 			 <div class="span3">
 				<div class="control-group">
 				  <label class="control-label col-xs2">Total Value:</label>
@@ -217,36 +229,88 @@ $(document).ready(function() {
 
 
 function calculateTotalBuy() {
-	var quantity  =  parseFloat($("#item\\.quantity").val());
-	var price = parseFloat($("#item\\.buyPrice").val());
+	var quantity  = $("#item\\.quantity").val();  
+	quantity = quantity.replace(/,/g, '');
+	quantity = parseFloat(quantity);
+	
+	var price = $("#item\\.buyPrice").val();
+	price = price.replace(/,/g, '');
+	price = parseFloat(price);
+	
 	var total = price * quantity;
 	
 	if(total){
+		total = total.toFixed(2);
 		$("#total-buy-price").val(total);
+		$('[data-behaviour~=valor]').setMask('decimal-us');
+		$('[data-behaviour~=valordecimal]').setMask('decimal-us-5');
 	}
 }
 
 function calculateTotalSell() {
-	var quantity  =  parseFloat($("#item\\.quantity").val());
-	var price = parseFloat($("#item\\.unitPrice").val());
-	var commision = parseFloat($("#item\\.commision").val());
+	var quantity  = $("#item\\.quantity").val();  
+	quantity = quantity.replace(/,/g, '');
+	quantity = parseFloat(quantity);
 	
-	if (!commision) commision = 0.0;
+	var price = $("#item\\.unitPrice").val();
+	price = price.replace(/,/g, '');
+	price = parseFloat(price);
+	
+	var commision = $("#item\\.commision").val();
+	if (commision){
+		commision = commision.replace(/,/g, '');
+		commision = parseFloat(commision);
+	}else{
+		commision = 0.0;
+	}
 	
 	var totalSell = price * quantity;
 	if(totalSell){
 		$("#total-sell-price").val(totalSell);
 		
 		var commisionValue = (totalSell * (commision/100));
+		var total = totalSell+commisionValue;
 		
-		$("#total-sell-price").val(totalSell);
-		$("#total-price").val(totalSell+commisionValue);
+		$("#total-sell-price").val(totalSell.toFixed(2));
+		$("#total-price").val(total.toFixed(2));
+		$("#item\\.commisionValue").val(commisionValue.toFixed(2));
+		$('[data-behaviour~=valor]').setMask('decimal-us');
+		$('[data-behaviour~=valordecimal]').setMask('decimal-us-5');
 	}
 }
 
+function calculateCommisionPercentual(){
+	
+	var quantity  = $("#item\\.quantity").val();  
+	quantity = quantity.replace(/,/g, '');
+	quantity = parseFloat(quantity);
+	
+	var price = $("#item\\.unitPrice").val();
+	price = price.replace(/,/g, '');
+	price = parseFloat(price);
+	
+	var commisionValue = $("#item\\.commisionValue").val();
+	if (commisionValue){
+		commisionValue = commisionValue.replace(/,/g, '');
+		commisionValue = parseFloat(commisionValue);	
+	}
+	
+	
+	var totalSell = price * quantity;
+	if (commisionValue && totalSell){
+		var commision = ((commisionValue/totalSell) * 100);
+		var total = totalSell+commisionValue;
+		
+		$("#total-sell-price").val(totalSell.toFixed(2));
+		$("#total-price").val(total.toFixed(2));
+		$("#item\\.commision").val(commision.toFixed(5));
+		$('[data-behaviour~=valor]').setMask('decimal-us');
+		$('[data-behaviour~=valordecimal]').setMask('decimal-us-5');
+	}
+	
+}
 
 function setProduct(item){
-
    	$('#item\\.product\\.id').val(item.id);
 	$('#item\\.buyPrice').val(item.buyPrice);
 	$('#item\\.unitPrice').val(item.sellPrice);

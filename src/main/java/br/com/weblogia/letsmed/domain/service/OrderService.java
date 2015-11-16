@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
 import br.com.weblogia.letsmed.domain.Customer;
 import br.com.weblogia.letsmed.domain.Expense;
 import br.com.weblogia.letsmed.domain.Order;
+import br.com.weblogia.letsmed.domain.OrderHistory;
 import br.com.weblogia.letsmed.domain.OrderItem;
 import br.com.weblogia.letsmed.domain.Revenue;
 import br.com.weblogia.letsmed.domain.helpers.StringUtils;
@@ -53,26 +54,76 @@ public class OrderService {
 			entityManager.persist(order);
 			saveItens(order);
 		}else{
+			
+			createHistoric(order);
 			entityManager.merge(order);
 		}
 	}
 	
+	private void createHistoric(Order order) {
+		Order old = entityManager.find(Order.class, order.getId());
+		
+		if (order.getDeliveryDate() != null && old.getDeliveryDate() != null){
+			if (!order.getDeliveryDate().equals(old.getDeliveryDate())){
+				OrderHistory oh = new OrderHistory();
+				oh.setDeliveryDate(old.getDeliveryDate());
+				oh.setChangeDate(new Date());
+				oh.setOrder(order);
+				entityManager.persist(oh);
+			}
+		}
+		
+		if (order.getDeliveryDate() == null && old.getDeliveryDate() != null){
+			OrderHistory oh = new OrderHistory();
+			oh.setDeliveryDate(old.getDeliveryDate());
+			oh.setChangeDate(new Date());
+			oh.setOrder(order);
+			entityManager.persist(oh);
+		}
+		
+
+	}
+
 	private void loadOrderCode(Order order) {
-		Customer customer = entityManager.find(Customer.class, order.getCustomer().getId());
-		int year = new DateTime(order.getOrderDate().getTime()).getYearOfCentury();
-		int next = (int) entityManager.createNativeQuery(" select value from sequences where name = 'order_number'").getSingleResult();
 		
-		if (customer.getCode() == null)
+		if (order.getOrderNumber() == null || "".equals(order.getOrderNumber().trim()))
+			throw new RuntimeException("Order number not found. Please inform the order number.");
+		
+		String[] codes = order.getOrderNumber().split("-");
+		if (codes[0] == null){
+			Customer customer = entityManager.find(Customer.class, order.getCustomer().getId());
 			throw new RuntimeException("Customer Code not found. Please inform the "+customer.getName()+" code.");
+		}
+
+		int thiscode = Integer.parseInt(codes[1]);
 		
+		int next = getNextSequence();
+		int year = new DateTime().getYearOfCentury();
+		int nextWithYear = Integer.parseInt(String.valueOf(year)+String.valueOf(next));
+		
+		if (thiscode == nextWithYear){
+			next++;
+			Query q = entityManager.createNativeQuery(" update sequences set value = :next where name = 'order_number' ");
+			q.setParameter("next", next);
+			q.executeUpdate();
+		}
+		
+	}
+
+	private String composeNextOrderNumber(Customer customer,	int next) {
+		int year = new DateTime().getYearOfCentury();
 		String code = customer.getCode()+"-"+String.valueOf(year)+StringUtils.fillCharacts(String.valueOf(next), 3, '0');
-		order.setOrderNumber(code);
-		
-		next++;
-		Query q = entityManager.createNativeQuery(" update sequences set value = :next where name = 'order_number' ");
-		q.setParameter("next", next);
-		q.executeUpdate();
-		
+		return code;
+	}
+
+	private int getNextSequence() {
+		int next = (int) entityManager.createNativeQuery(" select value from sequences where name = 'order_number'").getSingleResult();
+		return next;
+	}
+	
+	public String getNextOrderNumber(Customer customer){
+		int next = getNextSequence();
+		return composeNextOrderNumber(customer, next);
 	}
 
 	private void saveItens(Order order) {

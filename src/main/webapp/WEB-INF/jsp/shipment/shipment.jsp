@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Forward Details</title>
+<title>Shipment</title>
 </head>
 <body>
 <c:forEach var="error" items="${errors}">

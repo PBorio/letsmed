@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.poi.ss.usermodel.Cell;
+
 @Entity
 @Table(name="suppliers")
 public class Supplier {
@@ -36,6 +38,8 @@ public class Supplier {
 	
 	@ManyToOne
 	private User user;
+
+	private String shortName;
 
 	public Long getId() {
 		return id;
@@ -123,6 +127,14 @@ public class Supplier {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
+
+	public String getShortName() {
+		return this.shortName;
 	}
 
 }

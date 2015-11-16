@@ -180,7 +180,7 @@
                     mask: '9999 9999 9999 9999'
                 }, // credit card
                 'integer': {
-                    mask: '999999999999',
+                    mask: '999,999,999,999,999,999',
                     type: 'reverse'
                 },
                 'decimal': {
@@ -189,7 +189,7 @@
                     defaultValue: '000'
                 },
                 'decimal-us': {
-                    mask: '99.999999999999',
+                    mask: '99.999,999,999,999',
                     type: 'reverse',
                     defaultValue: '000'
                 },
@@ -204,7 +204,7 @@
                     defaultValue: '+000'
                 },
                 'decimal-us-5': {
-                    mask: '99999.999999999999',
+                    mask: '99999.999,999,999,999,999',
                     type: 'reverse',
                     defaultValue: '000000'
                 }

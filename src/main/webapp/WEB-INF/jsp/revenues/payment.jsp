@@ -48,7 +48,7 @@
 	  	<c:forEach var="payment" items="${revenue.payments}" varStatus="idx">	
 	  	  <tr id="payment-${payment.id}">
 		  		<td class="center"><fmt:formatDate value='${payment.paymentDate}' pattern='MM/dd/yyyy'/></td>
-		  		<td class="center">${payment.value}</td>
+		  		<td class="center"><fmt:formatNumber value='${revenuePayment.value}' pattern='#,##0.00'/></td>
 		  		<td class="center">
   	  			<a href="<c:url value='/revenues/payment/edit/${payment.id}'/>" class="btn btn-success"><i class="halflings-icon zoom-in halflings-icon"></i></a>
 				<a href="<c:url value='/revenues/payment/delete/${payment.id}'/>" class="btn btn-danger"><i class="halflings-icon trash halflings-icon"></i></a>	        	 
@@ -87,7 +87,7 @@
 		<div class="control-group">
 		  <label class="control-label col-xs2">Value:</label>
 		  <div class="controls">
-		    <input type="text" class="input-xlarge span4" data-behaviour="valor" name="revenuePayment.value" id="revenuePayment.value" value="${revenuePayment.value}" />
+		    <input type="text" class="input-xlarge span2" data-behaviour="valor" name="revenuePayment.value" id="revenuePayment.value" value="<fmt:formatNumber value='${revenuePayment.value}' pattern='#,##0.00'/>" />
 		  </div>
 		</div>
 		</fieldset>
@@ -106,6 +106,7 @@
 $(document).ready(function() {
 	$('[data-behaviour~=datepicker]').datepicker({dateFormat: "mm/dd/yy"});
 	$('[data-behaviour~=datepicker]').setMask({mask: '19/39/9999', autoTab: false});
+	$('[data-behaviour~=valor]').setMask('decimal-us');
 });
 
 function removePayment(id){

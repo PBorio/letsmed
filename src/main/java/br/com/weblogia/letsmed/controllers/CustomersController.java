@@ -21,6 +21,7 @@ import br.com.weblogia.letsmed.domain.Customer;
 import br.com.weblogia.letsmed.domain.Office;
 import br.com.weblogia.letsmed.domain.Partner;
 import br.com.weblogia.letsmed.domain.RevenueAccount;
+import br.com.weblogia.letsmed.domain.service.OrderService;
 
 @Controller
 public class CustomersController {
@@ -56,6 +57,7 @@ public class CustomersController {
 			customer.setCountry(null);
 		
 		validator.addIf(( customer.getName() == null || customer.getName().trim().equals("")),new I18nMessage("cus","customer.without.name"));
+		validator.addIf(( customer.getCode() == null || customer.getName().trim().equals("")),new I18nMessage("cus","customer.without.code"));
 
 		if(validator.hasErrors()){
 			List<Partner> partnerList = (List<Partner>) entityManager.createQuery(" from Partner p order by p.partnerName ").getResultList();
@@ -123,4 +125,15 @@ public class CustomersController {
 				.from((List<Customer>)q.getResultList()).recursive()
 				.serialize();
 	}
+	
+	@Get
+	@Path("/customers/nextnumber.json")
+	public void buscarValor(Long id) {
+		
+		Customer customer = entityManager.find(Customer.class, id);
+		OrderService os = new OrderService(entityManager);
+		String code = os.getNextOrderNumber(customer);
+		result.use(json()).withoutRoot().from(code).serialize();
+	}
+	
 }

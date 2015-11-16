@@ -71,7 +71,8 @@
 		<div class="control-group">
 		  <label class="control-label col-xs2">Value:</label>
 		  <div class="controls">
-		    <input type="text" class="input-xlarge span2" name="expensePayment.value" id="expensePayment.value" value="${expensePayment.value}" />
+		    <input type="text" class="input-xlarge span2" name="expensePayment.value" data-behaviour="valor" 
+		    	   id="expensePayment.value" value="<fmt:formatNumber value='${expensePayment.value}' pattern='#,##0.00'/>" />
 		  </div>
 		</div>
 		<div class="control-group">
@@ -96,6 +97,7 @@
 	$(document).ready(function() {
 		$('[data-behaviour~=datepicker]').datepicker({dateFormat: "mm/dd/yy"});
 		$('[data-behaviour~=datepicker]').setMask({mask: '19/39/9999', autoTab: false});
+		$('[data-behaviour~=valor]').setMask('decimal-us');
 	});
 </script>
 </content>

@@ -36,8 +36,11 @@
   <thead>
 	  <tr>
 	   <th width="10%">Order Number</th>
-	   <th width="10%">Order Date</th>
-	   <th width="40%">Customer Name</th>
+	   <th width="20%">Customer Name</th>
+	   <th >Order Date</th>
+	   <th >Delivery Date</th>
+	   <th >Ship Date</th>
+	   <th >Last Payment Date</th>
 	   <th>Supplier Name</th>
 	   <th>Value</th>
 	   <th>Balance</th>
@@ -47,8 +50,11 @@
   	<c:forEach var="order" items="${orders}">
   	  <tr>
   	  		<td class="center"><a href="<c:url value='/${url}/${order.id}'/>">${order.orderNumber}</a></td>
-	  		<td class="center"><a href="<c:url value='/${url}/${order.id}'/>"><fmt:formatDate value='${order.orderDate}' pattern='MM/dd/yyyy'/></a></td>
 	  		<td class="center"><a href="<c:url value='/${url}/${order.id}'/>">${order.customer.name}</a></td>
+	  		<td class="center"><a href="<c:url value='/${url}/${order.id}'/>"><fmt:formatDate value='${order.orderDate}' pattern='MM/dd/yyyy'/></a></td>
+	  		<td class="center"><a href="<c:url value='/${url}/${order.id}'/>"><fmt:formatDate value='${order.deliveryDate}' pattern='MM/dd/yyyy'/></a></td>
+	  		<td class="center"><a href="<c:url value='/${url}/${order.id}'/>"><fmt:formatDate value='${order.shipDate}' pattern='MM/dd/yyyy'/></a></td>
+	  		<td class="center"><a href="<c:url value='/${url}/${order.id}'/>"><fmt:formatDate value='${order.lastPaymentDate}' pattern='MM/dd/yyyy'/></a></td>
 	  		<td class="center"><a href="<c:url value='/${url}/${order.id}'/>">${order.supplier.supplierName}</a></td>
 	  		<td class="center"><a href="<c:url value='/${url}/${order.id}'/>"><fmt:formatNumber value='${order.totalValue}' pattern='#,##0.00'/></a></td>
 	  		<td class="center"><a href="<c:url value='/${url}/${order.id}'/>"><fmt:formatNumber value='${order.balance}' pattern='#,##0.00'/></a></td>
@@ -59,6 +65,9 @@
   </tbody>
   <tfoot>
      <tr>
+  		<td></td>
+  		<td></td>
+  		<td></td>
   		<td></td>
   		<td></td>
   		<td></td>

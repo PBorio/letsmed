@@ -26,22 +26,43 @@ public class OrderStatusFactory {
 			status.setTitle("Waiting for Proforma and ArtWork Confirmation");
 			
 			if (order.isWaitingProformaConfirmation()){
-				status.setStatusDate(order.getSupplierProformaDate());
-				status.setLastMovement("Supplier Proforma Date");
+				if (order.getArtworkConfirmationDate() == null){
+					status.setStatusDate(order.getSupplierProformaDate());
+					status.setLastMovement("Supplier Proforma Date");
+				}else{
+					status.setStatusDate(order.getArtworkConfirmationDate());
+					status.setLastMovement("Artwork Confirmation Date");
+				}
+				
 			}
 			else 
 			if (order.isWaitingArtworkConfirmation()){
-				status.setStatusDate(order.getProformaConfirmationDate());
-				status.setLastMovement("Proforma Confirmation Date");
+				if (order.getProformaConfirmationDate() == null){
+					status.setStatusDate(order.getSupplierProformaDate());
+					status.setLastMovement("Supplier Proforma Date");
+				}else{
+					status.setStatusDate(order.getProformaConfirmationDate());
+					status.setLastMovement("Proforma Confirmation Date");
+				}
 			}
 			
 			status.setUrl("orders");
-		}else if (order.isWaitingAdvancedPayment()){
+		}else if (order.isWaitingAdvancedPayment()||order.isWaitingAdvancedSupplierPayment()){
+			
 			status.setDescription("to_advanced_paid");
 			status.setTitle("Waiting for Advanced Payment");
-			status.setStatusDate(order.getProformaConfirmationDate());
-			status.setLastMovement("Artwork Confirmation Date");
-			status.setUrl("orderPayments/order");
+			
+			if (order.isWaitingAdvancedPayment()){
+				status.setStatusDate(order.getArtworkConfirmationDate());
+				status.setLastMovement("Artwork Confirmation Date");
+				status.setUrl("orderPayments/order");
+			}
+			else 
+			if (order.isWaitingAdvancedSupplierPayment()){
+				status.setStatusDate(order.getLastPaymentDate());
+				status.setLastMovement("Last Payment Date");
+				status.setUrl("supplierPayments/order");
+			}
 //		}else if (order.isWaitingProductionStart()){
 //			status = populateStatusToProductionSta1rt(order);
 		}else if (order.isWaitingForwardDetails()){
@@ -59,7 +80,7 @@ public class OrderStatusFactory {
 			status.setStatusDate(order.getShipDate());
 			status.setLastMovement("Ship Date");
 			status.setUrl("orders");
-		}else if (order.isWaitingOrderToBePaid()){
+		}else if (order.isWaitingOrderToBePaid() || order.isWaitingSupplierToBePaid()){
 			status = populateStatusToBePaid(order);
 		}else if (order.isWaitingForOriginalDocument()){
 			status.setDescription("to_original_doc_sent");
@@ -89,8 +110,8 @@ public class OrderStatusFactory {
 		
 		if (NegotiationType.TT_100_BEFORE_SHIPMENT.equals(order.getNegotiationTerm().getNegotiationType())||
 			NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT.equals(order.getNegotiationTerm().getNegotiationType())){
-			status.setStatusDate(order.getLastPaymentDate());
-			status.setLastMovement("Last Payment Date");
+			status.setStatusDate(order.getLastSupplierPaymentDate());
+			status.setLastMovement("Last Supplier Payment Date");
 		}else{
 			status.setStatusDate(order.getLastForwardDetailDate());
 			status.setLastMovement("Forward Detail Date");
@@ -106,19 +127,19 @@ public class OrderStatusFactory {
 		status.setUrl("forwardDetails/order");
 		
 		
-		status.setStatusDate(order.getLastPaymentDate());
-		status.setLastMovement("Last Payment Date");
+		status.setStatusDate(order.getLastSupplierPaymentDate());
+		status.setLastMovement("Last Supplier Payment Date");
 		
 		if (order.getNegotiationTerm().getNegotiationType().equals(NegotiationType.LC_AT_SIGHT)){
-			status.setStatusDate(order.getLastPaymentDate());
-			status.setLastMovement("Last Payment Date");
+			status.setStatusDate(order.getLastSupplierPaymentDate());
+			status.setLastMovement("Last Supplier Payment Date");
 			return status;
 		}
 		
 		if (order.getNegotiationTerm().getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_AGAINST_COPY)||
 			order.getNegotiationTerm().getNegotiationType().equals(NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT)){
-			status.setStatusDate(order.getLastPaymentDate());
-			status.setLastMovement("Last Payment Date");
+			status.setStatusDate(order.getLastSupplierPaymentDate());
+			status.setLastMovement("Last Supplier Payment Date");
 			return status;
 		}
 		status.setStatusDate(order.getArtworkConfirmationDate());
@@ -131,7 +152,11 @@ public class OrderStatusFactory {
 		OrderStatus status = new OrderStatus();
 		status.setDescription("to_be_paid");
 		status.setTitle("Waiting Order To Be Paid");
-		status.setUrl("orderPayments/order");
+		
+		if (order.isWaitingOrderToBePaid())
+			status.setUrl("orderPayments/order");
+		else if (order.isWaitingSupplierToBePaid())
+			status.setUrl("supplierPayments/order");
 		
 
 		if (NegotiationType.LC_AT_SIGHT.equals(order.getNegotiationTerm().getNegotiationType())){

@@ -53,7 +53,9 @@
 							<li <c:if test="${controller eq 'orders'}"> class="active" </c:if>>
 								<a class="submenu" href="<c:url value='/orders'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Orders</span></a></li>
 							<li <c:if test="${controller eq 'timeline'}"> class="active" </c:if>>
-								<a class="submenu" href="<c:url value='/orderPayments'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Orders Payment</span></a></li>
+								<a class="submenu" href="<c:url value='/orderPayments'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Orders Payments</span></a></li>
+							<li <c:if test="${controller eq 'timeline'}"> class="active" </c:if>>
+								<a class="submenu" href="<c:url value='/supplierPayments'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Supplier Payments</span></a></li>
 							<li <c:if test="${controller eq 'timeline'}"> class="active" </c:if>>
 								<a class="submenu" href="<c:url value='/forwardDetails'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Order Forward Detail</span></a></li>
 							<li <c:if test="${controller eq 'timeline'}"> class="active" </c:if>>

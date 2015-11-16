@@ -78,7 +78,7 @@
 		  </div>
 		</div>
 		<div class="control-group">
-		  <label class="control-label col-xs2">Comission Category:</label>
+		  <label class="control-label col-xs2">Commission Category:</label>
 		  <div class="controls">
 		    <select id="partner.expenseCategory.id" name="partner.expenseCategory.id" class="input-xlarge span6" >   
               <option value="-1"> Categories...</option>  
