@@ -14,6 +14,7 @@ import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.validator.I18nMessage;
 import br.com.caelum.vraptor.validator.Validator;
 import br.com.weblogia.letsmed.domain.NegotiationTerm;
+import br.com.weblogia.letsmed.domain.tipos.NegotiationType;
 
 @Controller
 public class NegotiationTermsController {
@@ -29,6 +30,7 @@ public class NegotiationTermsController {
 	Validator validator;
 	
 	public void term(){
+		result.include("negotiationTypes", NegotiationType.values());
 		result.include("controller", "negotiationTerms");
 	}
 	
@@ -44,9 +46,11 @@ public class NegotiationTermsController {
 	public void save(NegotiationTerm negotiationTerm){
 		
 		validator.addIf(( negotiationTerm.getDescription() == null || negotiationTerm.getDescription().trim().equals("")),new I18nMessage("rev","term.without.description"));
+		validator.addIf(( negotiationTerm.getNegotiationType() == null ),new I18nMessage("rev","term.without.type"));
 
 		if(validator.hasErrors()){
 			result.include("negotiationTerm", negotiationTerm);
+			result.include("negotiationTypes", NegotiationType.values());
 			validator.onErrorUsePageOf(this).term();
 		}
 		
@@ -64,6 +68,7 @@ public class NegotiationTermsController {
 		NegotiationTerm negotiationTerm = entityManager.find(NegotiationTerm.class, id);
 		result.include("controller", "negotiationTerms");
 		result.include("negotiationTerm", negotiationTerm);
+		result.include("negotiationTypes", NegotiationType.values());
 		result.of(this).term();
 	}
 

@@ -21,7 +21,7 @@
 	</div>
 </c:if>
 <div class="box-header" data-original-title>
-	<h2><i class="halflings-icon edit"></i><span class="break"></span>Order N. ${order.id}</h2>
+	<h2><i class="halflings-icon edit"></i><span class="break"></span>Order N. ${order.orderNumber}</h2>
 </div>
 <form class="form-horizontal" action='<c:url value="/orders/save"/>' method="post">
 <input type="hidden" name="order.id" value="${order.id}" />

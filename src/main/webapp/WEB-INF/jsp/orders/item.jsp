@@ -105,7 +105,7 @@
 			<div class="control-group">
 			  <label class="control-label col-xs2">Buy Price:</label>
 			  <div class="controls">
-			    <input type="text" class="input-xlarge span12" data-behaviour="valordecimal" id="item.buyPrice" name="item.buyPrice"  value="<fmt:formatNumber value='${item.buyPrice}' pattern='#,##0.00000'/>" onchange="calculateTotalBuy(); return false;" />
+			    <input type="number" step="any" class="input-xlarge span12" data-behaviour="valordecimal" id="item.buyPrice" name="item.buyPrice"  value="${item.buyPrice}" onchange="calculateTotalBuy(); return false;" />
 			  </div>
 			</div>
 		  </div>
@@ -113,7 +113,7 @@
 			<div class="control-group">
 			  <label class="control-label col-xs2">Sell Price:</label>
 			  <div class="controls">
-			    <input type="text" class="input-xlarge span12" data-behaviour="valordecimal" id="item.unitPrice" name="item.unitPrice" value="<fmt:formatNumber value='${item.unitPrice}' pattern='#,##0.00000'/>"  onchange="calculateTotalSell(); return false;"/>
+			    <input type="number" step="any" class="input-xlarge span12" data-behaviour="valordecimal" id="item.unitPrice" name="item.unitPrice" value="${item.unitPrice}"  onchange="calculateTotalSell(); return false;"/>
 			  </div>
 			</div>
 		</div>
@@ -140,7 +140,7 @@
 					<div class="control-group">
 					  <label class="control-label col-xs2">Commission %:</label>
 					  <div class="controls">
-					    <input type="text" class="input-xlarge span12" data-behaviour="valordecimal" id="item.commision" name="item.commision" value="<fmt:formatNumber value='${item.commision }' pattern='#,##0.00000'/>" onchange="calculateTotalSell(); return false;"  />
+					    <input type="number" step="any" class="input-xlarge span12" data-behaviour="valordecimal" id="item.commision" name="item.commision" value="${item.commision }" onchange="calculateTotalSell(); return false;"  />
 					  </div>
 					</div>
 				</div>
@@ -148,7 +148,7 @@
 					<div class="control-group">
 					  <label class="control-label col-xs2">Commission Value:</label>
 					  <div class="controls">
-					    <input type="text" class="input-xlarge span12" data-behaviour="valor" id="item.commisionValue" name="item.commisionValue" value="<fmt:formatNumber value='${item.commisionValue}' pattern='#,##0.00'/>" onchange="calculateCommisionPercentual(); return false;"  />
+					    <input type="number" step="any" class="input-xlarge span12" data-behaviour="valor" id="item.commisionValue" name="item.commisionValue" value="<fmt:formatNumber value='${item.commisionValue}' pattern='#,##0.00'/>" onchange="calculateCommisionPercentual(); return false;"  />
 					  </div>
 					</div>
 				</div>
@@ -212,7 +212,7 @@
 <script src="<c:url value='/resources/js/borioselect2.js'/>"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-	$('[data-behaviour~=valordecimal]').setMask('decimal-us-5');
+// 	$('[data-behaviour~=valordecimal]').setMask('decimal-us-5');
 	$('[data-behaviour~=valor]').setMask('decimal-us');
 	$('[data-behaviour~=inteiro]').setMask('integer');
     
@@ -243,7 +243,7 @@ function calculateTotalBuy() {
 		total = total.toFixed(2);
 		$("#total-buy-price").val(total);
 		$('[data-behaviour~=valor]').setMask('decimal-us');
-		$('[data-behaviour~=valordecimal]').setMask('decimal-us-5');
+// 		$('[data-behaviour~=valordecimal]').setMask('decimal-us-5');
 	}
 }
 
@@ -275,7 +275,7 @@ function calculateTotalSell() {
 		$("#total-price").val(total.toFixed(2));
 		$("#item\\.commisionValue").val(commisionValue.toFixed(2));
 		$('[data-behaviour~=valor]').setMask('decimal-us');
-		$('[data-behaviour~=valordecimal]').setMask('decimal-us-5');
+// 		$('[data-behaviour~=valordecimal]').setMask('decimal-us-5');
 	}
 }
 
@@ -305,7 +305,7 @@ function calculateCommisionPercentual(){
 		$("#total-price").val(total.toFixed(2));
 		$("#item\\.commision").val(commision.toFixed(5));
 		$('[data-behaviour~=valor]').setMask('decimal-us');
-		$('[data-behaviour~=valordecimal]').setMask('decimal-us-5');
+// 		$('[data-behaviour~=valordecimal]').setMask('decimal-us-5');
 	}
 	
 }

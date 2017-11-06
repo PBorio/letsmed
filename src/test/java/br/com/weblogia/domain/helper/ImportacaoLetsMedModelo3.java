@@ -38,10 +38,10 @@ import br.com.weblogia.letsmed.domain.TransactionTerm;
 import br.com.weblogia.letsmed.domain.UnitOfMeasure;
 import br.com.weblogia.letsmed.domain.User;
 
-public class ImportacaoLetsMedModelo2 {
+public class ImportacaoLetsMedModelo3 {
 	
 	public static void main(String[] args) throws IOException, ParseException {
-		File initialFile = new File("C:\\Borius\\amazon\\importacao3.xls");
+		File initialFile = new File("C:\\Borius\\amazon\\importacao4.xls");
 		InputStream excel = new FileInputStream(initialFile);
 		Workbook wb = new HSSFWorkbook(new POIFSFileSystem(excel));
 		HSSFSheet sheet = (HSSFSheet) wb.getSheetAt((short)0);
@@ -58,7 +58,7 @@ public class ImportacaoLetsMedModelo2 {
 		
 		for (Row row : sheet){
 
-			System.out.println("Row: "+row.getRowNum()+1);
+			
 			if (row.getRowNum() == 0)
 				continue;
 			
@@ -77,7 +77,7 @@ public class ImportacaoLetsMedModelo2 {
 						
 						if ("Confirmed".equalsIgnoreCase(status)){
 							confirmOrder(order);						
-						}else if("Finished".equalsIgnoreCase(status)){
+						}else if("Complete".equalsIgnoreCase(status)){
 							finishedOrder(order);
 						}else if("Proforma".equalsIgnoreCase(status)){
 							proformaOrder(order);
@@ -137,16 +137,16 @@ public class ImportacaoLetsMedModelo2 {
 					}
 					order.setSupplier(supplier);
 					
-					
+					System.out.println("Order: "+order.getOrderNumber());
 					try{
-						order.setOrderDate(row.getCell(4).getDateCellValue());
+						order.setOrderDate(row.getCell(5).getDateCellValue());
 					}catch (IllegalStateException e){
 						order.setOrderDate(new SimpleDateFormat("dd/MM/yyyy").parse(row.getCell(5).getStringCellValue()));
 					}
 					
-					status = row.getCell(6).getStringCellValue();
+					status = row.getCell(7).getStringCellValue();
 					
-					if (row.getCell(5) != null){
+					if (row.getCell(6) != null){
 						Date shipDate = null;
 						try{
 							shipDate = row.getCell(5).getDateCellValue();
@@ -162,12 +162,12 @@ public class ImportacaoLetsMedModelo2 {
 				if (cell.getColumnIndex() == 11){
 					OrderItem oi = new OrderItem();
 					oi.setOrder(order);
-					oi.setQuantity(row.getCell(12).getNumericCellValue());
-					oi.setBuyPrice(row.getCell(13).getNumericCellValue());
-					oi.setCommision(row.getCell(9).getNumericCellValue());
-					oi.setUnitPrice(row.getCell(15).getNumericCellValue());
+					oi.setQuantity(row.getCell(13).getNumericCellValue());
+					oi.setBuyPrice(row.getCell(14).getNumericCellValue());
+					oi.setCommision(row.getCell(10).getNumericCellValue());
+					oi.setUnitPrice(row.getCell(16).getNumericCellValue());
 					
-					String unity = row.getCell(11).getStringCellValue();
+					String unity = row.getCell(12).getStringCellValue();
 					if("pouch".equals(unity)){
 						UnitOfMeasure unit = new UnitOfMeasure();
 						unit.setId(4l);
@@ -220,7 +220,7 @@ public class ImportacaoLetsMedModelo2 {
 					
 					String productDescription = null;
 					try{
-						productDescription = row.getCell(10).getStringCellValue();
+						productDescription = row.getCell(11).getStringCellValue();
 					}catch(Exception e){
 						System.out.println(order.getOrderNumber());
 						e.printStackTrace();

@@ -355,6 +355,7 @@ public class OrdersController {
 		q.setParameter("id", customer.getId());
 		result.include("orderList", (List<Customer>)q.getResultList());
 		result.include("customer", customer);
+		result.include("url", "orders");
 		result.of(this).list();
 	}
 	

@@ -49,7 +49,10 @@ public class ProductsController {
 	public void save(Product product){
 		
 		validator.addIf(( product.getDescription() == null || product.getDescription().trim().equals("")),new I18nMessage("off","product.without.description"));
-
+		
+		if (product.getProductCategory() != null && product.getProductCategory().getId() == -1)
+			product.setProductCategory(null);
+		
 		if(validator.hasErrors()){
 			result.include("product", product);
 			validator.onErrorUsePageOf(this).product();
@@ -118,5 +121,17 @@ public class ProductsController {
 		@SuppressWarnings("unchecked")
 		List<ProductCategory> productCategoryList = (List<ProductCategory>) entityManager.createQuery(" from ProductCategory pc order by pc.description ").getResultList();
 		result.include("productCategoryList", productCategoryList);		
+	}
+	
+	public static void main(String[] args) {
+		Double total = 0.0;
+		
+		for (int i = 0; i< 100; i++){
+			total += (total*(0.01));
+			total += 500.0;
+			System.out.println(i+1);
+		}
+		
+		System.out.println(total);
 	}
 }

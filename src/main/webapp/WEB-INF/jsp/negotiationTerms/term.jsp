@@ -26,6 +26,20 @@
 		    <input type="text" class="input-xlarge span8" name="negotiationTerm.description" id="negotiationTerm.description" value="${negotiationTerm.description}" />
 		  </div>
 		</div>
+		<div class="control-group">
+		  <label class="control-label col-xs2">Negotiation Type:</label>
+		  <div class="controls">
+		    <select name='negotiationTerm.negotiationType' class='input-xlarge span8' id="type">    
+		         <option value='-1'>Negotiation Type...</option>
+		          <c:forEach var="type" items="${negotiationTypes}">
+		         	<option value='${type}' 
+	                <c:if test="${type == negotiationTerm.negotiationType}"> selected='true'</c:if>> 
+	                	${type.description}
+	                </option>   
+		         </c:forEach>   
+		    </select>
+		  </div>
+		</div>
 	  </fieldset>
     <hr class="hideInIE8"/>
    
