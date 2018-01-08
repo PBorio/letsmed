@@ -57,6 +57,14 @@
 				  </div>
 				</div>
 			</div>
+			<div class="span6">
+				<div class="control-group">
+				  <label class="control-label col-xs2">Delivery Forecast:</label>
+				  <div class="controls">
+				     <input type="text" class="input-xlarge span12" name="order.deliveryForecast" id="order.deliveryForecast" value="${order.deliveryForecast}" />
+				  </div>
+				</div>
+			</div>
 		</div>
 		<div class="control-group">
 		  <label class="control-label col-xs2">Order Number:</label>
@@ -170,7 +178,7 @@
 				  <tr>
 					<td width="20%" >Product</td>
 					<td >Quantity</td>
-					<td width="15%" >Units</td>
+					<td width="10%" >Units</td>
 					<td >Buy Price</td>
 					<td >Price</td>
 					<td >Total Buy Price</td>
@@ -190,19 +198,19 @@
 				 	  </td>
 				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-unit-${idx.index}' >${item.unitOfMeasure.description}</a>
 				 	  </td>
-				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-unit-price-${idx.index}' ><fmt:formatNumber value='${item.buyPrice}' pattern='#,##0.00000'/></a>
+				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-unit-price-${idx.index}' ><fmt:formatNumber value='${item.buyPrice}' pattern='#,##0.00####'/></a>
 				 	  </td>
-				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-unit-price-${idx.index}' ><fmt:formatNumber value='${item.unitPrice}' pattern='#,##0.00000'/></a>
+				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-unit-price-${idx.index}' ><fmt:formatNumber value='${item.unitPrice}' pattern='#,##0.00####'/></a>
 				 	  </td>
-				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-total-value-${idx.index}' ><fmt:formatNumber value='${item.totalBuyValue}' pattern='#,##0.00'/></a>
+				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-total-value-${idx.index}' ><fmt:formatNumber value='${item.totalBuyValue}' pattern='#,##0.00####'/></a>
 				 	  </td>
-				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-total-value-${idx.index}' ><fmt:formatNumber value='${item.totalProducts}' pattern='#,##0.00'/></a>
+				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-total-value-${idx.index}' ><fmt:formatNumber value='${item.totalProducts}' pattern='#,##0.00####'/></a>
 				 	  </td>
-				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-commision-${idx.index}' ><fmt:formatNumber value='${item.commision}' pattern='#,##0.00000'/></a>
+				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-commision-${idx.index}' ><fmt:formatNumber value='${item.commision}' pattern='#,##0.00####'/></a>
 				 	  </td>
-				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-commision-${idx.index}' ><fmt:formatNumber value='${item.commisionValue}' pattern='#,##0.00'/></a>
+				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-commision-${idx.index}' ><fmt:formatNumber value='${item.commisionValue}' pattern='#,##0.00####'/></a>
 				 	  </td>
-				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-commision-${idx.index}' ><fmt:formatNumber value='${item.totalWithCommision}' pattern='#,##0.00'/></a>
+				 	  <td><a  href='<c:url value='/orders/edit/item/${item.id}'/>' id='a-commision-${idx.index}' ><fmt:formatNumber value='${item.totalWithCommision}' pattern='#,##0.00####'/></a>
 				 	  </td>
 				 	  <td><c:if test='${order == null || order.toBeFilledIn}'>
 				 	        <a href='' title='Delete' class='btn btn-danger' onclick='removeItem(${item.id}); return false;'><i class='halflings-icon trash halflings-icon'></i></a>
@@ -252,6 +260,12 @@
 				  <label class="control-label col-xs2">Invoice Number:</label>
 				  <div class="controls">
 				    <input class="input-xlarge span6" name="order.invoiceNumber" value="${order.invoiceNumber}"/>
+				  </div>
+				</div>
+				<div class="control-group">
+				  <label class="control-label col-xs2">Invoice Date:</label>
+				  <div class="controls">
+				    <input type="text" autocomplete="off" class="input-xlarge span2" data-behaviour="datepicker" name="order.invoiceDate" id="order.invoiceDate" value="<fmt:formatDate value='${order.invoiceDate}' pattern='MM/dd/yyyy'/>" />
 				  </div>
 				</div>
 				<div class="control-group">

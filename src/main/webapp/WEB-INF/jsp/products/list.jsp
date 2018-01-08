@@ -10,6 +10,11 @@
 <div class="box-header" data-original-title>
 	<h2><i class="halflings-icon user"></i><span class="break"></span>Products</h2>
 </div>
+<div class="form-actions">
+<a href="<c:url value='/products/product'/>" class="btn btn-primary">New Product</a>
+</div>
+<br>
+<br>
 <div class="box-content">
 
 <div class="row-fluid sortable">		
@@ -47,8 +52,6 @@
 			
 			</div><!--/row-->
 </div>
-<div class="form-actions">
-<a href="<c:url value='/products/product'/>" class="btn btn-primary">New Product</a>
-</div>
+
 </body>
 </html>

@@ -77,6 +77,8 @@ public class Order {
 	
 	private String invoiceNumber;
 	
+	private Date invoiceDate;
+	
 	private String terms;
 	
 	private String landingPort;
@@ -88,6 +90,8 @@ public class Order {
 	private String shipment;
 	
 	private Date deliveryDate;
+	
+	private String deliveryForecast;
 	
 	@OneToMany(mappedBy="order")
 	@OrderBy("id")
@@ -662,7 +666,14 @@ public class Order {
 	public void setInvoiceNumber(String invoiceNumber) {
 		this.invoiceNumber = invoiceNumber;
 	}
+	
+	public Date getInvoiceDate() {
+		return invoiceDate;
+	}
 
+	public void setInvoiceDate(Date invoiceDate) {
+		this.invoiceDate = invoiceDate;
+	}
 	public String getTerms() {
 		return terms;
 	}
@@ -793,5 +804,12 @@ public class Order {
 		return orderHistories;
 	}
 
+	public String getDeliveryForecast() {
+		return deliveryForecast;
+	}
+
+	public void setDeliveryForecast(String deliveryForecast) {
+		this.deliveryForecast = deliveryForecast;
+	}
 
 }

@@ -138,7 +138,7 @@
 			<version>2.7.1</version>
 		</dependency>
 		
-		<dependency>
+		<!-- <dependency>
     		<groupId>br.com.weblogia</groupId>
     		<artifactId>times</artifactId>
     		<version>1.0.0</version>
@@ -148,7 +148,7 @@
     		<groupId>br.com.weblogia</groupId>
     		<artifactId>calibri</artifactId>
     		<version>1.0.0</version>
-		</dependency>
+		</dependency> -->
 		
 		<dependency>
 		    <groupId>br.com.prixma</groupId>

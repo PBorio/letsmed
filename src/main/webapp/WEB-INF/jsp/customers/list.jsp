@@ -10,6 +10,11 @@
 <div class="box-header" data-original-title>
 	<h2><i class="halflings-icon user"></i><span class="break"></span>Customers</h2>
 </div>
+<div class="form-actions">
+	<a href="<c:url value='/customers/customer'/>" class="btn btn-primary">New Customer</a>
+</div>
+<br>
+<br>
 <div class="box-content">
 <table class="table table-striped table-bordered">
   <thead>
@@ -32,8 +37,6 @@
   </tbody>
  </table>            
 </div>
-<div class="form-actions">
-<a href="<c:url value='/customers/customer'/>" class="btn btn-primary">New Customer</a>
-</div>
+
 </body>
 </html>

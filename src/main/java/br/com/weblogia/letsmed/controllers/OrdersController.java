@@ -57,6 +57,7 @@ public class OrdersController {
 	
 	public void order(){
 		Order order = new Order();
+		order.setOrderDate(new Date());
 		loadLists();
 		result.include("order", order);
 		result.include("controller", "orders");

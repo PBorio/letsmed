@@ -22,19 +22,7 @@
     
 	
 	  <fieldset>
-	    <div class="control-group">
-		  <label class="control-label col-xs2">Artible Number:</label>
-		  <div class="controls">
-		    <input type="text" class="input-xlarge span2" name="product.articleNumber" id="product.articleNumber" value="${product.articleNumber}" />
-		  </div>
-		</div>
-		<div class="control-group">
-		  <label class="control-label col-xs2">Description:</label>
-		  <div class="controls">
-		    <input type="text" class="input-xlarge span8" name="product.description" id="product.description" value="${product.description}" />
-		  </div>
-		</div>
-		<div class="control-group">
+	  	<div class="control-group">
 		  <label class="control-label col-xs2">Category:</label>
 		  <div class="controls">
 		    <select id="producot.productCategory.id" name="product.productCategory.id" class="input-xlarge span6" >   
@@ -47,6 +35,24 @@
           </select>
 		  </div>
 		 </div>
+	    <div class="control-group">
+		  <label class="control-label col-xs2">Article Number:</label>
+		  <div class="controls">
+		    <input type="text" class="input-xlarge span2" name="product.articleNumber" id="product.articleNumber" value="${product.articleNumber}" />
+		  </div>
+		</div>
+		<div class="control-group">
+		  <label class="control-label col-xs2">Description:</label>
+		  <div class="controls">
+		    <input type="text" class="input-xlarge span8" name="product.description" id="product.description" value="${product.description}" />
+		  </div>
+		</div>
+		 <div class="control-group">
+		  <label class="control-label col-xs2">Brand Name:</label>
+		  <div class="controls">
+		    <input type="text" class="input-xlarge span8" name="product.brandName" id="product.brandName" value="${product.brandName}" />
+		  </div>
+		</div>
 	  </fieldset>
     <hr class="hideInIE8"/>
    

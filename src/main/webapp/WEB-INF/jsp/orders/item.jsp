@@ -75,6 +75,7 @@
 			<div class="control-group">
 			  <label class="control-label col-xs2">Quantity:</label>
 			  <div class="controls">
+			    <fmt:setLocale value="en_US"/>
 			    <input type="text" class="input-xlarge span12" data-behaviour="inteiro" id="item.quantity" name="item.quantity" 
 			    		value="<fmt:formatNumber value='${item.quantity}' pattern='#,###'/>" onchange="calculateTotalSell(); calculateTotalBuy(); return false;" />
 			  </div>
@@ -105,7 +106,7 @@
 			<div class="control-group">
 			  <label class="control-label col-xs2">Buy Price:</label>
 			  <div class="controls">
-			    <input type="number" step="any" class="input-xlarge span12" data-behaviour="valordecimal" id="item.buyPrice" name="item.buyPrice"  value="${item.buyPrice}" onchange="calculateTotalBuy(); return false;" />
+			    <input type="text" step="any" class="input-xlarge span12" id="item.buyPrice" name="item.buyPrice"  value="<fmt:formatNumber value='${item.buyPrice}' pattern='#,##0.000000'/>" onchange="calculateTotalBuy(); return false;" />
 			  </div>
 			</div>
 		  </div>
@@ -113,7 +114,7 @@
 			<div class="control-group">
 			  <label class="control-label col-xs2">Sell Price:</label>
 			  <div class="controls">
-			    <input type="number" step="any" class="input-xlarge span12" data-behaviour="valordecimal" id="item.unitPrice" name="item.unitPrice" value="${item.unitPrice}"  onchange="calculateTotalSell(); return false;"/>
+			    <input type="text" step="any" class="input-xlarge span12" data-behaviour="valordecimal" id="item.unitPrice" name="item.unitPrice" value="<fmt:formatNumber value='${item.unitPrice}' pattern='#,##0.000000'/>"  onchange="calculateTotalSell(); return false;"/>
 			  </div>
 			</div>
 		</div>
@@ -212,8 +213,6 @@
 <script src="<c:url value='/resources/js/borioselect2.js'/>"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-// 	$('[data-behaviour~=valordecimal]').setMask('decimal-us-5');
-	$('[data-behaviour~=valor]').setMask('decimal-us');
 	$('[data-behaviour~=inteiro]').setMask('integer');
     
     $("#product-select").borioSelect({
@@ -240,9 +239,9 @@ function calculateTotalBuy() {
 	var total = price * quantity;
 	
 	if(total){
-		total = total.toFixed(2);
+		total = total.toFixed(6);
 		$("#total-buy-price").val(total);
-		$('[data-behaviour~=valor]').setMask('decimal-us');
+// 		$('[data-behaviour~=valor]').setMask('decimal-us');
 // 		$('[data-behaviour~=valordecimal]').setMask('decimal-us-5');
 	}
 }
@@ -271,11 +270,9 @@ function calculateTotalSell() {
 		var commisionValue = (totalSell * (commision/100));
 		var total = totalSell+commisionValue;
 		
-		$("#total-sell-price").val(totalSell.toFixed(2));
-		$("#total-price").val(total.toFixed(2));
-		$("#item\\.commisionValue").val(commisionValue.toFixed(2));
-		$('[data-behaviour~=valor]').setMask('decimal-us');
-// 		$('[data-behaviour~=valordecimal]').setMask('decimal-us-5');
+		$("#total-sell-price").val(totalSell.toFixed(6));
+		$("#total-price").val(total.toFixed(6));
+		$("#item\\.commisionValue").val(commisionValue.toFixed(6));
 	}
 }
 
@@ -304,8 +301,6 @@ function calculateCommisionPercentual(){
 		$("#total-sell-price").val(totalSell.toFixed(2));
 		$("#total-price").val(total.toFixed(2));
 		$("#item\\.commision").val(commision.toFixed(5));
-		$('[data-behaviour~=valor]').setMask('decimal-us');
-// 		$('[data-behaviour~=valordecimal]').setMask('decimal-us-5');
 	}
 	
 }

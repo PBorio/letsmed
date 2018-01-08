@@ -36,6 +36,16 @@ public class Product {
 	
 	private Double commision;
 	
+	private String brandName;
+	
+	public String getBrandName() {
+		return brandName;
+	}
+
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
+	}
+
 	public Long getId() {
 		return id;
 	}

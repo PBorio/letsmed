@@ -61,7 +61,7 @@
 		  </div>
 		</div>
 		<div class="control-group">
-		  <label class="control-label col-xs2">Phone Number:</label>
+		  <label class="control-label col-xs2">Fax Number:</label>
 		  <div class="controls">
 		    <input type="text" class="input-xlarge span3" name="customer.phoneNumber2" id="customer.phoneNumber2" value="${customer.phoneNumber2}" />
 		  </div>

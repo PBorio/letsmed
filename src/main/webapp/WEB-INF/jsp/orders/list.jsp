@@ -7,6 +7,11 @@
 <link rel="stylesheet" href="<c:url value='/resources/canvas-theme/css/datepicker.css'/>" type="text/css" media="screen" />
 </head>
 <body>
+<div class="form-actions">
+<a href="<c:url value='/orders/order'/>" class="btn btn-primary">New Order</a>
+</div>
+<br>
+<br>
 <div class="box-header" data-original-title>
 	<h2><i class="halflings-icon user"></i><span class="break"></span>Orders</h2>
 </div>
@@ -50,9 +55,6 @@
   	</c:forEach>
   </tbody>
  </table>            
-</div>
-<div class="form-actions">
-<a href="<c:url value='/orders/order'/>" class="btn btn-primary">New Order</a>
 </div>
 <content tag="local_script">
 <script src="<c:url value='/resources/js/plugins/select2/select2.js'/>"></script>
