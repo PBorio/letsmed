@@ -38,6 +38,12 @@ public class Product {
 	
 	private String brandName;
 	
+	@ManyToOne
+	private Customer customer;
+	
+	@ManyToOne 
+	private Supplier supplier;
+	
 	public String getBrandName() {
 		return brandName;
 	}
@@ -157,6 +163,22 @@ public class Product {
 		 if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
+	public Supplier getSupplier() {
+		return supplier;
+	}
+
+	public void setSupplier(Supplier supplier) {
+		this.supplier = supplier;
 	}
 	
 

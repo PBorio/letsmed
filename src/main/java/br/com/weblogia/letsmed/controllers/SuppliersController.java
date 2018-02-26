@@ -32,6 +32,9 @@ public class SuppliersController {
 	
 	@Inject 
 	Validator validator;
+
+	@Inject
+	private User user;
 	
 	public void supplier(){
 		loadList();
@@ -41,15 +44,36 @@ public class SuppliersController {
 	@Get
 	@Path("/suppliers")
 	public List<Supplier> list(){
+		
+		StringBuilder hql = new StringBuilder();
+		hql.append(" from Supplier s ");
+		
+		if (!user.isAdmin()) {
+			hql.append(" where s.user.id = :id ");
+		}
+		
+		hql.append(" order by s.supplierName ");
+		
+		Query q = entityManager.createQuery(hql.toString());
+		
+		if (!user.isAdmin()) {
+			q.setParameter("id", user.getId());
+		}
+		
 		result.include("controller", "suppliers");
-		return (List<Supplier>) entityManager.createQuery(" from Supplier s order by s.supplierName ").getResultList();
+		return (List<Supplier>) q.getResultList();
 	}
 	
 	@Transactional
 	public void save(Supplier supplier){
 		
-		validator.addIf(( supplier.getSupplierName() == null || supplier.getSupplierName().trim().equals("")),new I18nMessage("off","supplier.without.name"));
+		validator.addIf((supplier.getSupplierName() == null || supplier.getSupplierName().trim().equals("")),new I18nMessage("off","supplier.without.name"));
 
+		if (!user.isAdmin()) {
+			User u = entityManager.find(User.class, user.getId());
+			supplier.setUser(u);
+		}
+		
 		if(validator.hasErrors()){
 			loadList();
 			result.include("partner", supplier);
@@ -85,11 +109,18 @@ public class SuppliersController {
 		StringBuilder sql = new StringBuilder();
 		sql.append(" from Supplier s ");
 		sql.append(" where 1 = 1 ");
-			sql.append(" and s.supplierName like :name");
+	    sql.append(" and s.supplierName like :name");
+	    
+	    if (!user.isAdmin()) {
+	    	sql.append(" and s.user.id = :id");
+		}
 		
 		Query q = entityManager.createQuery(sql.toString());
-		
 		q.setParameter("name", "%"+term+"%");
+		
+		if (!user.isAdmin()) {
+			q.setParameter("id", user.getId());
+		}
 		result.use(json()).withoutRoot()
 				.from((List<Supplier>)q.getResultList()).recursive()
 				.serialize();

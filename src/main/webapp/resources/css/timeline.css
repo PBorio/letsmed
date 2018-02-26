@@ -21,6 +21,8 @@ Timeline UI Base
 }
 
 .jie {
+	border: solid;
+	border-color: #cc3300;
 	background-color: #fedc01;
 }
 

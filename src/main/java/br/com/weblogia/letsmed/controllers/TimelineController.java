@@ -11,9 +11,9 @@ import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.validator.Validator;
-import br.com.weblogia.letsmed.domain.Customer;
+import br.com.weblogia.letsmed.controllers.helpers.TimelineViewer;
 import br.com.weblogia.letsmed.domain.Order;
+import br.com.weblogia.letsmed.domain.User;
 
 @Controller
 public class TimelineController {
@@ -25,8 +25,8 @@ public class TimelineController {
 	@Inject
 	private Result result;
 	
-	@Inject 
-	Validator validator;
+	@Inject
+	private User user;
 	
 	@SuppressWarnings("unchecked")
 	@Get
@@ -34,13 +34,29 @@ public class TimelineController {
 	public void timeline(){
 		StringBuilder sql = new StringBuilder();
 		sql.append(" from Order o ");
+		sql.append(" inner join fetch o.supplier s ");
 		sql.append(" where o.conclusionDate is null ");
+		
+		if (!user.isAdmin()) {
+			sql.append(" and s.user.id = :id ");
+		}
+		
 		sql.append(" or exists (select 1 from Complain c where c.solvedDate is null and c.order.id = o.id ) ");
 		sql.append(" order by o.supplier.supplierName asc, o.id desc ");
 
-		List<Order> orderList = (List<Order>) entityManager.createQuery(sql.toString()).getResultList();
-		result.include("orderList", orderList);
+		Query query = entityManager.createQuery(sql.toString());
+		
+		if (!user.isAdmin()) {
+			query.setParameter("id", user.getId());
+		}
+		
+		List<Order> orderList = (List<Order>) query.getResultList();
+		
+		TimelineViewer timelineViewer = new TimelineViewer(orderList);
+		
+		result.include("timelineViewer", timelineViewer);
 		result.include("controller", "timeline");
+		result.include("user", user);
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -34,6 +34,9 @@ public class Customer {
 	private String countryDesc;
 	
 	@ManyToOne
+	private User user;
+	
+	@ManyToOne
 	private Country country;
 	
 	private String code;
@@ -202,6 +205,14 @@ public class Customer {
 		if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 	

@@ -78,7 +78,11 @@
 					 	Admin
 					 </a>
 					 <ul class="dropdown-menu tasks">
-						<li <c:if test="${controller eq 'accountDetails'}"> class="active" </c:if>>
+					 		<c:if test="${user.admin}">
+							<li <c:if test="${controller eq 'users'}"> class="active" </c:if>>
+								<a class="submenu"  href="<c:url value='/users'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Users</span></a></li>
+							</c:if>
+						    <li <c:if test="${controller eq 'accountDetails'}"> class="active" </c:if>>
 								<a class="submenu"  href="<c:url value='/accountDetails'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Acount Details</span></a></li>
 							<li <c:if test="${controller eq 'statement'}"> class="active" </c:if>>
 								<a class="submenu"  href="<c:url value='/statement'/>"><i class="fa-icon-align-justify"></i><span class="hidden-tablet"> Bank Statements</span></a></li>
@@ -440,12 +444,11 @@
 						<!-- start: User Dropdown -->
 						<li class="dropdown">
 							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-								<i class="halflings-icon white user"></i> Axel Henrich
+								<i class="halflings-icon white user"></i> ${user.name}
 								<span class="caret"></span>
 							</a>
 							<ul class="dropdown-menu">
-								<li><a href="#"><i class="halflings-icon white user"></i> Profile</a></li>
-								<li><a href="login.html"><i class="halflings-icon white off"></i> Logout</a></li>
+								<li><a href="<c:url value='/login/login'/>"><i class="halflings-icon white off"></i> Logout</a></li>
 							</ul>
 						</li>
 						<!-- end: User Dropdown -->

@@ -44,128 +44,165 @@
 	<table id="timeline" class="table table-striped">
 
 	  <thead>
-	  	  <tr><th colspan="13"><a href="<c:url value='/orders/order'/>" class="btn btn-primary">New Order</a></th></tr>	
+	  	  <tr><th colspan="${timelineViewer.columnNumber + 1}"><a href="<c:url value='/orders/order'/>" class="btn btn-primary">New Order</a></th></tr>	
 		  <tr>
 		   <th width="20%">Suppliers</th>	
-	 	   <th width="8%">Waiting for Supplier Proforma</th>
-	 	   <th width="8%">Waiting for Proforma and Artwork Confirmation</th>
-	 	   <th width="8%">Waiting for Advanced Payment</th>
-	 	   <th width="8%">Waiting for Forward Details</th>
-	 	   <th width="8%">Waiting for Shipment</th>
-	 	   <th width="8%">Waiting for Copies to Be Sent</th>
-	 	   <th width="8%">Waiting Order To Be Paid</th>
-	 	   <th width="8%">Waiting for Originals To Be Sent</th>
-	 	   <th width="8%">Waiting for Commission Payment</th>
-	 	   <th width="8%">Complains</th>
+		   <c:forEach var="coluna" items="${timelineViewer.columns}">
+			   <th>${coluna.supplier.supplierName }</th>
+	 	   </c:forEach>
 		  </tr>
 	  </thead>   
 	  <tbody>
-	  	<c:forEach var="order" items="${orderList }">
 	  	  <tr>
-	  	  		<td><a  href='<c:url value='/orders/${order.id}'/>'>${order.supplier.supplierName}</a></td>
-		        <td>
-	  	  		  <c:if test="${order.status.description == 'supplier_proforma' }">
-	  	  		  <div class="circle ${order.supplier.user.login}">
-	  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-	  	  			  ${order.orderNumber} <br/>
-		  	  			${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
-	  	  			</a> 
+	  	  	<td width="20%">Waiting for Supplier Proforma</td>	
+		    <c:forEach var="coluna" items="${timelineViewer.columns}">
+			   <td><c:forEach var="order" items="${coluna.ordersWaitingSupplierProforma}">
+			   		<div class="circle jie">
+		  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
+		  	  			  ${order.orderNumber} <br/>
+			  	  		  <fmt:formatDate value='${order.deliveryDate}' pattern='MM/dd/yyyy'/>
+		  	  			</a> 
 	  	  			</div>
-	  	  		  </c:if>    	 
-		        </td>
-		        <td>
-	  	  		  <c:if test="${order.status.description == 'to_proforma' }">
-	  	  		    <div class="circle ${order.supplier.user.login}">
-	  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-	  	  			  ${order.orderNumber} <br/>
-		  	  		${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
-	  	  			</a> 
+			   		</c:forEach>
+			   </td>
+	 	   </c:forEach>
+	 	  </tr>
+	 	  
+	 	  <tr>
+	  	  	<td width="20%">Waiting for Proforma and Artwork Confirmation</td>	
+		    <c:forEach var="coluna" items="${timelineViewer.columns}">
+			   <td><c:forEach var="order" items="${coluna.ordersWaitingArtworkConfirmation}">
+			   		<div class="circle jie">
+		  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
+		  	  			  ${order.orderNumber} <br/>
+			  	  		  <fmt:formatDate value='${order.deliveryDate}' pattern='MM/dd/yyyy'/>
+		  	  			</a> 
 	  	  			</div>
-	  	  		  </c:if>    	 
-		        </td>
-		         <td>
-	  	  		  <c:if test="${order.status.description == 'to_advanced_paid' }">
-	  	  			<div class="circle ${order.supplier.user.login}">
-	  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-	  	  			 ${order.orderNumber} <br/>
-		  	  			${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
-	  	  			</a> 
+			   		</c:forEach>
+			   </td>
+	 	   </c:forEach>
+	 	  </tr>
+	 	  
+	 	  <tr>
+	  	  	<td width="20%">Waiting for Advanced Payment</td>	
+		    <c:forEach var="coluna" items="${timelineViewer.columns}">
+			   <td><c:forEach var="order" items="${coluna.ordersWaitingAdvancedPayment}">
+			   		<div class="circle jie">
+		  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
+		  	  			  ${order.orderNumber} <br/>
+			  	  		  <fmt:formatDate value='${order.deliveryDate}' pattern='MM/dd/yyyy'/>
+		  	  			</a> 
 	  	  			</div>
-	  	  		  </c:if>    	 
-		        </td>
-		         <td>
-	  	  		  <c:if test="${order.status.description == 'to_forward_detail' }">
-	  	  		    <div class="circle ${order.supplier.user.login}">
-	  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-	  	  			  ${order.orderNumber} <br/>
-		  	  			 ${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
-	  	  			</a> 
+			   		</c:forEach>
+			   </td>
+	 	   </c:forEach>
+	 	  </tr>
+	 	  
+	 	  <tr>
+	  	  	<td width="20%">Waiting for Forward Details</td>	
+		    <c:forEach var="coluna" items="${timelineViewer.columns}">
+			   <td><c:forEach var="order" items="${coluna.ordersWaitingForwardDetails}">
+			   		<div class="circle jie">
+		  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
+		  	  			  ${order.orderNumber} <br/>
+			  	  		  <fmt:formatDate value='${order.deliveryDate}' pattern='MM/dd/yyyy'/>
+		  	  			</a> 
 	  	  			</div>
-	  	  		  </c:if>    	 
-		        </td>
-		        <td>
-	  	  		  <c:if test="${order.status.description == 'to_ship' }">
-	  	  		  <div class="circle ${order.supplier.user.login}">
-	  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-	  	  			  ${order.orderNumber} <br/>
-		  	  		${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
-	  	  			</a> 
+			   		</c:forEach>
+			   </td>
+	 	   </c:forEach>
+	 	  </tr>
+	 	  
+	 	  <tr>
+	  	  	<td width="20%">Waiting for Shipment</td>	
+		    <c:forEach var="coluna" items="${timelineViewer.columns}">
+			   <td><c:forEach var="order" items="${coluna.ordersWaitingForShipment}">
+			   		<div class="circle jie">
+		  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
+		  	  			  ${order.orderNumber} <br/>
+			  	  		  <fmt:formatDate value='${order.deliveryDate}' pattern='MM/dd/yyyy'/>
+		  	  			</a> 
 	  	  			</div>
-	  	  		  </c:if>    	 
-		        </td>
-		        <td>
-	  	  		  <c:if test="${order.status.description == 'to_copy_doc_sent' }">
-	  	  		  <div class="circle ${order.supplier.user.login}">
-	  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-	  	  			  ${order.orderNumber} <br/>
-		  	  		${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
-	  	  			</a> 
+			   		</c:forEach>
+			   </td>
+	 	   </c:forEach>
+	 	  </tr>
+	 	  
+	 	  <tr>
+	  	  	<td width="20%">Waiting for Copies to Be Sent</td>	
+		    <c:forEach var="coluna" items="${timelineViewer.columns}">
+			   <td><c:forEach var="order" items="${coluna.ordersWaitingCopiesToBeSent}">
+			   		<div class="circle jie">
+		  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
+		  	  			  ${order.orderNumber} <br/>
+			  	  		  <fmt:formatDate value='${order.deliveryDate}' pattern='MM/dd/yyyy'/>
+		  	  			</a> 
 	  	  			</div>
-	  	  		  </c:if>    	 
-		        </td>
-		        <td>
-	  	  		  <c:if test="${order.status.description == 'to_be_paid' }">
-	  	  		  <div class="circle ${order.supplier.user.login}">
-	  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-	  	  			  ${order.orderNumber} <br/>
-		  	  		${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
-	  	  			</a> 
+			   		</c:forEach>
+			   </td>
+	 	   </c:forEach>
+	 	  </tr>
+	 	  
+	 	  <tr>
+	  	  	<td width="20%">Waiting Order To Be Paid</td>	
+		    <c:forEach var="coluna" items="${timelineViewer.columns}">
+			   <td><c:forEach var="order" items="${coluna.ordersWaitingPayment}">
+			   		<div class="circle jie">
+		  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
+		  	  			  ${order.orderNumber} <br/>
+			  	  		  <fmt:formatDate value='${order.deliveryDate}' pattern='MM/dd/yyyy'/>
+		  	  			</a> 
 	  	  			</div>
-	  	  		  </c:if>    	 
-		        </td>
-		        
-		        <td>
-	  	  		  <c:if test="${order.status.description == 'to_original_doc_sent' }">
-	  	  		  <div class="circle ${order.supplier.user.login}">
-	  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-	  	  			  ${order.orderNumber} <br/>
-		  	  		 ${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
-	  	  			</a> 
+			   		</c:forEach>
+			   </td>
+	 	   </c:forEach>
+	 	  </tr>
+	 	   
+	 	  <tr>
+	  	  	<td width="20%">Waiting for Originals To Be Sent</td>	
+		    <c:forEach var="coluna" items="${timelineViewer.columns}">
+			   <td><c:forEach var="order" items="${coluna.ordersWaitingOriginalsDocument}">
+			   		<div class="circle jie">
+		  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
+		  	  			  ${order.orderNumber} <br/>
+			  	  		  <fmt:formatDate value='${order.deliveryDate}' pattern='MM/dd/yyyy'/>
+		  	  			</a> 
 	  	  			</div>
-	  	  		  </c:if>    	 
-		        </td>
-		         <td>
-	  	  		    <c:if test="${order.status.description == 'to_comisson_payment' }">
-	  	  		    <div class="circle ${order.supplier.user.login}">
-	  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
-	  	  			  ${order.orderNumber} <br/>
-		  	  		 ${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
-	  	  			</a> 
+			   		</c:forEach>
+			   </td>
+	 	   </c:forEach>
+	 	  </tr>
+	 	  
+	 	  <tr>
+	  	  	<td width="20%">Waiting for Commission Payment</td>	
+		    <c:forEach var="coluna" items="${timelineViewer.columns}">
+			   <td><c:forEach var="order" items="${coluna.ordersWaitingCommissionPayment}">
+			   		<div class="circle jie">
+		  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
+		  	  			  ${order.orderNumber} <br/>
+			  	  		  <fmt:formatDate value='${order.deliveryDate}' pattern='MM/dd/yyyy'/>
+		  	  			</a> 
 	  	  			</div>
-	  	  		  </c:if> 
-		        </td>
-		        <td>
-	  	  		  <c:if test="${order.status.description == 'complain' }">
-	  	  		   <div class="circle ${order.supplier.user.login}">
-	  	  			<a href="<c:url value='/${order.status.url}/${order.firstUnsolvedComplain.id}'/>">
-	  	  			  ${order.orderNumber} <br/>
-		  	  		${order.status.lastMovement}: <fmt:formatDate value='${order.status.statusDate}' pattern='MM/dd/yyyy'/>
-	  	  			</a> 
+			   		</c:forEach>
+			   </td>
+	 	   </c:forEach>
+	 	  </tr>
+	 	  
+	 	  <tr>
+	  	  	<td width="20%">Complains</td>	
+		    <c:forEach var="coluna" items="${timelineViewer.columns}">
+			   <td><c:forEach var="order" items="${coluna.complains}">
+			   		<div class="circle jie">
+		  	  			<a href="<c:url value='/${order.status.url}/${order.id}'/>">
+		  	  			  ${order.orderNumber} <br/>
+			  	  		  <fmt:formatDate value='${order.deliveryDate}' pattern='MM/dd/yyyy'/>
+		  	  			</a> 
 	  	  			</div>
-	  	  		  </c:if>    	 
-		        </td>
-	  	  </tr>
-	  	</c:forEach>
+			   		</c:forEach>
+			   </td>
+	 	   </c:forEach>
+	 	  </tr>
+	 	   
 	  </tbody>
 	</table>
 	

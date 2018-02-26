@@ -14,10 +14,6 @@ import javax.persistence.Query;
 import javax.servlet.ServletContext;
 import javax.transaction.Transactional;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
 import br.com.caelum.vraptor.Controller;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Path;
@@ -36,8 +32,13 @@ import br.com.weblogia.letsmed.domain.ShipmentTerm;
 import br.com.weblogia.letsmed.domain.Supplier;
 import br.com.weblogia.letsmed.domain.TransactionTerm;
 import br.com.weblogia.letsmed.domain.UnitOfMeasure;
+import br.com.weblogia.letsmed.domain.User;
 import br.com.weblogia.letsmed.domain.service.OrderService;
 import br.com.weblogia.letsmed.repositories.helpers.ConnectionFactory;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 
 @Controller
 public class OrdersController {
@@ -55,6 +56,9 @@ public class OrdersController {
 	@Inject
 	private ServletContext context;
 	
+	@Inject 
+	private User user;
+	
 	public void order(){
 		Order order = new Order();
 		order.setOrderDate(new Date());
@@ -68,6 +72,20 @@ public class OrdersController {
 	@Path("/orders")
 	public List<Order> list(){
 		result.include("url", "orders");
+		
+		StringBuilder hql = new StringBuilder();
+		hql.append(" from Order o");
+		hql.append(" join o.supplier s ");
+		
+		if (!user.isAdmin()) {
+			hql.append(" where s.user.id = :id ");
+		}
+		
+		Query q = entityManager.createQuery(hql.toString());
+		if (!user.isAdmin()) {
+			q.setParameter("id", user.getId());
+		}
+		
 		return (List<Order>) entityManager.createQuery(" from Order o order by o.id desc ").getResultList();
 	}
 	

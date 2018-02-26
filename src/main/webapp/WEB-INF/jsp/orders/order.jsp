@@ -67,7 +67,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-		  <label class="control-label col-xs2">Order Number:</label>
+		  <label class="control-label col-xs2">Proforma Letsmed:</label>
 		  <div class="controls">
 		    <input type="text" class="input-xlarge span4" tabindex="-1" name="order.orderNumber" id="order.orderNumber" value="${order.orderNumber}" />
 		  </div>
@@ -484,12 +484,12 @@ function setCostumer(customer){
 	$('#order\\.customer\\.name').val(customer.text);
 	$('#order\\.customer\\.code').val(customer.code);
 	
-	$.getJSON('/letsmed/customers/nextnumber.json', {
+	/*$.getJSON('/letsmed/customers/nextnumber.json', {
 		id : customer.id
 		}, function(json_result) {
 			console.log(json_result);
 			$('#order\\.orderNumber').val(json_result);
-	});  
+	});  */
 }
 
 function setSupplier(supplier){

@@ -50,7 +50,10 @@ public class OrderService {
 	
 	public void save(Order order){
 		if (order.getId() == null){
-			loadOrderCode(order);
+			
+			//disabled for a while
+			//loadOrderCode(order);
+			
 			entityManager.persist(order);
 			saveItens(order);
 		}else{
@@ -84,6 +87,7 @@ public class OrderService {
 
 	}
 
+	@SuppressWarnings("unused")
 	private void loadOrderCode(Order order) {
 		
 		if (order.getOrderNumber() == null || "".equals(order.getOrderNumber().trim()))

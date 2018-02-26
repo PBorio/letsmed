@@ -2,8 +2,7 @@
 <decorators defaultdir="/decorators">
     
     <excludes>
-        <pattern>/*/pedidoVendasMovimentos.jsp</pattern>
-        <pattern>/*/despesaMovimento.jsp</pattern>
+    	 <pattern>/*/login.jsp</pattern>
     </excludes>
 	
 	 <decorator name="principal" page="principal.jsp">
