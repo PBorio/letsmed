@@ -46,6 +46,7 @@ public class TimelineController {
 
 		Query query = entityManager.createQuery(sql.toString());
 		
+		System.out.println(user.getId());
 		if (!user.isAdmin()) {
 			query.setParameter("id", user.getId());
 		}

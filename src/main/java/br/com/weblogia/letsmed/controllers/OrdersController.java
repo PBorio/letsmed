@@ -75,7 +75,7 @@ public class OrdersController {
 		
 		StringBuilder hql = new StringBuilder();
 		hql.append(" from Order o");
-		hql.append(" join o.supplier s ");
+		hql.append(" inner join fetch o.supplier s ");
 		
 		if (!user.isAdmin()) {
 			hql.append(" where s.user.id = :id ");
@@ -86,7 +86,7 @@ public class OrdersController {
 			q.setParameter("id", user.getId());
 		}
 		
-		return (List<Order>) entityManager.createQuery(" from Order o order by o.id desc ").getResultList();
+		return (List<Order>) q.getResultList();
 	}
 	
 	@Transactional

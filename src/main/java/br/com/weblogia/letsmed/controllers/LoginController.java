@@ -56,6 +56,7 @@ public class LoginController {
 				
 				if(encryptedPass.equals(loadedUser.getPassword())){
 					user.setId(loadedUser.getId());
+					System.out.println(user.getId());
 					user.setLoggedOn(true);
 					user.setLogin(login);
 					user.setName(loadedUser.getName());

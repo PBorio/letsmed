@@ -31,6 +31,7 @@
 	<div class="task low">
 		<div class="desc">
 			<input type="hidden" value="${order.id}" name="order.id" />
+			<input type="hidden" value="${order.id}" name="order.id" />
 			<div class="title">Order: ${order.orderNumber} - ${order.customer.name}</div>
 			<div>Value: <fmt:formatNumber value='${order.totalValue}' pattern='#,##0.00'/></div>
 			<div>Commission: <fmt:formatNumber value='${order.commisionValue}' pattern='#,##0.00'/></div>
@@ -102,15 +103,15 @@
 		  	</div>
 		</div>
 		<div class="row-fluid">
-		   <div class="span3">
+		   <div class="span3" id="div-buy">
 			<div class="control-group">
-			  <label class="control-label col-xs2">Buy Price:</label>
+			  <label class="control-label col-xs2">Purchase Price:</label>
 			  <div class="controls">
 			    <input type="text" step="any" class="input-xlarge span12" id="item.buyPrice" name="item.buyPrice"  value="<fmt:formatNumber value='${item.buyPrice}' pattern='#,##0.000000'/>" onchange="calculateTotalBuy(); return false;" />
 			  </div>
 			</div>
 		  </div>
-		 <div class="span3">
+		 <div class="span3" id="div-sell">
 			<div class="control-group">
 			  <label class="control-label col-xs2">Sell Price:</label>
 			  <div class="controls">
@@ -118,15 +119,15 @@
 			  </div>
 			</div>
 		</div>
-		 <div class="span3">
+		 <div class="span3" id="div-total-buy">
 			<div class="control-group">
-			  <label class="control-label col-xs2">Total Buy Price:</label>
+			  <label class="control-label col-xs2">Total Purchase Price:</label>
 			  <div class="controls">
-			    <input type="text" class="input-xlarge span12" data-behaviour="valor" value="<fmt:formatNumber value='${item.totalBuyValue }' pattern='#,##0.00'/>" tabindex="-1" readonly="readonly" id="total-buy-price" />
+			    <input type="text" class="input-xlarge span12" data-behaviour="valor" value="<fmt:formatNumber value='${item.totalBuyValue}' pattern='#,##0.00'/>" tabindex="-1" readonly="readonly" id="total-buy-price" />
 			  </div>
 			</div>
 		</div>
-		 <div class="span3">
+		 <div class="span3" id="div-total-sell">
 			<div class="control-group">
 			  <label class="control-label col-xs2">Total Sell Price:</label>
 			  <div class="controls">
@@ -149,7 +150,7 @@
 					<div class="control-group">
 					  <label class="control-label col-xs2">Commission Value:</label>
 					  <div class="controls">
-					    <input type="number" step="any" class="input-xlarge span12" data-behaviour="valor" id="item.commisionValue" name="item.commisionValue" value="<fmt:formatNumber value='${item.commisionValue}' pattern='#,##0.00'/>" onchange="calculateCommisionPercentual(); return false;"  />
+					    <input type="number" step="any" class="input-xlarge span12" data-behaviour="valor" id="item.commisionValue" name="item.commisionValue" readonly="readonly" value="<fmt:formatNumber value='${item.commisionValue}' pattern='#,##0.00'/>"   />
 					  </div>
 					</div>
 				</div>
@@ -213,6 +214,7 @@
 <script src="<c:url value='/resources/js/borioselect2.js'/>"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+	
 	$('[data-behaviour~=inteiro]').setMask('integer');
     
     $("#product-select").borioSelect({
@@ -228,22 +230,18 @@ $(document).ready(function() {
 
 
 function calculateTotalBuy() {
-	var quantity  = $("#item\\.quantity").val();  
-	quantity = quantity.replace(/,/g, '');
-	quantity = parseFloat(quantity);
+	var quantity = getQuantity()
 	
-	var price = $("#item\\.buyPrice").val();
-	price = price.replace(/,/g, '');
-	price = parseFloat(price);
+	var price = getBuyPrice();
 	
 	var total = price * quantity;
 	
 	if(total){
 		total = total.toFixed(6);
 		$("#total-buy-price").val(total);
-// 		$('[data-behaviour~=valor]').setMask('decimal-us');
-// 		$('[data-behaviour~=valordecimal]').setMask('decimal-us-5');
 	}
+	
+	calculateCommission();
 }
 
 function calculateTotalSell() {
@@ -266,44 +264,13 @@ function calculateTotalSell() {
 	var totalSell = price * quantity;
 	if(totalSell){
 		$("#total-sell-price").val(totalSell);
-		
-		var commisionValue = (totalSell * (commision/100));
-		var total = totalSell+commisionValue;
-		
 		$("#total-sell-price").val(totalSell.toFixed(6));
-		$("#total-price").val(total.toFixed(6));
-		$("#item\\.commisionValue").val(commisionValue.toFixed(6));
+		$("#total-price").val(totalSell.toFixed(6));
 	}
+	
+	calculateCommission();
 }
 
-function calculateCommisionPercentual(){
-	
-	var quantity  = $("#item\\.quantity").val();  
-	quantity = quantity.replace(/,/g, '');
-	quantity = parseFloat(quantity);
-	
-	var price = $("#item\\.unitPrice").val();
-	price = price.replace(/,/g, '');
-	price = parseFloat(price);
-	
-	var commisionValue = $("#item\\.commisionValue").val();
-	if (commisionValue){
-		commisionValue = commisionValue.replace(/,/g, '');
-		commisionValue = parseFloat(commisionValue);	
-	}
-	
-	
-	var totalSell = price * quantity;
-	if (commisionValue && totalSell){
-		var commision = ((commisionValue/totalSell) * 100);
-		var total = totalSell+commisionValue;
-		
-		$("#total-sell-price").val(totalSell.toFixed(2));
-		$("#total-price").val(total.toFixed(2));
-		$("#item\\.commision").val(commision.toFixed(5));
-	}
-	
-}
 
 function setProduct(item){
    	$('#item\\.product\\.id').val(item.id);
@@ -311,6 +278,89 @@ function setProduct(item){
 	$('#item\\.unitPrice').val(item.sellPrice);
 	$('#item\\.commision').val(item.commision);
 	$('#item\\.product\\.description').val(item.text);
+}
+
+function calculateCommission(){
+	
+	var transactionType = $('#item\\.order\\.transactionTerm\\.id').val();
+    if (transactionType == '1' || transactionType == '3' ){ //supplier pays commission or profit
+    	calculateCommissionForProfit();
+	}
+}
+
+function getQuantity(){
+	var quantity  = $("#item\\.quantity").val();  
+	quantity = quantity.replace(/,/g, '');
+	quantity = parseFloat(quantity);
+	return quantity;
+}
+
+function getBuyPrice(){
+	var price = $("#item\\.buyPrice").val();
+	price = price.replace(/,/g, '');
+	price = parseFloat(price);
+	return price;
+}
+
+function getSellPrice(){
+	var price = $("#item\\.unitPrice").val();
+	price = price.replace(/,/g, '');
+	price = parseFloat(price);
+	return price;
+}
+
+function getCommission(){
+	var commission = $('#item\\.commision').val();
+	commission = commission.replace(/,/g, '');
+	commission = parseFloat(commission);
+	return commission;
+}
+
+function calculateCommissionForProfit(){
+	var quantity = getQuantity();
+	var price = getBuyPrice();
+	var sellPrice = getSellPrice();
+	
+	var totalBuy = price * quantity;
+	var totalSell = sellPrice * quantity;
+	
+	var difference = totalSell - totalBuy;
+	
+	if (difference && totalSell){
+		
+		var commission = 0;
+		var commissionValue = 0;
+		
+		if (difference > 0 ){
+		   commission = ((difference/totalBuy) * 100);
+		   commissionValue = difference;
+		} 
+		
+		$("#total-sell-price").val(totalSell.toFixed(2));
+		$("#total-price").val(totalSell.toFixed(2));
+		$("#item\\.commisionValue").val(commissionValue.toFixed(5));
+		$("#item\\.commision").val(commission.toFixed(5));
+	}
+}
+
+function calculateTotalSell(){
+	
+	var quantity = getQuantity();
+	var price = getBuyPrice();
+	var commission = getCommission();
+	
+	var sellPrice = price + (price*commission/100);
+	
+	var totalBuy = price * quantity;
+	var totalSell = sellPrice * quantity;
+	
+	var difference = totalSell - totalBuy;
+	
+	$('#item\\.unitPrice').val(sellPrice.toFixed(5));
+	$("#total-sell-price").val(totalSell.toFixed(2));
+	$("#total-price").val(totalSell.toFixed(2));
+	$("#item\\.commisionValue").val(difference.toFixed(5));
+	$("#item\\.commision").val(commission.toFixed(5));
 }
 
 </script>

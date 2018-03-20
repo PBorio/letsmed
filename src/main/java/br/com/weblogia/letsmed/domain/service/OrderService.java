@@ -51,11 +51,9 @@ public class OrderService {
 	public void save(Order order){
 		if (order.getId() == null){
 			
-			//disabled for a while
-			//loadOrderCode(order);
-			
 			entityManager.persist(order);
 			saveItens(order);
+			createHistoricForInsert(order);
 		}else{
 			
 			createHistoric(order);
@@ -69,7 +67,7 @@ public class OrderService {
 		if (order.getDeliveryDate() != null && old.getDeliveryDate() != null){
 			if (!order.getDeliveryDate().equals(old.getDeliveryDate())){
 				OrderHistory oh = new OrderHistory();
-				oh.setDeliveryDate(old.getDeliveryDate());
+				oh.setDeliveryDate(order.getDeliveryDate());
 				oh.setChangeDate(new Date());
 				oh.setOrder(order);
 				entityManager.persist(oh);
@@ -78,13 +76,20 @@ public class OrderService {
 		
 		if (order.getDeliveryDate() == null && old.getDeliveryDate() != null){
 			OrderHistory oh = new OrderHistory();
-			oh.setDeliveryDate(old.getDeliveryDate());
+			oh.setDeliveryDate(order.getDeliveryDate());
 			oh.setChangeDate(new Date());
 			oh.setOrder(order);
 			entityManager.persist(oh);
 		}
+	}
+	
+	private void createHistoricForInsert(Order order) {
 		
-
+			OrderHistory oh = new OrderHistory();
+			oh.setDeliveryDate(order.getDeliveryDate());
+			oh.setChangeDate(new Date());
+			oh.setOrder(order);
+			entityManager.persist(oh);
 	}
 
 	@SuppressWarnings("unused")
