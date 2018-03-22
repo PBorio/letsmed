@@ -55,7 +55,6 @@ public class OrderService {
 			saveItens(order);
 			createHistoricForInsert(order);
 		}else{
-			
 			createHistoric(order);
 			entityManager.merge(order);
 		}

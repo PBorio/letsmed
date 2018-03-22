@@ -142,13 +142,13 @@
 					<div class="control-group">
 					  <label class="control-label col-xs2">Commission %:</label>
 					  <div class="controls">
-					    <input type="number" step="any" class="input-xlarge span12" data-behaviour="valordecimal" id="item.commision" name="item.commision" value="${item.commision }" onchange="calculateTotalSell(); return false;"  />
+					    <input type="number" step="any" class="input-xlarge span12" data-behaviour="valordecimal" id="item.commision" name="item.commision" value="${item.commision }" onchange="calculateCommissionValue(); return false;"  />
 					  </div>
 					</div>
 				</div>
 				<div class="span3">
 					<div class="control-group">
-					  <label class="control-label col-xs2">Commission Value:</label>
+					  <label class="control-label col-xs2">Commission Total Value:</label>
 					  <div class="controls">
 					    <input type="number" step="any" class="input-xlarge span12" data-behaviour="valor" id="item.commisionValue" name="item.commisionValue" readonly="readonly" value="<fmt:formatNumber value='${item.commisionValue}' pattern='#,##0.00'/>"   />
 					  </div>
@@ -215,6 +215,12 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	
+	var transactionType = $('#item\\.order\\.transactionTerm\\.id').val();
+    if (transactionType == '2'){
+    	$("#item\\.unitPrice").attr('readonly', 'readonly');
+    	$("#item\\.unitPrice").attr('tabindex', '-1');
+    }
+	
 	$('[data-behaviour~=inteiro]').setMask('integer');
     
     $("#product-select").borioSelect({
@@ -237,8 +243,7 @@ function calculateTotalBuy() {
 	var total = price * quantity;
 	
 	if(total){
-		total = total.toFixed(6);
-		$("#total-buy-price").val(total);
+		$("#total-buy-price").val(total.toFixed(2));
 	}
 	
 	calculateCommission();
@@ -263,9 +268,8 @@ function calculateTotalSell() {
 	
 	var totalSell = price * quantity;
 	if(totalSell){
-		$("#total-sell-price").val(totalSell);
-		$("#total-sell-price").val(totalSell.toFixed(6));
-		$("#total-price").val(totalSell.toFixed(6));
+		$("#total-sell-price").val(totalSell.toFixed(2));
+		$("#total-price").val(totalSell.toFixed(2));
 	}
 	
 	calculateCommission();
@@ -285,6 +289,8 @@ function calculateCommission(){
 	var transactionType = $('#item\\.order\\.transactionTerm\\.id').val();
     if (transactionType == '1' || transactionType == '3' ){ //supplier pays commission or profit
     	calculateCommissionForProfit();
+	} else {
+		calculateComissonForCustomerPayment();
 	}
 }
 
@@ -338,29 +344,55 @@ function calculateCommissionForProfit(){
 		
 		$("#total-sell-price").val(totalSell.toFixed(2));
 		$("#total-price").val(totalSell.toFixed(2));
-		$("#item\\.commisionValue").val(commissionValue.toFixed(5));
-		$("#item\\.commision").val(commission.toFixed(5));
+		$("#item\\.commisionValue").val(commissionValue.toFixed(2));
+		$("#item\\.commision").val(commission.toFixed(2));
 	}
 }
 
-function calculateTotalSell(){
-	
+function calculateComissonForCustomerPayment(){
 	var quantity = getQuantity();
 	var price = getBuyPrice();
 	var commission = getCommission();
 	
-	var sellPrice = price + (price*commission/100);
-	
 	var totalBuy = price * quantity;
-	var totalSell = sellPrice * quantity;
+	var totalSell = totalBuy;
+		
+	if (commission && totalBuy){
+		var commissionValue = 0;
+		
+	    commissionValue = totalBuy*(commission/100);
+		
+	    $("#item\\.unitPrice").val(price);
+		$("#total-sell-price").val(totalSell.toFixed(2));
+		$("#total-price").val(totalSell.toFixed(2));
+		$("#item\\.commisionValue").val(commissionValue.toFixed(2));
+	}
+}
+
+function calculateCommissionValue(){
 	
-	var difference = totalSell - totalBuy;
 	
-	$('#item\\.unitPrice').val(sellPrice.toFixed(5));
-	$("#total-sell-price").val(totalSell.toFixed(2));
-	$("#total-price").val(totalSell.toFixed(2));
-	$("#item\\.commisionValue").val(difference.toFixed(5));
-	$("#item\\.commision").val(commission.toFixed(5));
+	var transactionType = $('#item\\.order\\.transactionTerm\\.id').val();
+    if (transactionType == '1' || transactionType == '3' ){ //supplier pays commission or profit
+		var quantity = getQuantity();
+		var price = getBuyPrice();
+		var commission = getCommission();
+		
+		var sellPrice = price + (price*commission/100);
+		
+		var totalBuy = price * quantity;
+		var totalSell = sellPrice * quantity;
+		
+		var difference = totalSell - totalBuy;
+		
+		$('#item\\.unitPrice').val(sellPrice.toFixed(5));
+		$("#total-sell-price").val(totalSell.toFixed(2));
+		$("#total-price").val(totalSell.toFixed(2));
+		$("#item\\.commisionValue").val(difference.toFixed(2));
+		$("#item\\.commision").val(commission.toFixed(2));
+    } else {
+    	calculateComissonForCustomerPayment();
+    }
 }
 
 </script>

@@ -93,6 +93,26 @@ public class Order {
 	
 	private String deliveryForecast;
 	
+	private String poNumber;
+	
+	private String thirdPartNumber;
+	
+	public String getPoNumber() {
+		return poNumber;
+	}
+
+	public void setPoNumber(String poNumber) {
+		this.poNumber = poNumber;
+	}
+
+	public String getThirdPartNumber() {
+		return thirdPartNumber;
+	}
+
+	public void setThirdPartNumber(String thirdPartNumber) {
+		this.thirdPartNumber = thirdPartNumber;
+	}
+
 	@OneToMany(mappedBy="order")
 	@OrderBy("id")
 	private List<OrderItem> itens = new ArrayList<OrderItem>();

@@ -49,14 +49,6 @@
 				   </div>
 				</div>
 			</div>
-			<div class="span3">
-				<div class="control-group">
-				  <label class="control-label col-xs2">Delivery Date:</label>
-				  <div class="controls">
-				     <input type="text" autocomplete="off" class="input-xlarge span12" data-behaviour="datepicker" name="order.deliveryDate" id="order.deliveryDate" value="<fmt:formatDate value='${order.deliveryDate}' pattern='MM/dd/yyyy'/>" />
-				  </div>
-				</div>
-			</div>
 			<div class="span6">
 				<div class="control-group">
 				  <label class="control-label col-xs2">Delivery Forecast:</label>
@@ -65,11 +57,33 @@
 				  </div>
 				</div>
 			</div>
+			 <c:if test="${order.id != null}">
+				<div class="span3">
+					<div class="control-group">
+					  <label class="control-label col-xs2">Delivery Date:</label>
+					  <div class="controls">
+					     <input type="text" autocomplete="off" class="input-xlarge span12" data-behaviour="datepicker" name="order.deliveryDate" id="order.deliveryDate" value="<fmt:formatDate value='${order.deliveryDate}' pattern='MM/dd/yyyy'/>" />
+					  </div>
+					</div>
+				</div>
+			</c:if>
 		</div>
 		<div class="control-group">
 		  <label class="control-label col-xs2">Proforma Letsmed:</label>
 		  <div class="controls">
-		    <input type="text" class="input-xlarge span4" tabindex="-1" name="order.orderNumber" id="order.orderNumber" value="${order.orderNumber}" />
+		    <input type="text" class="input-xlarge span4" name="order.orderNumber" id="order.orderNumber" value="${order.orderNumber}" />
+		  </div>
+		</div>
+		<div class="control-group">
+		  <label class="control-label col-xs2">PO Number:</label>
+		  <div class="controls">
+		    <input type="text" class="input-xlarge span4" name="order.poNumber" id="order.poNumber" value="${order.poNumber}" />
+		  </div>
+		</div>
+		<div class="control-group">
+		  <label class="control-label col-xs2">Third Party PI Number:</label>
+		  <div class="controls">
+		    <input type="text" class="input-xlarge span4" name="order.thirdPartNumber" id="order.thirdPartNumber" value="${order.thirdPartNumber}" />
 		  </div>
 		</div>
 		<div class="row-fluid">
@@ -460,7 +474,7 @@ $(document).ready(function() {
 	$('[data-behaviour~=datepicker]').setMask({mask: '19/39/9999', autoTab: false});
 	
 	<c:if test="${order.id == null}">
-	    $('#order\\.orderDate').focus();
+	    $('#order\\.deliveryForecast').focus();
 	</c:if>
 	
 	 $("#customer-select").borioSelect({
