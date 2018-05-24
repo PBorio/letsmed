@@ -33,10 +33,8 @@ public class OrderStatusFactory {
 					status.setStatusDate(order.getArtworkConfirmationDate());
 					status.setLastMovement("Artwork Confirmation Date");
 				}
-				
 			}
-			else 
-			if (order.isWaitingArtworkConfirmation()){
+			else if (order.isWaitingArtworkConfirmation()){
 				if (order.getProformaConfirmationDate() == null){
 					status.setStatusDate(order.getSupplierProformaDate());
 					status.setLastMovement("Supplier Proforma Date");
@@ -47,7 +45,8 @@ public class OrderStatusFactory {
 			}
 			
 			status.setUrl("orders");
-		}else if (order.isWaitingAdvancedPayment()||order.isWaitingAdvancedSupplierPayment()){
+		}else if (order.isWaitingAdvancedPayment()) {
+				//||order.isWaitingAdvancedSupplierPayment()
 			
 			status.setDescription("to_advanced_paid");
 			status.setTitle("Waiting for Advanced Payment");
@@ -57,21 +56,14 @@ public class OrderStatusFactory {
 				status.setLastMovement("Artwork Confirmation Date");
 				status.setUrl("orderPayments/order");
 			}
-			else 
-			if (order.isWaitingAdvancedSupplierPayment()){
-				status.setStatusDate(order.getLastPaymentDate());
-				status.setLastMovement("Last Payment Date");
-				status.setUrl("supplierPayments/order");
-			}
-//		}else if (order.isWaitingProductionStart()){
-//			status = populateStatusToProductionSta1rt(order);
+//			else 
+//			if (order.isWaitingAdvancedSupplierPayment()){
+//				status.setStatusDate(order.getLastPaymentDate());
+//				status.setLastMovement("Last Payment Date");
+//				status.setUrl("supplierPayments/order");
+//			}
 		}else if (order.isWaitingForwardDetails()){
 			status = populateStatusToForwardDetail(order);
-//			status.setDescription("to_forward_detail");
-//			status.setTitle("Waiting for Forward Details");
-//			status.setStatusDate(order.getProductionStartDate());
-//			status.setLastMovement("Production Start Date");
-//			status.setUrl("forwardDetails/order");
 		}else if (order.isWaitingShipment()){
 			status = populateStatusToShipment(order);
 		}else if (order.isWaitingForDocumentCopy()){
@@ -80,14 +72,16 @@ public class OrderStatusFactory {
 			status.setStatusDate(order.getShipDate());
 			status.setLastMovement("Ship Date");
 			status.setUrl("orders");
-		}else if (order.isWaitingOrderToBePaid() || order.isWaitingSupplierToBePaid()){
+		}else if (order.isWaitingOrderToBePaid()) {
+			//|| order.isWaitingSupplierToBePaid()){
+		
 			status = populateStatusToBePaid(order);
 		}else if (order.isWaitingForOriginalDocument()){
 			status.setDescription("to_original_doc_sent");
 			status.setTitle("Waiting for Original Documents To Be Sent");
 			status.setStatusDate(order.getLastPaymentDate());
 			status.setLastMovement("Payment Date");
-			status.setUrl("orders");
+			status.setUrl("originalDocument/order");
 		}else if (order.isWaitingForComissionPayment()){
 			status.setDescription("to_comisson_payment");
 			status.setTitle("Waiting for Commision Payment");
@@ -155,10 +149,9 @@ public class OrderStatusFactory {
 		
 		if (order.isWaitingOrderToBePaid())
 			status.setUrl("orderPayments/order");
-		else if (order.isWaitingSupplierToBePaid())
-			status.setUrl("supplierPayments/order");
+//		else if (order.isWaitingSupplierToBePaid())
+//			status.setUrl("supplierPayments/order");
 		
-
 		if (NegotiationType.LC_AT_SIGHT.equals(order.getNegotiationTerm().getNegotiationType())){
 			status.setStatusDate(order.getProformaConfirmationDate());
 			status.setLastMovement("Artwork confirmation Date");

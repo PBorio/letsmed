@@ -71,8 +71,6 @@ public class Order {
 	
 	private Date copyDocumentDate;
 	
-	private Date originalDocumentDate;
-	
 	private Date conclusionDate;
 	
 	private String invoiceNumber;
@@ -122,6 +120,9 @@ public class Order {
 	
 	@OneToMany(mappedBy="order")
 	private List<ForwardDetail> forwardDetails = new ArrayList<ForwardDetail>();
+	
+	@OneToMany(mappedBy="order")
+	private List<OriginalDocumentShipment> originalDocumentShipment = new ArrayList<OriginalDocumentShipment>();
 
 	@OneToMany(mappedBy="order")
 	private List<OrderPayment> payments = new ArrayList<OrderPayment>();
@@ -319,6 +320,10 @@ public class Order {
 	public boolean isForwardDetailsSent() {
 		return (this.forwardDetails != null && !this.forwardDetails.isEmpty());
 	}
+	
+	public boolean isOriginalDocumentSent() {
+		return (this.originalDocumentShipment != null && !this.originalDocumentShipment.isEmpty());
+	}
 
 	public boolean isToBeFilledIn() {
 		return (this.orderDate != null && this.confirmationDate == null);
@@ -440,41 +445,41 @@ public class Order {
 		
 		if (NegotiationType.TT_100_AGAINST_COPY.equals(this.negotiationTerm.getNegotiationType())||
 			NegotiationType.TT_ADVANCE_AND_BALANCE_AGAINST_COPY.equals(this.negotiationTerm.getNegotiationType())){
-			return (this.copyDocumentDate != null && this.originalDocumentDate == null);
+			return (this.copyDocumentDate != null && !this.isOriginalDocumentSent());
 		}
 		return false;
 	}
 	
-	public boolean isWaitingSupplierToBePaid() {
-		
-		if (negotiationTerm == null)
-			return false;
-		
-		if (this.isSupplierPaid())
-			return false;
-		
-		if (isWaitingOrderToBePaid())
-			return false;
-		
-		if (NegotiationType.LC_AT_SIGHT.equals(this.negotiationTerm.getNegotiationType())){
-			return ((this.proformaConfirmationDate != null && this.artworkConfirmationDate != null) && !this.isForwardDetailsSent());
-		}
-		
-		if (NegotiationType.TT_100_BEFORE_SHIPMENT.equals(this.negotiationTerm.getNegotiationType())||
-			NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT.equals(this.negotiationTerm.getNegotiationType())){
-			return (this.isForwardDetailsSent() && this.shipDate == null);
-		}
-		
-		if (NegotiationType.TT_100_AGAINST_COPY.equals(this.negotiationTerm.getNegotiationType())||
-			NegotiationType.TT_ADVANCE_AND_BALANCE_AGAINST_COPY.equals(this.negotiationTerm.getNegotiationType())){
-			return (this.copyDocumentDate != null && this.originalDocumentDate == null);
-		}
-		
-		return false;
-	}
+//	public boolean isWaitingSupplierToBePaid() {
+//		
+//		if (negotiationTerm == null)
+//			return false;
+//		
+//		if (this.isSupplierPaid())
+//			return false;
+//		
+//		if (isWaitingOrderToBePaid())
+//			return false;
+//		
+//		if (NegotiationType.LC_AT_SIGHT.equals(this.negotiationTerm.getNegotiationType())){
+//			return ((this.proformaConfirmationDate != null && this.artworkConfirmationDate != null) && !this.isForwardDetailsSent());
+//		}
+//		
+//		if (NegotiationType.TT_100_BEFORE_SHIPMENT.equals(this.negotiationTerm.getNegotiationType())||
+//			NegotiationType.TT_ADVANCE_AND_BALANCE_BEFORE_SHIPMENT.equals(this.negotiationTerm.getNegotiationType())){
+//			return (this.isForwardDetailsSent() && this.shipDate == null);
+//		}
+//		
+//		if (NegotiationType.TT_100_AGAINST_COPY.equals(this.negotiationTerm.getNegotiationType())||
+//			NegotiationType.TT_ADVANCE_AND_BALANCE_AGAINST_COPY.equals(this.negotiationTerm.getNegotiationType())){
+//			return (this.copyDocumentDate != null && !this.isOriginalDocumentSent());
+//		}
+//		
+//		return false;
+//	}
 
 	public boolean isWaitingForOriginalDocument() {
-		return (this.originalDocumentDate == null && this.isPaid());
+		return (!this.isOriginalDocumentSent() && this.isPaid());
 	}
 
 	public boolean isComissionPaid() {
@@ -485,7 +490,7 @@ public class Order {
 	}
 
 	public boolean isWaitingForComissionPayment() {
-		return (this.originalDocumentDate != null && this.conclusionDate == null);
+		return (this.isOriginalDocumentSent() && this.conclusionDate == null);
 	}
 	
 	public Long getId() {
@@ -562,11 +567,11 @@ public class Order {
 	}
 
 	public Date getOriginalDocumentDate() {
-		return originalDocumentDate;
-	}
-
-	public void setOriginalDocumentDate(Date originalDocumentDate) {
-		this.originalDocumentDate = originalDocumentDate;
+		Date originalDocumentShipmentDate = null;
+		for (OriginalDocumentShipment ods : this.originalDocumentShipment) {
+			originalDocumentShipmentDate = ods.getShipDate();
+		}
+		return originalDocumentShipmentDate;
 	}
 
 	public String getOrderNumber() {

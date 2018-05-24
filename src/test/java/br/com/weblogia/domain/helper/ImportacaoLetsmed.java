@@ -295,7 +295,6 @@ public class ImportacaoLetsmed {
 		proformaOrder(order);
 		confirmOrder(order);
 		order.setCopyDocumentDate(order.getOrderDate());
-		order.setOriginalDocumentDate(order.getOriginalDocumentDate());
 		order.setConclusionDate(order.getShipDate());
 		
 		OrderPayment op = new OrderPayment();

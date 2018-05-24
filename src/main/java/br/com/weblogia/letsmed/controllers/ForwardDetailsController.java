@@ -1,7 +1,6 @@
 package br.com.weblogia.letsmed.controllers;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -41,17 +40,6 @@ public class ForwardDetailsController {
 		result.include("controller", "forwardDetails");
 	}
 
-	@SuppressWarnings("unchecked")
-	@Get
-	@Path("/forwardDetails")
-	public void list(){
-		List<Order> orderList = (List<Order>) entityManager.createQuery(" from Order o where confirmationDate is not null and originalDocumentDate is null order by o.orderDate desc ").getResultList();
-		result.include("orderList", orderList);
-		result.include("url", "forwardDetails/order");
-		result.include("controller", "forwardDetails");
-		result.of(OrdersController.class).list();
-	}
-	
 	@Transactional
 	public void save(ForwardDetail forwardDetail){
 		

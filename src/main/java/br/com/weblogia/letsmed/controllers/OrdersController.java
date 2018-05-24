@@ -362,19 +362,63 @@ public class OrdersController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public void search(Customer customer) {
+	@Path("/orders/search")
+	public void search(Order order) {
 		
 		StringBuilder sql = new StringBuilder();
 		sql.append(" from Order o ");
-		sql.append(" where 1 = 1 ");
-		sql.append(" and o.customer.id = :id ");
+		sql.append(" inner join fetch o.supplier s ");
+		sql.append(" where 1 = 1  ");
+		
+		if (order != null){
+			if (order.getOrderNumber() != null && !"".equals(order.getOrderNumber().trim())){
+				sql.append(" and o.orderNumber like :orderNumber");
+			}
+			
+			if (order.getCustomer() != null && order.getCustomer().getName() != null && !"".equals(order.getCustomer().getName().trim())){
+				sql.append(" and o.customer.name like :customerName ");
+			}
+			
+			if (order.getSupplier() != null && order.getSupplier().getSupplierName() != null && !"".equals(order.getSupplier().getSupplierName().trim())){
+				sql.append(" and o.supplier.supplierName like :supplierName ");
+			}
+			
+			if (order.getSupplier() != null && order.getSupplier().getUser() != null && order.getSupplier().getUser().getLogin() != null && !"".equals(order.getSupplier().getUser().getLogin().trim())){
+				sql.append(" and o.supplier.user.login like :user ");
+			}
+			if (!user.isAdmin()) {
+				sql.append(" and s.user.id = :id ");
+			}
+		}
 		
 		Query q = entityManager.createQuery(sql.toString());
 		
-		q.setParameter("id", customer.getId());
-		result.include("orderList", (List<Customer>)q.getResultList());
-		result.include("customer", customer);
+		if (order != null){
+			if (order.getOrderNumber() != null && !"".equals(order.getOrderNumber().trim())){
+				q.setParameter("orderNumber", "%"+order.getOrderNumber()+"%");
+			}
+			
+			if (order.getCustomer() != null && order.getCustomer().getName() != null && !"".equals(order.getCustomer().getName().trim())){
+				q.setParameter("customerName", "%"+order.getCustomer().getName()+"%");
+			}
+			
+			if (order.getSupplier() != null && order.getSupplier().getSupplierName() != null && !"".equals(order.getSupplier().getSupplierName().trim())){
+				q.setParameter("supplierName", "%"+order.getSupplier().getSupplierName()+"%");
+			}
+			
+			if (order.getSupplier() != null && order.getSupplier().getUser() != null && order.getSupplier().getUser().getLogin() != null && !"".equals(order.getSupplier().getUser().getLogin().trim())){
+				q.setParameter("user", "%"+order.getSupplier().getUser().getLogin()+"%");
+			}
+			
+			if (!user.isAdmin()) {
+				q.setParameter("id", user.getId());
+			}
+		}
+		
+		List<Order> orderList = (List<Order>) q.getResultList();
+		result.include(order);
 		result.include("url", "orders");
+		result.include("orderList", orderList);
 		result.of(this).list();
 	}
 	

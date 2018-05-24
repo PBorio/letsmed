@@ -1,6 +1,6 @@
 package br.com.weblogia.letsmed.controllers;
 
-import java.util.List;
+import java.util.Date;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -34,31 +34,19 @@ public class OrderPaymentsController {
 	public void payment(Long id){
 		Order order = entityManager.find(Order.class, id);
 		OrderPayment orderPayment = new OrderPayment();
+		orderPayment.setPaymentDate(new Date());
 		orderPayment.setOrder(order);
-		loadLists();
 		result.include(order);
 		result.include("orderPayment", orderPayment);
 		result.include("controller", "orderPayments");
 	}
 
-	@SuppressWarnings("unchecked")
-	@Get
-	@Path("/orderPayments")
-	public void list(){
-		result.include("controller", "orderPayments");
-		List<Order> orderList = (List<Order>) entityManager.createQuery(" from Order o where confirmationDate is not null and originalDocumentDate is null order by o.orderDate desc").getResultList();
-		result.include("orderList", orderList);
-		result.include("url", "orderPayments/order");
-		result.of(OrdersController.class).list();
-	}
-	
 	@Transactional
 	public void save(OrderPayment orderPayment){
 		
 		validatePayment(orderPayment);
 
 		if(validator.hasErrors()){
-			loadLists();
 			result.include("orderPayment", orderPayment);
 			validator.onErrorUsePageOf(this).payment(null);
 		}
@@ -68,14 +56,13 @@ public class OrderPaymentsController {
 		}else{
 			entityManager.merge(orderPayment);
 		}
-		result.redirectTo(this).payment(orderPayment.getOrder().getId());
+		result.redirectTo(TimelineController.class).timeline();
 	}
 
 	@Get
 	@Path("/orderPayments/{id}")
 	public void edit(Long id) {
 		OrderPayment orderPayment = entityManager.find(OrderPayment.class, id);
-		loadLists();
 		result.include("orderPayment", orderPayment);
 		result.include("order", orderPayment.getOrder());
 		result.include("controller", "orderPayments");
@@ -92,11 +79,6 @@ public class OrderPaymentsController {
 		result.redirectTo(this).payment(orderId);
 	}
 
-	private void loadLists() {
-//		List<TransactionTerms> paymentTermList = (List<TransactionTerms>) entityManager.createQuery(" from PaymentTerm p order by p.description ").getResultList();
-//		result.include("paymentTermList", paymentTermList);
-	}
-	
 	private void validatePayment(OrderPayment orderPayment) {
 		validator.addIf( orderPayment.getPaymentDate() == null,new I18nMessage("rev","revenuepayment.without.date"));
 		validator.addIf( orderPayment.getValue() == null,new I18nMessage("cus","revenuepayment.without.value"));

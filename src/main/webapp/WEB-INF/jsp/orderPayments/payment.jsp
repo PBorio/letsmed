@@ -83,7 +83,8 @@
 $(document).ready(function() {
 	$('[data-behaviour~=datepicker]').datepicker({dateFormat: "mm/dd/yy"});
 	$('[data-behaviour~=datepicker]').setMask({mask: '19/39/9999', autoTab: false});
-	$('[data-behaviour~=valor]').setMask('decimal-us');
+	$('#orderPayment\\.value').focus();
+// 	$('[data-behaviour~=valor]').setMask('decimal-us');
 });
 
 function removePayment(id){

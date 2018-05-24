@@ -17,22 +17,33 @@
 </div>
 <div class="box-content">
 <form class="form-horizontal" action='<c:url value="/orders/search"/>' method="post">
-	<div class="row-fluid">
-		<div class="span10">
-			<div class="control-group">
-			       <div class="controls">
-					  <input id="customer-select" type="hidden" class="input-xlarge span12" name="customer.id" value="${customer.id}"/>
-					  <input type="hidden" id="customer.name" name="customer.name" value="${customer.name}" />
-				   </div>
-				</div>
+		<div class="row-fluid">
+			<div class="span3">
+				<div class="control-group">
+						  <input type="text" placeholder="Order Number" class="input-xlarge span12" name="order.orderNumber" value="${order.orderNumber}"/>
+					</div>
+			</div>
+			<div class="span3">
+				       <div class="control-group">
+						  <input type="text" placeholder="Customer" class="input-xlarge span12" name="order.customer.name" value="${order.customer.name}"/>
+					   </div>
+			</div>
+			<div class="span2">
+				       <div class="control-group">
+						  <input type="text" placeholder="Supplier" class="input-xlarge span12" name="order.supplier.supplierName" value="${order.supplier.supplierName}"/>
+					   </div>
+			</div>
+			<div class="span2">
+				       <div class="control-group">
+						  <input type="text" placeholder="User" class="input-xlarge span12" name="order.supplier.user.login" value="${order.supplier.user.login}"/>
+					   </div>
+			</div>
+			<div class="span2">
+				<button type="submit" class="btn btn-small"><i class="halflings-icon search"></i>Search</button>
+				<a href="<c:url value='/orders'/>" class="btn btn-small"><i class="halflings-icon refresh"></i>Clear Filters</a>
+			</div>
 		</div>
-		<div class="span2">
-			<button type="submit" class="btn btn-small"><i class="halflings-icon search"></i>Search</button>
-			<a href="<c:url value='/orders'/>" class="btn btn-small"><i class="halflings-icon refresh"></i>Clear Filters</a>
-		</div>
-	</div>
-
-</form>
+	</form>
 <table class="table table-striped table-bordered">
   <thead>
 	  <tr>

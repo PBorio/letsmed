@@ -32,7 +32,6 @@
 <input type="hidden" name="order.productionStartDate" value="<fmt:formatDate value='${order.productionStartDate}' pattern='MM/dd/yyyy'/>" />
 <input type="hidden" name="order.shipDate" value="<fmt:formatDate value='${order.shipDate}' pattern='MM/dd/yyyy'/>" />
 <input type="hidden" name="order.copyDocumentDate" value="<fmt:formatDate value='${order.copyDocumentDate}' pattern='MM/dd/yyyy'/>" />
-<input type="hidden" name="order.originalDocumentDate" value="<fmt:formatDate value='${order.originalDocumentDate}' pattern='MM/dd/yyyy'/>" />
 <div class="box-content">
 	  
 	 <div class="box-header" data-original-title>

@@ -1,7 +1,5 @@
 package br.com.weblogia.letsmed.controllers;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -40,15 +38,6 @@ public class SupplierPaymentsController {
 		result.include("supplierPayment", supplierPayment);
 	}
 
-	@SuppressWarnings("unchecked")
-	@Get
-	@Path("/supplierPayments")
-	public void list(){
-		List<Order> orderList = (List<Order>) entityManager.createQuery(" from Order o where confirmationDate is not null and originalDocumentDate is null order by o.orderDate desc").getResultList();
-		result.include("orderList", orderList);
-		result.of(OrdersController.class).list();
-	}
-	
 	@Transactional
 	public void save(OrderSupplierPayment supplierPayment){
 		

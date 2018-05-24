@@ -6,7 +6,7 @@
 			<div>Value: <fmt:formatNumber value='${order.totalValue}' pattern='#,##0.00'/></div>
 			<div>Commission: <fmt:formatNumber value='${order.commisionValue}' pattern='#,##0.00'/></div>
 			<div>Balance: <fmt:formatNumber value='${order.balance}' pattern='#,##0.00'/></div>
-			<div>Supplier Balance: <fmt:formatNumber value='${order.supplierBalance}' pattern='#,##0.00'/></div>
+			<!-- <div>Supplier Balance: <fmt:formatNumber value='${order.supplierBalance}' pattern='#,##0.00'/></div> -->
 		</div>
 		<div class="time">
 			<div class="date"><fmt:formatDate value='${order.orderDate}'  pattern='MM/dd/yyyy' /></div>

@@ -77,7 +77,6 @@ public class ExpensePaymentsController {
 	}
 	
 	
-	//TODO: fix delete
 	@SuppressWarnings("unused")
 	private void deleteItem(Long id){
 		if (id == null)

@@ -54,7 +54,7 @@
 		<div class="control-group">
 		  <label class="control-label col-xs2">Description:</label>
 		  <div class="controls">
-		    <textarea class="input-xlarge span8" name="forwardDetail.description">${forwardDetail.description}</textarea>
+		    <textarea class="input-xlarge span8" name="forwardDetail.description" name="forwardDetail.description">${forwardDetail.description}</textarea>
 		  </div>
 		</div>
 	</fieldset>
@@ -67,5 +67,12 @@
 	</div>
 </div>
 </form>
+<content tag="local_script">
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#forwardDetail\\.description').focus();
+});
+</script>
+</content>
 </body>
 </html>

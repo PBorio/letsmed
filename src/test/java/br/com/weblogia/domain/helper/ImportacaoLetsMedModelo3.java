@@ -313,7 +313,6 @@ public class ImportacaoLetsMedModelo3 {
 		proformaOrder(order);
 		confirmOrder(order);
 		order.setCopyDocumentDate(order.getOrderDate());
-		order.setOriginalDocumentDate(order.getOriginalDocumentDate());
 		order.setConclusionDate(order.getShipDate());
 		
 		OrderPayment op = new OrderPayment();
