@@ -31,8 +31,6 @@ public class ProformaConfirmationController {
 		Order order = entityManager.find(Order.class, id);
 		OrderService service = new OrderService(entityManager);
 		service.confirm(order);
-//		order.setProformaConfirmationDate(new Date());
-//		entityManager.merge(order);
 		result.redirectTo(TimelineController.class).timeline();
 	}
 	

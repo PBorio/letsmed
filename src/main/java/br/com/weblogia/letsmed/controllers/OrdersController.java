@@ -448,10 +448,10 @@ public class OrdersController {
 			order.setNegotiationTerm(entityManager.find(NegotiationTerm.class, order.getNegotiationTerm().getId()));
 		}
 		
-		if (order.getCustomer().getId() == -1) 	order.setCustomer(null);
-		if (order.getSupplier().getId() == -1) 	order.setSupplier(null);
-		if (order.getTransactionTerm().getId() == -1) 	order.setTransactionTerm(null);
-		if (order.getNegotiationTerm().getId() == -1) 	order.setNegotiationTerm(null);
+		if (order.getCustomer() == null || order.getCustomer().getId() == -1) 	order.setCustomer(null);
+		if (order.getSupplier() == null || order.getSupplier().getId() == -1) 	order.setSupplier(null);
+		if (order.getTransactionTerm() == null || order.getTransactionTerm().getId() == -1) 	order.setTransactionTerm(null);
+		if (order.getNegotiationTerm() == null || order.getNegotiationTerm().getId() == -1) 	order.setNegotiationTerm(null);
 		if (order.getShipmentTerm().getId() == -1) 	order.setShipmentTerm(null);
 		
 		for (OrderItem item : order.getItens()){

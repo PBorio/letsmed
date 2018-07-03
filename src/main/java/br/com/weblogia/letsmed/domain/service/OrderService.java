@@ -8,11 +8,9 @@ import javax.persistence.Query;
 import org.joda.time.DateTime;
 
 import br.com.weblogia.letsmed.domain.Customer;
-import br.com.weblogia.letsmed.domain.Expense;
 import br.com.weblogia.letsmed.domain.Order;
 import br.com.weblogia.letsmed.domain.OrderHistory;
 import br.com.weblogia.letsmed.domain.OrderItem;
-import br.com.weblogia.letsmed.domain.Revenue;
 import br.com.weblogia.letsmed.domain.helpers.StringUtils;
 
 public class OrderService {
@@ -27,24 +25,24 @@ public class OrderService {
 		order.setProformaConfirmationDate(new Date());
 		entityManager.merge(order);
 		
-		if (order.getCustomer().getPartnerExpenseAccount() != null){
-			Expense expense = new Expense();
-			expense.setExpenseDate(new Date());
-			expense.setExpenseAccount(order.getCustomer().getPartnerExpenseAccount());
-			expense.setExpenseCategory(order.getCustomer().getPartnerExpenseCategory());
-			expense.setOrder(order);
-			expense.setValue(order.getPartnerComissionValue());
-			expense.setAdditionalInfo("Expense from Order N. "+String.valueOf(order.getId()));
-			entityManager.persist(expense);
-		}
-		
-		Revenue revenue = new Revenue();
-		revenue.setRevenueDate(new Date());
-		revenue.setRevenueAccount(order.getCustomer().getRevenueAccount());
-		revenue.setOrder(order);
-		revenue.setValue(order.getRevenueValue());
-		revenue.setAdditionalInfo("Revenue from Order N. "+String.valueOf(order.getId()));
-		entityManager.persist(revenue);
+//		if (order.getCustomer().getPartnerExpenseAccount() != null){
+//			Expense expense = new Expense();
+//			expense.setExpenseDate(new Date());
+//			expense.setExpenseAccount(order.getCustomer().getPartnerExpenseAccount());
+//			expense.setExpenseCategory(order.getCustomer().getPartnerExpenseCategory());
+//			expense.setOrder(order);
+//			expense.setValue(order.getPartnerComissionValue());
+//			expense.setAdditionalInfo("Expense from Order N. "+String.valueOf(order.getId()));
+//			entityManager.persist(expense);
+//		}
+//		
+//		Revenue revenue = new Revenue();
+//		revenue.setRevenueDate(new Date());
+//		revenue.setRevenueAccount(order.getCustomer().getRevenueAccount());
+//		revenue.setOrder(order);
+//		revenue.setValue(order.getRevenueValue());
+//		revenue.setAdditionalInfo("Revenue from Order N. "+String.valueOf(order.getId()));
+//		entityManager.persist(revenue);
 		
 	}
 	

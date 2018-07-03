@@ -234,7 +234,7 @@
 				</tbody>
 			 </table>
 			 <div class="row-fluid">
-			   <c:if test="${order.toBeFilledIn}">
+			   <c:if test="${order.toBeFilledIn && order.id != null}">
 				   <a href="<c:url value='/orders/item/${order.id}'/>" id="new-item" class="btn btn-primary">
 				     New Item
 				   </a>
@@ -305,12 +305,12 @@
 				    <input class="input-xlarge span6" name="order.insurance" value="${order.insurance}"/>
 				  </div>
 				</div>
-				<div class="control-group">
-				  <label class="control-label col-xs2">Shipment:</label>
-				  <div class="controls">
-				    <input class="input-xlarge span6" name="order.shipment" value="${order.shipment}"/>
-				  </div>
-				</div>
+<!-- 				<div class="control-group"> -->
+<!-- 				  <label class="control-label col-xs2">Shipment:</label> -->
+<!-- 				  <div class="controls"> -->
+<%-- 				    <input class="input-xlarge span6" name="order.shipment" value="${order.shipment}"/> --%>
+<!-- 				  </div> -->
+<!-- 				</div> -->
 				
 			  </fieldset>
 			</div>

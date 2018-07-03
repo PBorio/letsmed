@@ -85,7 +85,7 @@ public class Order {
 	
 	private String insurance;
 	
-	private String shipment;
+//	private String shipment;
 	
 	private Date deliveryDate;
 	
@@ -731,13 +731,13 @@ public class Order {
 		this.insurance = insurance;
 	}
 
-	public String getShipment() {
-		return shipment;
-	}
-
-	public void setShipment(String shipment) {
-		this.shipment = shipment;
-	}
+//	public String getShipment() {
+//		return shipment;
+//	}
+//
+//	public void setShipment(String shipment) {
+//		this.shipment = shipment;
+//	}
 
 	public Date getDeliveryDate() {
 		return deliveryDate;

@@ -14,7 +14,7 @@
 <table class="table table-striped table-bordered">
   <thead>
 	  <tr>
-	   <th width="85%">Partner Name</th>
+	   <th width="85%">Users</th>
  	   <th>Actions</th>
 	  </tr>
   </thead>   
@@ -32,7 +32,7 @@
  </table>            
 </div>
 <div class="form-actions">
-<a href="<c:url value='/partners/partner'/>" class="btn btn-primary">New Partner</a>
+<a href="<c:url value='/users/user'/>" class="btn btn-primary">New User</a>
 </div>
 </body>
 </html>
